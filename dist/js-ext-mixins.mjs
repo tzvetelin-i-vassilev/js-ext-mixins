@@ -179,16 +179,17 @@ class NumberExt extends Extension {
 		MAX_INT64: (typeof BigInt == "undefined") ? undefined : {value: 0x7FFFFFFFFFFFFFFFn, enumerable: true},
 		MAX_UINT64: (typeof BigInt == "undefined") ? undefined : {value: 0xFFFFFFFFFFFFFFFFn, enumerable: true}
 	}
-	static properties = {
-		length: {get: function() {return (Math.log10((this ^ (this >> 31)) - (this >> 31)) | 0) + 1}, configurable: true}
-	}
 	format(pattern) {
+		if (!Number.isInteger(this) || this < 0)
+			throw new Error(`Underlying number ${this} should be positive integer`);
 		if (this.toString().length < pattern.length)
 			return pattern.substring(0, pattern.length - this.toString().length) + this;
 		else
 			return this.toString();
 	}
 	pad(length, char = "0") {
+		if (!Number.isInteger(this) || this < 0)
+			throw new Error(`Underlying number ${this} should be positive integer`);
 		return (String(this).length < length) ? (new Array(length - String(this).length + 1)).join(char) + String(this) : this.toString();
 	}
 }

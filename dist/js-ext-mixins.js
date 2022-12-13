@@ -451,12 +451,14 @@
     _createClass(NumberExt, [{
       key: "format",
       value: function format(pattern) {
+        if (!Number.isInteger(this) || this < 0) throw new Error("Underlying number ".concat(this, " should be positive integer"));
         if (this.toString().length < pattern.length) return pattern.substring(0, pattern.length - this.toString().length) + this;else return this.toString();
       }
     }, {
       key: "pad",
       value: function pad(length) {
         var _char = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "0";
+        if (!Number.isInteger(this) || this < 0) throw new Error("Underlying number ".concat(this, " should be positive integer"));
         return String(this).length < length ? new Array(length - String(this).length + 1).join(_char) + String(this) : this.toString();
       }
     }]);
@@ -478,14 +480,6 @@
     MAX_UINT64: typeof BigInt == "undefined" ? undefined : {
       value: 0xFFFFFFFFFFFFFFFFn,
       enumerable: true
-    }
-  });
-  _defineProperty(NumberExt, "properties", {
-    length: {
-      get: function get() {
-        return (Math.log10((this ^ this >> 31) - (this >> 31)) | 0) + 1;
-      },
-      configurable: true
     }
   });
 

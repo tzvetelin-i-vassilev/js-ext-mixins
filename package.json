@@ -35,8 +35,7 @@
   },
   "scripts": {
     "doc": "del docs && jsdoc -c jsdoc.config.json ./README.md",
-    "build": "del dist && ./scripts/buildVersionJS.js && rollup -c && npm run doc",
-    "publish": "./scripts/buildVersionJS.js && npm publish"
+    "build": "del dist && ./scripts/buildVersionJS.js && rollup -c && npm run doc"
   },
   "engines": {
     "node": ">=10.0.0"
