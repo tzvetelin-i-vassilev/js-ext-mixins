@@ -1,0 +1,22 @@
+{
+	"source": {
+		"include": ["src"],
+		"excludePattern": "(^|\\/|\\\\)_"
+	},
+	"opts": {
+		"recurse": true,
+		"destination": "./docs/"
+	},
+	"plugins": [
+		"plugins/markdown"
+	],
+	"markdown": {
+		"hardwrap": false
+	},
+	"templates": {
+		"default": {
+			"includeDate": false,
+			"outputSourceFiles": false
+		}
+	}
+}

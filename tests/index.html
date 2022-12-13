@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JS Ext</title>
+
+<!--
+	<script src="/dist/js-ext.js"></script>
+	<script src="/tests.js"></script>
+
+	<script type="text/javascript">
+-->
+	<script type="module">
+		import "../src/index.js"
+		import "./tests.js"
+
+		testJSExt();
+
+		console.log("=================================== Screen ===================================")
+
+		console.log("orientation / size / resolution", screen.orientation ? screen.orientation.angle : "not supported", screen.size, screen.resolution)
+		if (screen.orientation) screen.orientation.onchange = e => console.log(e.target.type, e.target.angle, screen.size, screen.resolution);
+		matchMedia("(orientation: portrait)").addListener(e => console.log(e.matches ? "portrait" : "landscape", screen.orientation.angle, screen.size, screen.resolution));
+
+		console.log("=================================== HTMLElement ===================================")
+
+		console.log("=================================== Canvas ===================================")
+		console.log("OffscreenCanvas polyfill", OffscreenCanvas)
+
+		console.log("=================================== Image & ArrayBuffer ===================================")
+		let base64 = "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"
+
+		addEventListener("DOMContentLoaded", async (event) => {
+			console.log("image loading starting...");
+			await Image.fromBytes(ArrayBuffer.fromBase64(base64), "png", document.querySelector("img"));
+
+			console.log("=================================== HTMLImageElement ===================================")
+			console.log("...image loading ready")
+
+			console.log("toDataURL", document.querySelector("img").toDataURL().substring(0, 100) + "...")
+			console.log("toArrayBuffer", document.querySelector("img").toArrayBuffer())
+			console.log("toBlob", document.querySelector("img").toBlob())
+
+			document.querySelectorAll("img")[1].src = document.querySelector("img").toDataURL();
+		});
+	</script>
+</head>
+<body>
+	<img src="" alt="" />
+	<img src="" alt="" />
+</body>
+</html>
