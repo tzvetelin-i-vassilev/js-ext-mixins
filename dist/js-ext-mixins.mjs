@@ -1,4 +1,4 @@
-var version = "1.0.0";
+var version = "1.0.5";
 
 class Extension {
 	static overrides = ["toString"];

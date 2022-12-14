@@ -208,7 +208,7 @@
     return typeof key === "symbol" ? key : String(key);
   }
 
-  var version = "1.0.0";
+  var version = "1.0.5";
 
   var Extension = /*#__PURE__*/function () {
     function Extension() {
