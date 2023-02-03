@@ -43,23 +43,6 @@ class NumberExt extends Extension {
 		else
 			return this.toString();
 	}
-
-	/**
-	 * Formats underlying number with padding from the left side.
-	 * It should be positive integer else Error is thrown.
-	 *
-	 * @example padded number 158 with length 5 and char '0' will result to  '00158'
-	 *
-	 * @param {int} length Number length that needs padding
-	 * @param {char} [char='0'] Padding value
-	 * @returns {string} Formatted number
-	 */
-	pad(length, char = "0") {
-		if (!Number.isInteger(this) || this < 0)
-			throw new Error(`Underlying number ${this} should be positive integer`);
-
-		return (String(this).length < length) ? (new Array(length - String(this).length + 1)).join(char) + String(this) : this.toString();
-	}
 }
 
 export default NumberExt

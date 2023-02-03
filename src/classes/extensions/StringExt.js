@@ -16,7 +16,7 @@ class StringExt extends Extension {
 	 * @param {char} [char='-'] Padding value
 	 * @returns {string} Formatted string
 	 */
-	pad(length, char = "-") {
+	padStart(length, char = "-") {
 		return (this.length < length) ? (new Array(length - this.length + 1)).join(char) + this : this.toString();
 	}
 /*

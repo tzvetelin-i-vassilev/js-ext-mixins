@@ -24,7 +24,7 @@ class FunctionExt extends Extension {
 	 *
 	 * @param {string} name Class name
 	 * @param {Class} [parentClass] When is available, class definition extends this class
-	 * @return {Class} Class definition
+	 * @returns {Class} Class definition
 	 */
 	static createClass(name, parentClass) {
 		const def = new Function(parentClass ? parentClass.name : undefined, `return class ${name}${parentClass ? ` extends ${parentClass.name}` : ""} {
