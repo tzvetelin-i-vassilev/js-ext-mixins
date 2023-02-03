@@ -1,6 +1,6 @@
-import Extension from "../Extension.js"
+import Extension from "../Extension.mjs"
 
-import SharedArrayBufferExt from "./SharedArrayBufferExt.js"
+import SharedArrayBufferExt from "./SharedArrayBufferExt.mjs"
 
 const TYPES = ["Int8", "Uint8", "Uint8Clamped", "Int16", "Uint16", "Int32", "Uint32", "Float32", "Float64", "BigInt64", "BigUint64"];
 

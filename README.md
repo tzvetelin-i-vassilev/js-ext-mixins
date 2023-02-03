@@ -16,25 +16,27 @@ import "js-ext-mixins"
 
 ## Affected classes
 
- * Object
- * String
- * Number
+ * ArrayBuffer
+ * Array
+ * CSSStyleSheet
+ * DOMMatrix
+ * DOMPoint
+ * DOMRect
  * Date
  * Function
- * Array
- * ArrayBuffer
- * SharedArrayBuffer
- * TypedArray
- * Set
- * Screen
- * Location
+ * HTMLDocument
  * HTMLElement
  * HTMLImageElement
  * Image
- * DOMPoint
- * DOMRect
- * DOMMatrix
- * CSSStyleSheet
+ * Location
+ * Number
+ * Object
+ * Screen
+ * Set
+ * ShadowRoot
+ * SharedArrayBuffer
+ * String
+ * TypedArray
 
 Functionallity extensions through not existant classes:
  * DOMSize

@@ -2,7 +2,6 @@ const CSSStyleSheetOrigin = window.CSSStyleSheet;
 const protoProps = Object.getOwnPropertyNames(CSSStyleSheetOrigin.prototype).slice(1);
 
 class CSSStyleSheet {
-	#style;
 	#sheet;
 
 	constructor() {
@@ -13,7 +12,7 @@ class CSSStyleSheet {
 				this[name] = property.value.bind(this.#sheet);
 			else {
 				Object.defineProperty(this, name, {
-					get: () => this.#style.sheet[name],
+					get: () => this.#sheet[name],
 					configurable: property.configurable,
 					enumerable: property.enumerable
 				});
@@ -27,7 +26,6 @@ class CSSStyleSheet {
 
 		document.head.appendChild(style);
 
-		this.#style = style;
 		this.#sheet = style.sheet;
 	}
 }

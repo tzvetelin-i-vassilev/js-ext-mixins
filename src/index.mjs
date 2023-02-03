@@ -1,8 +1,8 @@
-import version from "./version.js"
+import version from "./version.mjs"
 
 // https://javascript.info/mixins
-import * as extensions from "./classes/extensions/index.js"
-import Extension from "./classes/Extension.js"
+import * as extensions from "./classes/extensions/index.mjs"
+import Extension from "./classes/Extension.mjs"
 
 if (typeof globalThis == "undefined") {
 	if (typeof window !== "undefined") window.globalThis = window;
@@ -11,14 +11,10 @@ if (typeof globalThis == "undefined") {
 }
 
 if (!globalThis["JS_EXT_SCOPE"]) {
-	Object.defineProperty(globalThis, "JS_EXT_SCOPE", {value: [
-		"Object", "String", "Number", "Date", "Function", "Set",
-		"Array", "ArrayBuffer", "SharedArrayBuffer", "TypedArray",
-		"Screen", "Location",
-		"HTMLElement", "HTMLImageElement", "Image",
-		"DOMPoint", "DOMRect", "DOMMatrix",
-		"CSSStyleSheet"
-	], enumerable: true, configurable: true});
+	// substring Ext suffix
+	const scope = Object.keys(extensions).map(name => name.substring(0, name.length - 3));
+
+	Object.defineProperty(globalThis, "JS_EXT_SCOPE", {value: scope, enumerable: true, configurable: true});
 }
 
 // Extension.debug = true;

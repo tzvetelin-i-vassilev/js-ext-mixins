@@ -1,4 +1,4 @@
-import "js-ext-mixins/src"
+import "js-ext-mixins/dev"
 
 import assert from "assert"
 

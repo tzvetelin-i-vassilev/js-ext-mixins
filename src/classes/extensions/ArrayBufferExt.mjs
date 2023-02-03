@@ -1,4 +1,4 @@
-import Extension from "../Extension.js"
+import Extension from "../Extension.mjs"
 
 /**
  * ArrayBuffer extension

@@ -1,6 +1,6 @@
-import Extension from "../Extension.js"
+import Extension from "../Extension.mjs"
 
-import DOMSize from "../add-ons/DOMSize.js"
+import DOMSize from "../add-ons/DOMSize.mjs"
 
 /**
  * Screen extension

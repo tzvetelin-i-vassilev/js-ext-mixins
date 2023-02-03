@@ -7,7 +7,8 @@ _2022-02-01_
 ### Updates
 - Polyfill CSSStyleSheet to resolve Safari missing constructable style sheets
 - unit tests included
-- buf-fixing and improvments
+- bug-fixing and improvments
+- convert .js to .mjs
 
 ## 1.0.5
 

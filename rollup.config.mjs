@@ -7,13 +7,14 @@ import terser from "@rollup/plugin-terser"
 
 import pkg from "./package.json" assert {type: "json"}
 
-const input = "./src/index.js";
+const input = "./src/index.mjs";
 const name = "jsExt";
 
 const babelOptions = {
 	babelrc: false,
 	babelHelpers: "bundled",
 	presets: ["@babel/preset-env"],
+	plugins: ["@babel/plugin-syntax-import-assertions"],
 	exclude: "node_modules/**"
 };
 

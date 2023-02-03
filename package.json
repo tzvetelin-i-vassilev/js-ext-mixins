@@ -17,14 +17,21 @@
       "import": "./dist/js-ext-mixins.mjs",
       "default": "./dist/js-ext-mixins.js"
     },
-    "./dev": {
-      "import": "./src/index.mjs"
+    "./dev": "./src/index.mjs",
+    "./polyfills/css-style-sheet": {
+      "import": "./dist/polyfills/css-style-sheet-min.mjs",
+      "default": "./dist/polyfills/css-style-sheet-min.js"
+    },
+    "./polyfills/css-style-sheet/src": {
+      "import": "./dist/polyfills/css-style-sheet.mjs",
+      "default": "./dist/polyfills/css-style-sheet.js"
     }
   },
   "devDependencies": {
     "@babel/cli": "^7.20.7",
     "@babel/core": "^7.20.12",
     "@babel/eslint-parser": "^7.19.1",
+    "@babel/plugin-syntax-import-assertions": "^7.20.0",
     "@babel/preset-env": "^7.20.2",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^24.0.1",
@@ -35,7 +42,7 @@
     "eslint": "^8.33.0",
     "jsdoc": "^4.0.0",
     "mocha": "^10.2.0",
-    "rollup": "^3.12.0",
+    "rollup": "^3.13.0",
     "rollup-plugin-cleanup": "^3.2.1"
   },
   "scripts": {
