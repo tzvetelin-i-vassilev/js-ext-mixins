@@ -1,6 +1,6 @@
 'use strict';
 
-var version = "1.0.5";
+var version = "1.0.6";
 
 class Extension {
 	static overrides = ["toString"];
@@ -144,7 +144,7 @@ class ObjectExt extends Extension {
 }
 
 class StringExt extends Extension {
-	pad(length, char = "-") {
+	padStart(length, char = "-") {
 		return (this.length < length) ? (new Array(length - this.length + 1)).join(char) + this : this.toString();
 	}
 	toCharArray(bytes = false) {
@@ -188,11 +188,6 @@ class NumberExt extends Extension {
 			return pattern.substring(0, pattern.length - this.toString().length) + this;
 		else
 			return this.toString();
-	}
-	pad(length, char = "0") {
-		if (!Number.isInteger(this) || this < 0)
-			throw new Error(`Underlying number ${this} should be positive integer`);
-		return (String(this).length < length) ? (new Array(length - String(this).length + 1)).join(char) + String(this) : this.toString();
 	}
 }
 
@@ -446,7 +441,7 @@ let DOMSize$1 = class DOMSize {
 		return `size(${this.width}, ${this.height})`;
 	}
 	static fromSize(value) {
-		if (value instanceof DOMSize$1) return value;
+		if (value instanceof DOMSize) return value;
 		if (typeof value == "string") {
 			if (value.startsWith("size(")) {
 				let arr = value.substring(value.indexOf("(")+1, value.indexOf(")")).split(/,\s*/g);
@@ -460,7 +455,7 @@ let DOMSize$1 = class DOMSize {
 		}
 		if (isNaN(value.width)) throw new Error("Invalid width found, expected number");
 		if (isNaN(value.height)) throw new Error("Invalid height found, expected number");
-		return new DOMSize$1(value.width, value.height);
+		return new DOMSize(value.width, value.height);
 	}
 };
 
@@ -497,7 +492,7 @@ class HTMLElementExt extends Extension {
 	static properties = {
 		computedStyle: {get: function() { return window.getComputedStyle(this); }, configurable: true}
 	}
-	getClientOffset() {
+	getClientOffset(relative = false) {
 		let offsetParent = this;
 		let offsetLeft = 0;
 		let offsetTop  = 0;
@@ -506,8 +501,27 @@ class HTMLElementExt extends Extension {
 			offsetTop  += offsetParent.offsetTop;
 			offsetParent = offsetParent.offsetParent;
 		}
-		while(offsetParent);
-		return new DOMPoint(offsetLeft, offsetTop);
+		while (offsetParent);
+		let scrollParent = this;
+		let scrollLeft = 0;
+		let scrollTop  = 0;
+		if (!relative) {
+			do {
+				let position = scrollParent.computedStyle.position;
+				if (position == "absolute" || position == "fixed") {
+					scrollLeft = 0;
+					scrollTop  = 0;
+					break;
+				}
+				scrollLeft += scrollParent.scrollLeft;
+				scrollTop  += scrollParent.scrollTop;
+				scrollParent = scrollParent.parentNode;
+				if (scrollParent && scrollParent.host)
+					scrollParent = scrollParent.host;
+			}
+			while (scrollParent != document);
+		}
+		return new DOMPoint(offsetLeft - scrollLeft, offsetTop - scrollTop);
 	}
 	toRect() {
 		let display = this.style.display;
@@ -820,27 +834,75 @@ class CSSStyleSheetExt extends Extension {
 	}
 }
 
+class ShadowRootExt extends Extension {
+	adoptStyleSheet(text) {
+		let sheet;
+		if (this.adoptedStyleSheets) {
+			sheet = new CSSStyleSheet();
+			sheet.replaceSync(text);
+			this.adoptedStyleSheets.push(sheet);
+		}
+		else {
+			let style = document.createElement("style");
+			style.innerHTML = text;
+			this.appendChild(style);
+			sheet = style.sheet;
+		}
+		return sheet;
+	}
+}
+
+class HTMLDocumentExt extends Extension {
+	async adoptStyleSheet(src, name) {
+		let sheet;
+		if (this.adoptedStyleSheets) {
+			let Module = await import(src);
+			sheet = Module.default;
+			sheet.remove = function() {
+				document.adoptedStyleSheets.remove(this);
+			};
+			this.adoptedStyleSheets.push(sheet);
+		}
+		else {
+			let respone = await fetch(src);
+			let text = await respone.text();
+			let style = document.createElement("style");
+			style.innerHTML = text;
+			if (name) style.setAttribute("name", name);
+			this.head.appendChild(style);
+			sheet = style.sheet;
+			sheet.remove = function() {
+				style.remove();
+			};
+		}
+		if (name) sheet.name = name;
+		return sheet;
+	}
+}
+
 var extensions = /*#__PURE__*/Object.freeze({
 	__proto__: null,
-	ObjectExt: ObjectExt,
-	StringExt: StringExt,
-	NumberExt: NumberExt,
+	ArrayBufferExt: ArrayBufferExt,
+	ArrayExt: ArrayExt,
+	CSSStyleSheetExt: CSSStyleSheetExt,
+	DOMMatrixExt: DOMMatrixExt,
+	DOMPointExt: DOMPointExt,
+	DOMRectExt: DOMRectExt,
 	DateExt: DateExt,
 	FunctionExt: FunctionExt,
-	ArrayExt: ArrayExt,
-	ArrayBufferExt: ArrayBufferExt,
-	SharedArrayBufferExt: SharedArrayBufferExt,
-	TypedArrayExt: TypedArrayExt,
-	SetExt: SetExt,
-	ScreenExt: ScreenExt,
-	LocationExt: LocationExt,
+	HTMLDocumentExt: HTMLDocumentExt,
 	HTMLElementExt: HTMLElementExt,
 	HTMLImageElementExt: HTMLImageElementExt,
 	ImageExt: ImageExt,
-	DOMPointExt: DOMPointExt,
-	DOMRectExt: DOMRectExt,
-	DOMMatrixExt: DOMMatrixExt,
-	CSSStyleSheetExt: CSSStyleSheetExt
+	LocationExt: LocationExt,
+	NumberExt: NumberExt,
+	ObjectExt: ObjectExt,
+	ScreenExt: ScreenExt,
+	SetExt: SetExt,
+	ShadowRootExt: ShadowRootExt,
+	SharedArrayBufferExt: SharedArrayBufferExt,
+	StringExt: StringExt,
+	TypedArrayExt: TypedArrayExt
 });
 
 if (typeof globalThis == "undefined") {
@@ -849,14 +911,8 @@ if (typeof globalThis == "undefined") {
 	else if (typeof global !== "undefined") global.globalThis = global;
 }
 if (!globalThis["JS_EXT_SCOPE"]) {
-	Object.defineProperty(globalThis, "JS_EXT_SCOPE", {value: [
-		"Object", "String", "Number", "Date", "Function", "Set",
-		"Array", "ArrayBuffer", "SharedArrayBuffer", "TypedArray",
-		"Screen", "Location",
-		"HTMLElement", "HTMLImageElement", "Image",
-		"DOMPoint", "DOMRect", "DOMMatrix",
-		"CSSStyleSheet"
-	], enumerable: true, configurable: true});
+	const scope = Object.keys(extensions).map(name => name.substring(0, name.length - 3));
+	Object.defineProperty(globalThis, "JS_EXT_SCOPE", {value: scope, enumerable: true, configurable: true});
 }
 const extend = new Function("Extension", "name", "Extension.extend(name)");
 for (let name of globalThis["JS_EXT_SCOPE"]) {

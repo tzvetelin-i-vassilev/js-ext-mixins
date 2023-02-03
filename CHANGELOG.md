@@ -6,6 +6,7 @@ _2022-02-01_
 
 ### Updates
 - Polyfill CSSStyleSheet to resolve Safari missing constructable style sheets
+- HTMLDocument, ShadowRoot extensions added to resolve style sheets adoption
 - unit tests included
 - bug-fixing and improvments
 - convert .js to .mjs
