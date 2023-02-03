@@ -1,41 +1,47 @@
 {
   "name": "js-ext-mixins",
   "productName": "JavaScript Extensions",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Additional functionality provider",
   "main": "./dist/js-ext-mixins-min.cjs",
   "module": "./dist/js-ext-mixins-min.mjs",
+  "browser": "./dist/js-ext-mixins-min.js",
   "exports": {
     ".": {
-      "node": {
-        "import": "./dist/js-ext-mixins-min.mjs",
-        "require": "./dist/js-ext-mixins-min.cjs"
-      },
-      "browser": {
-        "import": "./dist/js-ext-mixins-min.mjs"
-      },
+      "require": "./dist/js-ext-mixins-min.cjs",
+      "import": "./dist/js-ext-mixins-min.mjs",
       "default": "./dist/js-ext-mixins-min.js"
+    },
+    "./src": {
+      "require": "./dist/js-ext-mixins.cjs",
+      "import": "./dist/js-ext-mixins.mjs",
+      "default": "./dist/js-ext-mixins.js"
+    },
+    "./dev": {
+      "import": "./src/index.mjs"
     }
   },
   "devDependencies": {
-    "@babel/cli": "^7.19.3",
-    "@babel/core": "^7.20.5",
+    "@babel/cli": "^7.20.7",
+    "@babel/core": "^7.20.12",
     "@babel/eslint-parser": "^7.19.1",
     "@babel/preset-env": "^7.20.2",
     "@rollup/plugin-babel": "^6.0.3",
-    "@rollup/plugin-commonjs": "^23.0.4",
-    "@rollup/plugin-eslint": "^9.0.1",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-eslint": "^9.0.3",
     "@rollup/plugin-node-resolve": "^15.0.1",
-    "@rollup/plugin-terser": "^0.1.0",
+    "@rollup/plugin-terser": "^0.4.0",
     "del-cli": "^5.0.0",
-    "eslint": "^8.29.0",
+    "eslint": "^8.33.0",
     "jsdoc": "^4.0.0",
-    "rollup": "^3.7.0",
+    "mocha": "^10.2.0",
+    "rollup": "^3.12.0",
     "rollup-plugin-cleanup": "^3.2.1"
   },
   "scripts": {
     "doc": "del docs && jsdoc -c jsdoc.config.json ./README.md",
-    "build": "del dist && ./scripts/buildVersionJS.js && rollup -c && npm run doc"
+    "build": "del dist && ./scripts/buildVersionJS.js && rollup -c && npm run doc && npm run test",
+    "test": "mocha"
   },
   "engines": {
     "node": ">=10.0.0"

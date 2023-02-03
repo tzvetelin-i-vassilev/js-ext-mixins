@@ -1,5 +1,14 @@
 # js-ext-mixins ChangeLog
 
+## 1.0.6
+
+_2022-02-01_
+
+### Updates
+- Polyfill CSSStyleSheet to resolve Safari missing constructable style sheets
+- unit tests included
+- buf-fixing and improvments
+
 ## 1.0.5
 
 _2022-12-01_

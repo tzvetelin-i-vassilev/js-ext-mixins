@@ -4,7 +4,6 @@ import resolve from "@rollup/plugin-node-resolve"
 import cleanup from "rollup-plugin-cleanup"
 import eslint from "@rollup/plugin-eslint"
 import terser from "@rollup/plugin-terser"
-// import {sizeSnapshot} from "rollup-plugin-size-snapshot"
 
 import pkg from "./package.json" assert {type: "json"}
 
@@ -39,14 +38,8 @@ let browserPlugins = [
 	commonjs()
 ];
 
-let minPlugins = [
-	// sizeSnapshot(),
-	terser({
-		output: {comments: /^!/}
-	})
-];
-
 export default [
+	/* ************** UMD ************** */
 	{
 		input,
 		output: {
@@ -66,8 +59,11 @@ export default [
 			name,
 			file: `./dist/${pkg.name}-min.js`
 		},
-		plugins: browserPlugins.concat(minPlugins)
+		plugins: browserPlugins.concat([
+			terser()
+		])
 	},
+	/* ************** ESM, CJS ************** */
 	{
 		input,
 		output: [
@@ -97,7 +93,54 @@ export default [
 			}
 		],
 		plugins: [
+			terser()
+		]
+	},
+	/* ************** Polyfill CSSStyleSheet - UMD ************** */
+	{
+		input: "./src/polyfills/CSSStyleSheet.mjs",
+		output: {
+			format: "umd",
+			name: "CSSStyleSheet",
+			file: "./dist/polyfills/css-style-sheet.js"
+		},
+		plugins: [
+			babel(babelOptions),
+			eslint(eslintOptions),
 			cleanup()
-		].concat(minPlugins)
+		]
+	},
+	{
+		input,
+		output: {
+			format: "umd",
+			name: "CSSStyleSheet",
+			file: "./dist/polyfills/css-style-sheet-min.js",
+		},
+		plugins: [
+			babel(babelOptions),
+			terser()
+		]
+	},
+	/* ************** Polyfill CSSStyleSheet - ESM ************** */
+	{
+		input: "./src/polyfills/CSSStyleSheet.mjs",
+		output: {
+			format: "esm",
+			file: "./dist/polyfills/css-style-sheet.mjs"
+		},
+		plugins: [
+			cleanup()
+		]
+	},
+	{
+		input: "./src/polyfills/CSSStyleSheet.mjs",
+		output: {
+			format: "esm",
+			file: "./dist/polyfills/css-style-sheet-min.mjs"
+		},
+		plugins: [
+			terser()
+		]
 	}
 ];
