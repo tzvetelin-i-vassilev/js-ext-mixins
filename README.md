@@ -12,9 +12,14 @@ npm install --save js-ext-mixins
 
 ```js
 import "js-ext-mixins"
+import "js-ext-mixins/polyfills/css-style-sheet"
 ```
 
-## Affected classes
+## Polyfills
+
+ * CSSStyleSheet
+
+## Extensions (affected classes)
 
  * ArrayBuffer
  * Array
@@ -38,7 +43,8 @@ import "js-ext-mixins"
  * String
  * TypedArray
 
-Functionallity extensions through not existant classes:
+## Add-ons
+
  * DOMSize
 
 ## License

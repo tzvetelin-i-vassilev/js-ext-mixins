@@ -1,12 +1,17 @@
 const CSSStyleSheetOrigin = window.CSSStyleSheet;
 const protoProps = Object.getOwnPropertyNames(CSSStyleSheetOrigin.prototype).slice(1);
 class CSSStyleSheet {
+	static get polyfill() { return true; }
 	#sheet;
 	constructor() {
 		for (let name of protoProps) {
 			let property = Object.getOwnPropertyDescriptor(CSSStyleSheetOrigin.prototype, name);
-			if (typeof property.value == "function")
-				this[name] = property.value.bind(this.#sheet);
+			if (typeof property.value == "function") {
+				if (this.#sheet)
+					this[name] = property.value.bind(this.#sheet);
+				else
+					this[name] = function(...args) { return property.value.apply(this.#sheet, args); };
+			}
 			else {
 				Object.defineProperty(this, name, {
 					get: () => this.#sheet[name],

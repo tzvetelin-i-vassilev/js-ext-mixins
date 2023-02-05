@@ -161,7 +161,14 @@
         var _loop = function _loop() {
           var name = _step.value;
           var property = Object.getOwnPropertyDescriptor(CSSStyleSheetOrigin.prototype, name);
-          if (typeof property.value == "function") _this[name] = property.value.bind(_classPrivateFieldGet(_this, _sheet));else {
+          if (typeof property.value == "function") {
+            if (_classPrivateFieldGet(_this, _sheet)) _this[name] = property.value.bind(_classPrivateFieldGet(_this, _sheet));else _this[name] = function () {
+              for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+                args[_key] = arguments[_key];
+              }
+              return property.value.apply(_classPrivateFieldGet(this, _sheet), args);
+            };
+          } else {
             Object.defineProperty(_this, name, {
               get: function get() {
                 return _classPrivateFieldGet(_this, _sheet)[name];
@@ -187,6 +194,11 @@
         style.innerHTML = text;
         document.head.appendChild(style);
         _classPrivateFieldSet(this, _sheet, style.sheet);
+      }
+    }], [{
+      key: "polyfill",
+      get: function get() {
+        return true;
       }
     }]);
     return CSSStyleSheet;

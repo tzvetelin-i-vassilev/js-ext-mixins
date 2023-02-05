@@ -99,7 +99,7 @@ export default [
 	},
 	/* ************** Polyfill CSSStyleSheet - UMD ************** */
 	{
-		input: "./src/polyfills/CSSStyleSheet.mjs",
+		input: "./src/classes/polyfills/CSSStyleSheet.mjs",
 		output: {
 			format: "umd",
 			name: "CSSStyleSheet",
@@ -125,7 +125,7 @@ export default [
 	},
 	/* ************** Polyfill CSSStyleSheet - ESM ************** */
 	{
-		input: "./src/polyfills/CSSStyleSheet.mjs",
+		input: "./src/classes/polyfills/CSSStyleSheet.mjs",
 		output: {
 			format: "esm",
 			file: "./dist/polyfills/css-style-sheet.mjs"
@@ -135,7 +135,7 @@ export default [
 		]
 	},
 	{
-		input: "./src/polyfills/CSSStyleSheet.mjs",
+		input: "./src/classes/polyfills/CSSStyleSheet.mjs",
 		output: {
 			format: "esm",
 			file: "./dist/polyfills/css-style-sheet-min.mjs"
