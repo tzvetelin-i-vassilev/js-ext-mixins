@@ -10,6 +10,18 @@ import pkg from "./package.json" assert {type: "json"}
 const input = "./src/index.mjs";
 const name = "jsExt";
 
+const license = `
+/**
+ * [${pkg.name}]{@link ${pkg.homepage}}
+ *
+ * @namespace ${name}
+ * @version ${pkg.version}
+ * @author ${pkg.author}
+ * @copyright ${pkg.author} 2020-${(new Date()).getFullYear()}
+ * @license ${pkg.license}
+ */
+`.trim();
+
 const babelOptions = {
 	babelrc: false,
 	babelHelpers: "bundled",
@@ -46,7 +58,8 @@ export default [
 		output: {
 			format: "umd",
 			name,
-			file: `./dist/${pkg.name}.js`,
+			intro: license,
+			file: `./dist/${pkg.name}.js`
 		},
 		plugins: [
 			eslint(eslintOptions),
@@ -58,6 +71,7 @@ export default [
 		output: {
 			format: "umd",
 			name,
+			intro: license,
 			file: `./dist/${pkg.name}-min.js`
 		},
 		plugins: browserPlugins.concat([
@@ -70,10 +84,12 @@ export default [
 		output: [
 			{
 				format: "esm",
+				intro: license,
 				file: `./dist/${pkg.name}.mjs`,
 			},
 			{
 				format: "cjs",
+				intro: license,
 				file: `./dist/${pkg.name}.cjs`,
 			}
 		],
@@ -86,10 +102,12 @@ export default [
 		output: [
 			{
 				format: "esm",
+				intro: license,
 				file: `./dist/${pkg.name}-min.mjs`
 			},
 			{
 				format: "cjs",
+				intro: license,
 				file: `./dist/${pkg.name}-min.cjs`
 			}
 		],
@@ -103,6 +121,7 @@ export default [
 		output: {
 			format: "umd",
 			name: "CSSStyleSheet",
+			intro: license,
 			file: "./dist/polyfills/css-style-sheet.js"
 		},
 		plugins: [
@@ -116,7 +135,8 @@ export default [
 		output: {
 			format: "umd",
 			name: "CSSStyleSheet",
-			file: "./dist/polyfills/css-style-sheet-min.js",
+			intro: license,
+			file: "./dist/polyfills/css-style-sheet-min.js"
 		},
 		plugins: [
 			babel(babelOptions),
@@ -128,6 +148,7 @@ export default [
 		input: "./src/classes/polyfills/CSSStyleSheet.mjs",
 		output: {
 			format: "esm",
+			intro: license,
 			file: "./dist/polyfills/css-style-sheet.mjs"
 		},
 		plugins: [
@@ -138,6 +159,7 @@ export default [
 		input: "./src/classes/polyfills/CSSStyleSheet.mjs",
 		output: {
 			format: "esm",
+			intro: license,
 			file: "./dist/polyfills/css-style-sheet-min.mjs"
 		},
 		plugins: [

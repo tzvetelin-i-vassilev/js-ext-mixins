@@ -29,7 +29,6 @@ import "js-ext-mixins/polyfills/css-style-sheet"
  * DOMRect
  * Date
  * Function
- * HTMLDocument
  * HTMLElement
  * HTMLImageElement
  * Image

@@ -1,3 +1,13 @@
+/**
+ * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
+ *
+ * @namespace jsExt
+ * @version 1.0.6
+ * @author Tzvetelin Vassilev
+ * @copyright Tzvetelin Vassilev 2020-2023
+ * @license ISC
+ */
+
 const CSSStyleSheetOrigin = window.CSSStyleSheet;
 const protoProps = Object.getOwnPropertyNames(CSSStyleSheetOrigin.prototype).slice(1);
 class CSSStyleSheet {

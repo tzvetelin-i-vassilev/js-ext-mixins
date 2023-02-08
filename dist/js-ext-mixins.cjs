@@ -1,5 +1,15 @@
 'use strict';
 
+/**
+ * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
+ *
+ * @namespace jsExt
+ * @version 1.0.6
+ * @author Tzvetelin Vassilev
+ * @copyright Tzvetelin Vassilev 2020-2023
+ * @license ISC
+ */
+
 var version = "1.0.6";
 
 class Extension {
@@ -852,34 +862,6 @@ class ShadowRootExt extends Extension {
 	}
 }
 
-class HTMLDocumentExt extends Extension {
-	async adoptStyleSheet(src, name) {
-		let sheet;
-		if (this.adoptedStyleSheets) {
-			let Module = await import(src);
-			sheet = Module.default;
-			sheet.remove = function() {
-				document.adoptedStyleSheets.remove(this);
-			};
-			this.adoptedStyleSheets.push(sheet);
-		}
-		else {
-			let respone = await fetch(src);
-			let text = await respone.text();
-			let style = document.createElement("style");
-			style.innerHTML = text;
-			if (name) style.setAttribute("name", name);
-			this.head.appendChild(style);
-			sheet = style.sheet;
-			sheet.remove = function() {
-				style.remove();
-			};
-		}
-		if (name) sheet.name = name;
-		return sheet;
-	}
-}
-
 var extensions = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	ArrayBufferExt: ArrayBufferExt,
@@ -890,7 +872,6 @@ var extensions = /*#__PURE__*/Object.freeze({
 	DOMRectExt: DOMRectExt,
 	DateExt: DateExt,
 	FunctionExt: FunctionExt,
-	HTMLDocumentExt: HTMLDocumentExt,
 	HTMLElementExt: HTMLElementExt,
 	HTMLImageElementExt: HTMLImageElementExt,
 	ImageExt: ImageExt,

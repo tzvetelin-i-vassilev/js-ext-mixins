@@ -3,6 +3,16 @@
   factory();
 })((function () { 'use strict';
 
+  /**
+   * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
+   *
+   * @namespace jsExt
+   * @version 1.0.6
+   * @author Tzvetelin Vassilev
+   * @copyright Tzvetelin Vassilev 2020-2023
+   * @license ISC
+   */
+
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");

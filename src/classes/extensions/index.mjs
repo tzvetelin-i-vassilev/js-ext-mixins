@@ -26,7 +26,6 @@ import DOMRectExt from "./DOMRectExt.mjs"
 import DOMMatrixExt from "./DOMMatrixExt.mjs"
 import CSSStyleSheetExt from "./CSSStyleSheetExt.mjs"
 import ShadowRootExt from "./ShadowRootExt.mjs"
-import HTMLDocumentExt from "./HTMLDocumentExt.mjs"
 
 export {
 	ObjectExt,
@@ -48,6 +47,5 @@ export {
 	DOMRectExt,
 	DOMMatrixExt,
 	CSSStyleSheetExt,
-	ShadowRootExt,
-	HTMLDocumentExt
+	ShadowRootExt
 }
