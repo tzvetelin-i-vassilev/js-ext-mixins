@@ -4,7 +4,7 @@
 })((function () { 'use strict';
 
   /**
-   * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
+   * [js-ext-mixins/polyfills/css-style-sheet]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
    *
    * @namespace jsExt
    * @version 1.0.6

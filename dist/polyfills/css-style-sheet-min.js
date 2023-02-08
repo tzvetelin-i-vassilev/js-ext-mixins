@@ -1,6 +1,6 @@
 !function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"function"==typeof define&&define.amd?define(["exports"],e):e((t="undefined"!=typeof globalThis?globalThis:t||self).CSSStyleSheet={})}(this,(function(t){"use strict";
 /**
-   * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
+   * [js-ext-mixins/polyfills/css-style-sheet]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
    *
    * @namespace jsExt
    * @version 1.0.6

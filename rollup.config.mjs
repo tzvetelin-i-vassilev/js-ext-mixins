@@ -10,17 +10,19 @@ import pkg from "./package.json" assert {type: "json"}
 const input = "./src/index.mjs";
 const name = "jsExt";
 
-const license = `
-/**
- * [${pkg.name}]{@link ${pkg.homepage}}
- *
- * @namespace ${name}
- * @version ${pkg.version}
- * @author ${pkg.author}
- * @copyright ${pkg.author} 2020-${(new Date()).getFullYear()}
- * @license ${pkg.license}
- */
-`.trim();
+function getLicenseHeader(polyfill) {
+	return `
+		/**
+		 * [${pkg.name}${polyfill ? `/polyfills/${polyfill}` : ""}]{@link ${pkg.homepage}}
+		 *
+		 * @namespace ${name}
+		 * @version ${pkg.version}
+		 * @author ${pkg.author}
+		 * @copyright ${pkg.author} 2020-${(new Date()).getFullYear()}
+		 * @license ${pkg.license}
+		 */
+	`.trim().replaceAll("\t", "");
+}
 
 const babelOptions = {
 	babelrc: false,
@@ -58,7 +60,7 @@ export default [
 		output: {
 			format: "umd",
 			name,
-			intro: license,
+			intro: getLicenseHeader(),
 			file: `./dist/${pkg.name}.js`
 		},
 		plugins: [
@@ -71,7 +73,7 @@ export default [
 		output: {
 			format: "umd",
 			name,
-			intro: license,
+			intro: getLicenseHeader(),
 			file: `./dist/${pkg.name}-min.js`
 		},
 		plugins: browserPlugins.concat([
@@ -84,12 +86,12 @@ export default [
 		output: [
 			{
 				format: "esm",
-				intro: license,
+				intro: getLicenseHeader(),
 				file: `./dist/${pkg.name}.mjs`,
 			},
 			{
 				format: "cjs",
-				intro: license,
+				intro: getLicenseHeader(),
 				file: `./dist/${pkg.name}.cjs`,
 			}
 		],
@@ -102,12 +104,12 @@ export default [
 		output: [
 			{
 				format: "esm",
-				intro: license,
+				intro: getLicenseHeader(),
 				file: `./dist/${pkg.name}-min.mjs`
 			},
 			{
 				format: "cjs",
-				intro: license,
+				intro: getLicenseHeader(),
 				file: `./dist/${pkg.name}-min.cjs`
 			}
 		],
@@ -121,7 +123,7 @@ export default [
 		output: {
 			format: "umd",
 			name: "CSSStyleSheet",
-			intro: license,
+			intro: getLicenseHeader("css-style-sheet"),
 			file: "./dist/polyfills/css-style-sheet.js"
 		},
 		plugins: [
@@ -135,7 +137,7 @@ export default [
 		output: {
 			format: "umd",
 			name: "CSSStyleSheet",
-			intro: license,
+			intro: getLicenseHeader("css-style-sheet"),
 			file: "./dist/polyfills/css-style-sheet-min.js"
 		},
 		plugins: [
@@ -148,7 +150,7 @@ export default [
 		input: "./src/classes/polyfills/CSSStyleSheet.mjs",
 		output: {
 			format: "esm",
-			intro: license,
+			intro: getLicenseHeader("css-style-sheet"),
 			file: "./dist/polyfills/css-style-sheet.mjs"
 		},
 		plugins: [
@@ -159,7 +161,7 @@ export default [
 		input: "./src/classes/polyfills/CSSStyleSheet.mjs",
 		output: {
 			format: "esm",
-			intro: license,
+			intro: getLicenseHeader("css-style-sheet"),
 			file: "./dist/polyfills/css-style-sheet-min.mjs"
 		},
 		plugins: [
