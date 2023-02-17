@@ -1,5 +1,4 @@
 {
-	"recurseDepth": 20,
 	"source": {
 		"include": ["src"],
 		"includePattern": ".+\\.(m)js(doc)?$",
