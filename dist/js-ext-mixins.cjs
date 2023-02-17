@@ -240,13 +240,16 @@ class FunctionExt extends Extension {
 			configurable: true
 		}
 	}
-	static createClass(name, parentClass) {
-		const def = new Function(parentClass ? parentClass.name : undefined, `return class ${name}${parentClass ? ` extends ${parentClass.name}` : ""} {
+	createClass(name, parentClass, options = {}) {
+		let args = options.args || {};
+		const def = new Function(parentClass.name, ...Object.keys(args), `return class ${name} extends ${parentClass.name} {
 			constructor() {
-				${parentClass ? "super(...arguments);" : ""}
+				super(...arguments);
+				${options.constructorSrc || ""}
 			}
+			${options.methods || ""}
 		}`);
-		return def(parentClass);
+		return def(parentClass, ...Object.values(args));
 	}
 }
 

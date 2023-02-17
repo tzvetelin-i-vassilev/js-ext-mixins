@@ -99,6 +99,21 @@
       return false;
     }
   }
+  function _construct(Parent, args, Class) {
+    if (_isNativeReflectConstruct()) {
+      _construct = Reflect.construct.bind();
+    } else {
+      _construct = function _construct(Parent, args, Class) {
+        var a = [null];
+        a.push.apply(a, args);
+        var Constructor = Function.bind.apply(Parent, a);
+        var instance = new Constructor();
+        if (Class) _setPrototypeOf(instance, Class.prototype);
+        return instance;
+      };
+    }
+    return _construct.apply(null, arguments);
+  }
   function _assertThisInitialized(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -533,11 +548,13 @@
       _classCallCheck(this, FunctionExt);
       return _super.apply(this, arguments);
     }
-    _createClass(FunctionExt, null, [{
+    _createClass(FunctionExt, [{
       key: "createClass",
       value: function createClass(name, parentClass) {
-        var def = new Function(parentClass ? parentClass.name : undefined, "return class ".concat(name).concat(parentClass ? " extends ".concat(parentClass.name) : "", " {\n\t\t\tconstructor() {\n\t\t\t\t").concat(parentClass ? "super(...arguments);" : "", "\n\t\t\t}\n\t\t}"));
-        return def(parentClass);
+        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+        var args = options.args || {};
+        var def = _construct(Function, [parentClass.name].concat(_toConsumableArray(Object.keys(args)), ["return class ".concat(name, " extends ").concat(parentClass.name, " {\n\t\t\tconstructor() {\n\t\t\t\tsuper(...arguments);\n\t\t\t\t").concat(options.constructorSrc || "", "\n\t\t\t}\n\t\t\t").concat(options.methods || "", "\n\t\t}")]));
+        return def.apply(void 0, [parentClass].concat(_toConsumableArray(Object.values(args))));
       }
     }]);
     return FunctionExt;
