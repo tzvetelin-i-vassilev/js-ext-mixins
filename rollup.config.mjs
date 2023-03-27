@@ -1,9 +1,8 @@
-import babel from "@rollup/plugin-babel"
 import commonjs from "@rollup/plugin-commonjs"
 import resolve from "@rollup/plugin-node-resolve"
-import cleanup from "rollup-plugin-cleanup"
 import eslint from "@rollup/plugin-eslint"
 import terser from "@rollup/plugin-terser"
+import cleanup from "rollup-plugin-cleanup"
 
 import pkg from "./package.json" assert {type: "json"}
 
@@ -24,34 +23,13 @@ function getLicenseHeader(polyfill) {
 	`.trim().replaceAll("\t", "");
 }
 
-const babelOptions = {
-	babelrc: false,
-	babelHelpers: "bundled",
-	presets: ["@babel/preset-env"],
-	plugins: ["@babel/plugin-syntax-import-assertions"],
-	exclude: "node_modules/**"
-};
-
 const eslintOptions = {
 	overrideConfig: {
-		env: {
-			browser: true,
-			node: true
-		},
 		globals: {
-			DedicatedWorkerGlobalScope: "readonly",
 			DOMSize: "readonly"
 		}
 	}
 };
-
-let browserPlugins = [
-	resolve({
-		browser: true
-	}),
-	babel(babelOptions),
-	commonjs()
-];
 
 export default [
 	/* ************** UMD ************** */
@@ -65,8 +43,10 @@ export default [
 		},
 		plugins: [
 			eslint(eslintOptions),
+			resolve(),
+			commonjs(),
 			cleanup()
-		].concat(browserPlugins)
+		]
 	},
 	{
 		input,
@@ -76,9 +56,11 @@ export default [
 			intro: getLicenseHeader(),
 			file: `./dist/${pkg.name}-min.js`
 		},
-		plugins: browserPlugins.concat([
+		plugins: [
+			resolve(),
+			commonjs(),
 			terser()
-		])
+		]
 	},
 	/* ************** ESM, CJS ************** */
 	{
@@ -127,7 +109,6 @@ export default [
 			file: "./dist/polyfills/css-style-sheet.js"
 		},
 		plugins: [
-			babel(babelOptions),
 			eslint(eslintOptions),
 			cleanup()
 		]
@@ -141,7 +122,6 @@ export default [
 			file: "./dist/polyfills/css-style-sheet-min.js"
 		},
 		plugins: [
-			babel(babelOptions),
 			terser()
 		]
 	},

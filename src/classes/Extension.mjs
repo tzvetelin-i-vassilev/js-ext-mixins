@@ -13,13 +13,13 @@ class Extension {
 
 		if (!clazz) {
 			if (this.debug)
-				console.warn(`============================================================ Class ${name} not found`)
+				console.warn(`Class ${name} not found`)
 
 			return false;
 		}
 
 		if (this.debug)
-			console.log("============================================================ extend", clazz.name, extension.name)
+			console.log("extend", clazz.name, extension.name)
 
 		Object.getOwnPropertyNames(extension.prototype).filter(name => name != "constructor").forEach(name => {
 			if (name in clazz.prototype && !extension.overrides.includes(name)) {
