@@ -1,1652 +1,916 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.jsExt = {}));
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.jsExt = {}));
 })(this, (function (exports) { 'use strict';
 
-  /**
-   * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
-   *
-   * @namespace jsExt
-   * @version 1.0.6
-   * @author Tzvetelin Vassilev
-   * @copyright Tzvetelin Vassilev 2020-2023
-   * @license ISC
-   */
+	/**
+	 * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
+	 *
+	 * @namespace jsExt
+	 * @version 1.0.6
+	 * @author Tzvetelin Vassilev
+	 * @copyright Tzvetelin Vassilev 2020-2023
+	 * @license ISC
+	 */
 
-  function _typeof(obj) {
-    "@babel/helpers - typeof";
+	var version = "1.0.6";
 
-    return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-      return typeof obj;
-    } : function (obj) {
-      return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    }, _typeof(obj);
-  }
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-  function _defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor);
-    }
-  }
-  function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
-    Object.defineProperty(Constructor, "prototype", {
-      writable: false
-    });
-    return Constructor;
-  }
-  function _defineProperty(obj, key, value) {
-    key = _toPropertyKey(key);
-    if (key in obj) {
-      Object.defineProperty(obj, key, {
-        value: value,
-        enumerable: true,
-        configurable: true,
-        writable: true
-      });
-    } else {
-      obj[key] = value;
-    }
-    return obj;
-  }
-  function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        writable: true,
-        configurable: true
-      }
-    });
-    Object.defineProperty(subClass, "prototype", {
-      writable: false
-    });
-    if (superClass) _setPrototypeOf(subClass, superClass);
-  }
-  function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
-      return o.__proto__ || Object.getPrototypeOf(o);
-    };
-    return _getPrototypeOf(o);
-  }
-  function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
-      o.__proto__ = p;
-      return o;
-    };
-    return _setPrototypeOf(o, p);
-  }
-  function _isNativeReflectConstruct() {
-    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-    if (Reflect.construct.sham) return false;
-    if (typeof Proxy === "function") return true;
-    try {
-      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-  function _construct(Parent, args, Class) {
-    if (_isNativeReflectConstruct()) {
-      _construct = Reflect.construct.bind();
-    } else {
-      _construct = function _construct(Parent, args, Class) {
-        var a = [null];
-        a.push.apply(a, args);
-        var Constructor = Function.bind.apply(Parent, a);
-        var instance = new Constructor();
-        if (Class) _setPrototypeOf(instance, Class.prototype);
-        return instance;
-      };
-    }
-    return _construct.apply(null, arguments);
-  }
-  function _assertThisInitialized(self) {
-    if (self === void 0) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-    return self;
-  }
-  function _possibleConstructorReturn(self, call) {
-    if (call && (typeof call === "object" || typeof call === "function")) {
-      return call;
-    } else if (call !== void 0) {
-      throw new TypeError("Derived constructors may only return object or undefined");
-    }
-    return _assertThisInitialized(self);
-  }
-  function _createSuper(Derived) {
-    var hasNativeReflectConstruct = _isNativeReflectConstruct();
-    return function _createSuperInternal() {
-      var Super = _getPrototypeOf(Derived),
-        result;
-      if (hasNativeReflectConstruct) {
-        var NewTarget = _getPrototypeOf(this).constructor;
-        result = Reflect.construct(Super, arguments, NewTarget);
-      } else {
-        result = Super.apply(this, arguments);
-      }
-      return _possibleConstructorReturn(this, result);
-    };
-  }
-  function _toConsumableArray(arr) {
-    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
-  }
-  function _arrayWithoutHoles(arr) {
-    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
-  }
-  function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
-  }
-  function _unsupportedIterableToArray(o, minLen) {
-    if (!o) return;
-    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-    var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === "Object" && o.constructor) n = o.constructor.name;
-    if (n === "Map" || n === "Set") return Array.from(o);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-  }
-  function _arrayLikeToArray(arr, len) {
-    if (len == null || len > arr.length) len = arr.length;
-    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-    return arr2;
-  }
-  function _nonIterableSpread() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-  function _createForOfIteratorHelper(o, allowArrayLike) {
-    var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
-    if (!it) {
-      if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
-        if (it) o = it;
-        var i = 0;
-        var F = function () {};
-        return {
-          s: F,
-          n: function () {
-            if (i >= o.length) return {
-              done: true
-            };
-            return {
-              done: false,
-              value: o[i++]
-            };
-          },
-          e: function (e) {
-            throw e;
-          },
-          f: F
-        };
-      }
-      throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-    }
-    var normalCompletion = true,
-      didErr = false,
-      err;
-    return {
-      s: function () {
-        it = it.call(o);
-      },
-      n: function () {
-        var step = it.next();
-        normalCompletion = step.done;
-        return step;
-      },
-      e: function (e) {
-        didErr = true;
-        err = e;
-      },
-      f: function () {
-        try {
-          if (!normalCompletion && it.return != null) it.return();
-        } finally {
-          if (didErr) throw err;
-        }
-      }
-    };
-  }
-  function _toPrimitive(input, hint) {
-    if (typeof input !== "object" || input === null) return input;
-    var prim = input[Symbol.toPrimitive];
-    if (prim !== undefined) {
-      var res = prim.call(input, hint || "default");
-      if (typeof res !== "object") return res;
-      throw new TypeError("@@toPrimitive must return a primitive value.");
-    }
-    return (hint === "string" ? String : Number)(input);
-  }
-  function _toPropertyKey(arg) {
-    var key = _toPrimitive(arg, "string");
-    return typeof key === "symbol" ? key : String(key);
-  }
+	class Extension {
+		static overrides = ["toString"];
+		static extend(clazz, extension = this) {
+			let name;
+			if (typeof clazz == "string") {
+				name = clazz;
+				clazz = globalThis[name];
+			}
+			else
+				name = clazz.name;
+			if (!clazz) {
+				if (this.debug)
+					console.warn(`Class ${name} not found`);
+				return false;
+			}
+			if (this.debug)
+				console.log("extend", clazz.name, extension.name);
+			Object.getOwnPropertyNames(extension.prototype).filter(name => name != "constructor").forEach(name => {
+				if (name in clazz.prototype && !extension.overrides.includes(name)) {
+					if (this.debug) console.log(`%cexclude ${name}`, "color: red");
+					return;
+				}
+				if (this.debug) {
+					if (extension.overrides.includes(name))
+						console.log(`%coverride ${name}`, "color: chartreuse");
+					else
+						console.log(`%cdefine ${name}`, "color: green");
+				}
+				Object.defineProperty(clazz.prototype, name, {value: extension.prototype[name], configurable: true});
+			});
+			Object.getOwnPropertyNames(extension).forEach(name => {
+				if (typeof extension[name] != "function" || name == "extend") return;
+				if (name in clazz && !extension.overrides.includes(name)) {
+					if (this.debug) console.log(`%cexclude static ${name}`, "color: red");
+					return;
+				}
+				if (this.debug) {
+					if (extension.overrides.includes(name))
+						console.log(`%coverride static ${name}`, "color: chartreuse");
+					else
+						console.log(`%cdefine static ${name}`, "color: orange");
+				}
+				clazz[name] = extension[name];
+			});
+			if (extension.properties) {
+				Object.keys(extension.properties).forEach(name => {
+					if (name in clazz.prototype) {
+						if (this.debug) console.log(`%cexclude prop ${name}`, "color: red");
+						return;
+					}
+					if (extension.properties[name]) {
+						if (this.debug) console.log(`%cdefine prop ${name}`, "color: darkseagreen");
+						Object.defineProperty(clazz.prototype, name, extension.properties[name]);
+					}
+				});
+			}
+			if (extension.classProperties) {
+				Object.keys(extension.classProperties).forEach(name => {
+					if (name in clazz) {
+						if (this.debug) console.log(`%cexclude static prop ${name}`, "color: red");
+						return;
+					}
+					if (extension.classProperties[name]) {
+						if (this.debug) console.log(`%cdefine static prop ${name}`, "color: chocolate");
+						Object.defineProperty(clazz, name, extension.classProperties[name]);
+					}
+				});
+			}
+			return true;
+		}
+	}
 
-  var version = "1.0.6";
+	class EnumValue {
+		constructor(name, value, index) {
+			Object.defineProperty(this, "type", {value: name, enumerable: true});
+			Object.defineProperty(this, "name", {value: value, enumerable: true});
+			Object.defineProperty(this, "value", {value: index, enumerable: true});
+		}
+		toString() {
+			return this.name;
+		}
+	}
 
-  var Extension = /*#__PURE__*/function () {
-    function Extension() {
-      _classCallCheck(this, Extension);
-    }
-    _createClass(Extension, null, [{
-      key: "extend",
-      value: function extend(clazz) {
-        var _this = this;
-        var extension = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this;
-        var name;
-        if (typeof clazz == "string") {
-          name = clazz;
-          clazz = globalThis[name];
-        } else name = clazz.name;
-        if (!clazz) {
-          if (this.debug) console.warn("============================================================ Class ".concat(name, " not found"));
-          return false;
-        }
-        if (this.debug) console.log("============================================================ extend", clazz.name, extension.name);
-        Object.getOwnPropertyNames(extension.prototype).filter(function (name) {
-          return name != "constructor";
-        }).forEach(function (name) {
-          if (name in clazz.prototype && !extension.overrides.includes(name)) {
-            if (_this.debug) console.log("%cexclude ".concat(name), "color: red");
-            return;
-          }
-          if (_this.debug) {
-            if (extension.overrides.includes(name)) console.log("%coverride ".concat(name), "color: chartreuse");else console.log("%cdefine ".concat(name), "color: green");
-          }
-          Object.defineProperty(clazz.prototype, name, {
-            value: extension.prototype[name],
-            configurable: true
-          });
-        });
-        Object.getOwnPropertyNames(extension).forEach(function (name) {
-          if (typeof extension[name] != "function" || name == "extend") return;
-          if (name in clazz && !extension.overrides.includes(name)) {
-            if (_this.debug) console.log("%cexclude static ".concat(name), "color: red");
-            return;
-          }
-          if (_this.debug) {
-            if (extension.overrides.includes(name)) console.log("%coverride static ".concat(name), "color: chartreuse");else console.log("%cdefine static ".concat(name), "color: orange");
-          }
-          clazz[name] = extension[name];
-        });
-        if (extension.properties) {
-          Object.keys(extension.properties).forEach(function (name) {
-            if (name in clazz.prototype) {
-              if (_this.debug) console.log("%cexclude prop ".concat(name), "color: red");
-              return;
-            }
-            if (extension.properties[name]) {
-              if (_this.debug) console.log("%cdefine prop ".concat(name), "color: darkseagreen");
-              Object.defineProperty(clazz.prototype, name, extension.properties[name]);
-            }
-          });
-        }
-        if (extension.classProperties) {
-          Object.keys(extension.classProperties).forEach(function (name) {
-            if (name in clazz) {
-              if (_this.debug) console.log("%cexclude static prop ".concat(name), "color: red");
-              return;
-            }
-            if (extension.classProperties[name]) {
-              if (_this.debug) console.log("%cdefine static prop ".concat(name), "color: chocolate");
-              Object.defineProperty(clazz, name, extension.classProperties[name]);
-            }
-          });
-        }
-        return true;
-      }
-    }]);
-    return Extension;
-  }();
-  _defineProperty(Extension, "overrides", ["toString"]);
+	class ObjectExt extends Extension {
+		static equals(x, y) {
+			if (x === y) return true;
+			if (!(x instanceof Object && y instanceof Object)) return false;
+			if (x.constructor !== y.constructor) return false;
+			if (x instanceof Array || ArrayBuffer.isTypedArray(x)) {
+				if (x.length != y.length) return false;
+				return x.every((v, i) => Object.equals(v, y[i]));
+			}
+			for (let p in x) {
+				if (!x.hasOwnProperty(p)) continue;
+				if (!y.hasOwnProperty(p)) return false;
+				if (x[p] === y[p]) continue;
+				if (typeof(x[p]) !== "object") return false;
+				if (!Object.equals(x[p], y[p])) return false;
+			}
+			for (let p in y) {
+				if (y.hasOwnProperty(p) && !x.hasOwnProperty(p)) return false;
+			}
+			return true;
+		}
+		static clone(oReferance, bDataOnly = false) {
+			let aReferances = new Array();
+			function deepCopy(oSource) {
+				if (oSource === null) return null;
+				if (typeof(oSource) !== "object" || oSource.immutable) return oSource;
+				if (typeof oSource.clone === "function") return oSource.clone();
+				for (let i = 0; i < aReferances.length; i++) {
+					if (aReferances[i][0] === oSource)
+						return aReferances[i][1];
+				}
+				let oCopy = Object.create(Object.getPrototypeOf(oSource));
+				aReferances.push([oSource, oCopy]);
+				for (let sPropertyName in oSource) {
+					if (bDataOnly && typeof oSource[sPropertyName] === "function")
+						continue;
+					if (oSource.hasOwnProperty(sPropertyName))
+						oCopy[sPropertyName] = deepCopy(oSource[sPropertyName]);
+				}
+				return oCopy;
+			}
+			return deepCopy(oReferance);
+		}
+		static defineEnum(target, name, values) {
+			if (target[name]) throw new Error(`Already exist property: ${name}`);
+			let type = {
+				name,
+				values: values.map((value, index) => new EnumValue(name, value, index))
+			};
+			type.values.forEach(value => {
+				Object.defineProperty(type, value.name, {value: value, enumerable: true});
+				Object.defineProperty(type, value.value, {value: value, enumerable: true});
+			});
+			Object.defineProperty(target, name, {value: type, enumerable: true});
+			return type;
+		}
+	}
 
-  var EnumValue = /*#__PURE__*/function () {
-    function EnumValue(name, value, index) {
-      _classCallCheck(this, EnumValue);
-      Object.defineProperty(this, "type", {
-        value: name,
-        enumerable: true
-      });
-      Object.defineProperty(this, "name", {
-        value: value,
-        enumerable: true
-      });
-      Object.defineProperty(this, "value", {
-        value: index,
-        enumerable: true
-      });
-    }
-    _createClass(EnumValue, [{
-      key: "toString",
-      value: function toString() {
-        return this.name;
-      }
-    }]);
-    return EnumValue;
-  }();
+	class StringExt extends Extension {
+		padStart(length, char = "-") {
+			return (this.length < length) ? (new Array(length - this.length + 1)).join(char) + this : this.toString();
+		}
+		toCharArray(bytes = false) {
+			let list = [];
+			let byteList = true;
+			for (let i = 0; i < this.length; i++) {
+				let code = this.charCodeAt(i);
+				if (code > 255) byteList = false;
+				list[i] = code;
+			}
+			if (bytes) {
+				if (!byteList) throw new Error("Current value is not byte string");
+				list = new Uint8Array(list);
+			}
+			return list;
+		}
+		static fromCharArray(data) {
+			let binary = "";
+			try {
+				binary = String.fromCharCode.apply(null, data);
+			}
+			catch(e) {
+				for (let i = 0; i < data.length; i++)
+					binary += String.fromCharCode(data[i]);
+			}
+			return binary;
+		}
+	}
 
-  var ObjectExt = /*#__PURE__*/function (_Extension) {
-    _inherits(ObjectExt, _Extension);
-    var _super = _createSuper(ObjectExt);
-    function ObjectExt() {
-      _classCallCheck(this, ObjectExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(ObjectExt, null, [{
-      key: "equals",
-      value: function equals(x, y) {
-        if (x === y) return true;
-        if (!(x instanceof Object && y instanceof Object)) return false;
-        if (x.constructor !== y.constructor) return false;
-        if (x instanceof Array || ArrayBuffer.isTypedArray(x)) {
-          if (x.length != y.length) return false;
-          return x.every(function (v, i) {
-            return Object.equals(v, y[i]);
-          });
-        }
-        for (var p in x) {
-          if (!x.hasOwnProperty(p)) continue;
-          if (!y.hasOwnProperty(p)) return false;
-          if (x[p] === y[p]) continue;
-          if (_typeof(x[p]) !== "object") return false;
-          if (!Object.equals(x[p], y[p])) return false;
-        }
-        for (var _p in y) {
-          if (y.hasOwnProperty(_p) && !x.hasOwnProperty(_p)) return false;
-        }
-        return true;
-      }
-    }, {
-      key: "clone",
-      value: function clone(oReferance) {
-        var bDataOnly = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-        var aReferances = new Array();
-        function deepCopy(oSource) {
-          if (oSource === null) return null;
-          if (_typeof(oSource) !== "object" || oSource.immutable) return oSource;
-          if (typeof oSource.clone === "function") return oSource.clone();
-          for (var i = 0; i < aReferances.length; i++) {
-            if (aReferances[i][0] === oSource) return aReferances[i][1];
-          }
-          var oCopy = Object.create(Object.getPrototypeOf(oSource));
-          aReferances.push([oSource, oCopy]);
-          for (var sPropertyName in oSource) {
-            if (bDataOnly && typeof oSource[sPropertyName] === "function") continue;
-            if (oSource.hasOwnProperty(sPropertyName)) oCopy[sPropertyName] = deepCopy(oSource[sPropertyName]);
-          }
-          return oCopy;
-        }
-        return deepCopy(oReferance);
-      }
-    }, {
-      key: "defineEnum",
-      value: function defineEnum(target, name, values) {
-        if (target[name]) throw new Error("Already exist property: ".concat(name));
-        var type = {
-          name: name,
-          values: values.map(function (value, index) {
-            return new EnumValue(name, value, index);
-          })
-        };
-        type.values.forEach(function (value) {
-          Object.defineProperty(type, value.name, {
-            value: value,
-            enumerable: true
-          });
-          Object.defineProperty(type, value.value, {
-            value: value,
-            enumerable: true
-          });
-        });
-        Object.defineProperty(target, name, {
-          value: type,
-          enumerable: true
-        });
-        return type;
-      }
-    }]);
-    return ObjectExt;
-  }(Extension);
+	class NumberExt extends Extension {
+		static classProperties = {
+			MAX_INT32: {value: 0x7FFFFFFF, enumerable: true},
+			MAX_UINT32: {value: 0xFFFFFFFF, enumerable: true},
+			MAX_INT64: (typeof BigInt == "undefined") ? undefined : {value: 0x7FFFFFFFFFFFFFFFn, enumerable: true},
+			MAX_UINT64: (typeof BigInt == "undefined") ? undefined : {value: 0xFFFFFFFFFFFFFFFFn, enumerable: true}
+		}
+		format(pattern) {
+			if (!Number.isInteger(this) || this < 0)
+				throw new Error(`Underlying number ${this} should be positive integer`);
+			if (this.toString().length < pattern.length)
+				return pattern.substring(0, pattern.length - this.toString().length) + this;
+			else
+				return this.toString();
+		}
+	}
 
-  var StringExt = /*#__PURE__*/function (_Extension) {
-    _inherits(StringExt, _Extension);
-    var _super = _createSuper(StringExt);
-    function StringExt() {
-      _classCallCheck(this, StringExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(StringExt, [{
-      key: "padStart",
-      value: function padStart(length) {
-        var _char = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "-";
-        return this.length < length ? new Array(length - this.length + 1).join(_char) + this : this.toString();
-      }
-    }, {
-      key: "toCharArray",
-      value: function toCharArray() {
-        var bytes = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-        var list = [];
-        var byteList = true;
-        for (var i = 0; i < this.length; i++) {
-          var code = this.charCodeAt(i);
-          if (code > 255) byteList = false;
-          list[i] = code;
-        }
-        if (bytes) {
-          if (!byteList) throw new Error("Current value is not byte string");
-          list = new Uint8Array(list);
-        }
-        return list;
-      }
-    }], [{
-      key: "fromCharArray",
-      value: function fromCharArray(data) {
-        var binary = "";
-        try {
-          binary = String.fromCharCode.apply(null, data);
-        } catch (e) {
-          for (var i = 0; i < data.length; i++) {
-            binary += String.fromCharCode(data[i]);
-          }
-        }
-        return binary;
-      }
-    }]);
-    return StringExt;
-  }(Extension);
+	class DateExt extends Extension {
+		format(pattern) {
+			let result = pattern;
+			function resolve(search, value) {
+				let rs = RegExp(`${search}+`).exec(result);
+				if (rs) {
+					let match = rs[0];
+					let pattern = match.replace(new RegExp(match.substring(0, 1), "g"), "0");
+					if (search == "Y" && match == "YY") value = parseInt(value.toString().substring(2));
+					result = result.replace(match, value.format(pattern));
+				}
+			}
+			resolve("Y", this.getFullYear());
+			resolve("M", this.getMonth()+1);
+			resolve("D", this.getDate());
+			resolve("h", this.getHours());
+			resolve("m", this.getMinutes());
+			resolve("s", this.getSeconds());
+			resolve("S", this.getMilliseconds());
+			if (result.match(/[a-zA-Z]/))
+				throw new Error(`Invalid pattern found in ${pattern}: ${result.match(/[a-zA-Z]+/)[0]}`);
+			return result;
+		}
+		static format(pattern, timestamp = Date.now()) {
+			return (new Date(timestamp)).format(pattern);
+		}
+	}
 
-  var NumberExt = /*#__PURE__*/function (_Extension) {
-    _inherits(NumberExt, _Extension);
-    var _super = _createSuper(NumberExt);
-    function NumberExt() {
-      _classCallCheck(this, NumberExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(NumberExt, [{
-      key: "format",
-      value: function format(pattern) {
-        if (!Number.isInteger(this) || this < 0) throw new Error("Underlying number ".concat(this, " should be positive integer"));
-        if (this.toString().length < pattern.length) return pattern.substring(0, pattern.length - this.toString().length) + this;else return this.toString();
-      }
-    }]);
-    return NumberExt;
-  }(Extension);
-  _defineProperty(NumberExt, "classProperties", {
-    MAX_INT32: {
-      value: 0x7FFFFFFF,
-      enumerable: true
-    },
-    MAX_UINT32: {
-      value: 0xFFFFFFFF,
-      enumerable: true
-    },
-    MAX_INT64: typeof BigInt == "undefined" ? undefined : {
-      value: 0x7FFFFFFFFFFFFFFFn,
-      enumerable: true
-    },
-    MAX_UINT64: typeof BigInt == "undefined" ? undefined : {
-      value: 0xFFFFFFFFFFFFFFFFn,
-      enumerable: true
-    }
-  });
+	class FunctionExt extends Extension {
+		static properties = {
+			body: {
+				get: function() {
+					let body = this.toString();
+					body = body.substring(body.indexOf("{") + 1, body.lastIndexOf("}"));
+					return body;
+				},
+				configurable: true
+			}
+		}
+		createClass(name, parentClass, options = {}) {
+			let args = options.args || {};
+			const def = new Function(parentClass.name, ...Object.keys(args), `return class ${name} extends ${parentClass.name} {
+			constructor() {
+				super(...arguments);
+				${options.constructorSrc || ""}
+			}
+			${options.methods || ""}
+		}`);
+			return def(parentClass, ...Object.values(args));
+		}
+	}
 
-  var DateExt = /*#__PURE__*/function (_Extension) {
-    _inherits(DateExt, _Extension);
-    var _super = _createSuper(DateExt);
-    function DateExt() {
-      _classCallCheck(this, DateExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(DateExt, [{
-      key: "format",
-      value: function format(pattern) {
-        var result = pattern;
-        function resolve(search, value) {
-          var rs = RegExp("".concat(search, "+")).exec(result);
-          if (rs) {
-            var match = rs[0];
-            var _pattern = match.replace(new RegExp(match.substring(0, 1), "g"), "0");
-            if (search == "Y" && match == "YY") value = parseInt(value.toString().substring(2));
-            result = result.replace(match, value.format(_pattern));
-          }
-        }
-        resolve("Y", this.getFullYear());
-        resolve("M", this.getMonth() + 1);
-        resolve("D", this.getDate());
-        resolve("h", this.getHours());
-        resolve("m", this.getMinutes());
-        resolve("s", this.getSeconds());
-        resolve("S", this.getMilliseconds());
-        if (result.match(/[a-zA-Z]/)) throw new Error("Invalid pattern found in ".concat(pattern, ": ").concat(result.match(/[a-zA-Z]+/)[0]));
-        return result;
-      }
-    }], [{
-      key: "format",
-      value: function format(pattern) {
-        var timestamp = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : Date.now();
-        return new Date(timestamp).format(pattern);
-      }
-    }]);
-    return DateExt;
-  }(Extension);
+	class ArrayExt extends Extension {
+		static properties = {
+			first: {get: function() {return this[0]}, configurable: true},
+			last: {get: function() {return this[this.length-1]}, configurable: true}
+		};
+		clear() {
+			this.length = 0;
+		}
+		clone() {
+			if (!Object.clone) throw new Error("Object extension is required");
+			return this.map(item => Object.clone(item));
+		}
+		unique() {
+			return this.filter((item, index) => this.indexOf(item) == index);
+		}
+		insert(item, index = 0) {
+			this.splice(index, 0, item);
+		}
+		indicesOf(item) {
+			let indices = [];
+			let index = this.indexOf(item);
+			if (index != -1) {
+				indices.push(index);
+				let lastIndex = this.lastIndexOf(item);
+				while (lastIndex > index) {
+					index = this.indexOf(item, index + 1);
+					indices.push(index);
+				}
+			}
+			return indices;
+		}
+		remove(...itemN) {
+			let group = (indices) => {
+				let groups = [];
+				let lastIndex = -1;
+				indices.forEach(index => {
+					if (lastIndex - index != 1)
+						groups.push([]);
+					groups.last.push(index);
+					lastIndex = index;
+				});
+				return groups;
+			};
+			let indices = itemN
+				.map(element => this.indicesOf(element))
+				.flat()
+				.sort((a, b) => b - a);
+			group(indices)
+				.forEach(group => this.removeAt(group.last, group.length));
+			return this;
+		}
+		removeAt(index, count = 1) {
+			if (index > -1)
+				this.splice(index, count);
+			return this;
+		}
+		replace(item, replaceWith, exact = false) {
+			let index = this.indexOf(item);
+			if (index > -1) {
+				if (!exact && replaceWith instanceof Array)
+					this.splice(index, 1, ...replaceWith);
+				else
+					this.splice(index, 1, replaceWith);
+			}
+			return this;
+		}
+		static from(collection) {
+			return Array.prototype.slice.call(collection);
+		}
+	}
 
-  var FunctionExt = /*#__PURE__*/function (_Extension) {
-    _inherits(FunctionExt, _Extension);
-    var _super = _createSuper(FunctionExt);
-    function FunctionExt() {
-      _classCallCheck(this, FunctionExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(FunctionExt, [{
-      key: "createClass",
-      value: function createClass(name, parentClass) {
-        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-        var args = options.args || {};
-        var def = _construct(Function, [parentClass.name].concat(_toConsumableArray(Object.keys(args)), ["return class ".concat(name, " extends ").concat(parentClass.name, " {\n\t\t\tconstructor() {\n\t\t\t\tsuper(...arguments);\n\t\t\t\t").concat(options.constructorSrc || "", "\n\t\t\t}\n\t\t\t").concat(options.methods || "", "\n\t\t}")]));
-        return def.apply(void 0, [parentClass].concat(_toConsumableArray(Object.values(args))));
-      }
-    }]);
-    return FunctionExt;
-  }(Extension);
-  _defineProperty(FunctionExt, "properties", {
-    body: {
-      get: function get() {
-        var body = this.toString();
-        body = body.substring(body.indexOf("{") + 1, body.lastIndexOf("}"));
-        return body;
-      },
-      configurable: true
-    }
-  });
+	class ArrayBufferExt extends Extension {
+		toBase64() {
+			if (!String.fromCharArray) throw new Error("String extension is required");
+			let bytes = new Uint8Array(this);
+			return btoa(String.fromCharArray(bytes));
+		}
+		static fromBase64(str) {
+			if (!String.prototype.toCharArray) throw new Error("String extension is required");
+			return atob(str).toCharArray(true).buffer;
+		}
+		static isTypedArray(o) {
+			return ArrayBuffer.isView(o) && !(o instanceof DataView);
+		}
+	}
 
-  var ArrayExt = /*#__PURE__*/function (_Extension) {
-    _inherits(ArrayExt, _Extension);
-    var _super = _createSuper(ArrayExt);
-    function ArrayExt() {
-      _classCallCheck(this, ArrayExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(ArrayExt, [{
-      key: "clear",
-      value: function clear() {
-        this.length = 0;
-      }
-    }, {
-      key: "clone",
-      value: function clone() {
-        if (!Object.clone) throw new Error("Object extension is required");
-        return this.map(function (item) {
-          return Object.clone(item);
-        });
-      }
-    }, {
-      key: "unique",
-      value: function unique() {
-        var _this = this;
-        return this.filter(function (item, index) {
-          return _this.indexOf(item) == index;
-        });
-      }
-    }, {
-      key: "insert",
-      value: function insert(item) {
-        var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-        this.splice(index, 0, item);
-      }
-    }, {
-      key: "indicesOf",
-      value: function indicesOf(item) {
-        var indices = [];
-        var index = this.indexOf(item);
-        if (index != -1) {
-          indices.push(index);
-          var lastIndex = this.lastIndexOf(item);
-          while (lastIndex > index) {
-            index = this.indexOf(item, index + 1);
-            indices.push(index);
-          }
-        }
-        return indices;
-      }
-    }, {
-      key: "remove",
-      value: function remove() {
-        var _this2 = this;
-        var group = function group(indices) {
-          var groups = [];
-          var lastIndex = -1;
-          indices.forEach(function (index) {
-            if (lastIndex - index != 1) groups.push([]);
-            groups.last.push(index);
-            lastIndex = index;
-          });
-          return groups;
-        };
-        for (var _len = arguments.length, itemN = new Array(_len), _key = 0; _key < _len; _key++) {
-          itemN[_key] = arguments[_key];
-        }
-        var indices = itemN.map(function (element) {
-          return _this2.indicesOf(element);
-        }).flat().sort(function (a, b) {
-          return b - a;
-        });
-        group(indices).forEach(function (group) {
-          return _this2.removeAt(group.last, group.length);
-        });
-        return this;
-      }
-    }, {
-      key: "removeAt",
-      value: function removeAt(index) {
-        var count = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
-        if (index > -1) this.splice(index, count);
-        return this;
-      }
-    }, {
-      key: "replace",
-      value: function replace(item, replaceWith) {
-        var exact = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-        var index = this.indexOf(item);
-        if (index > -1) {
-          if (!exact && replaceWith instanceof Array) this.splice.apply(this, [index, 1].concat(_toConsumableArray(replaceWith)));else this.splice(index, 1, replaceWith);
-        }
-        return this;
-      }
-    }], [{
-      key: "from",
-      value: function from(collection) {
-        return Array.prototype.slice.call(collection);
-      }
-    }]);
-    return ArrayExt;
-  }(Extension);
-  _defineProperty(ArrayExt, "properties", {
-    first: {
-      get: function get() {
-        return this[0];
-      },
-      configurable: true
-    },
-    last: {
-      get: function get() {
-        return this[this.length - 1];
-      },
-      configurable: true
-    }
-  });
+	class SharedArrayBufferExt extends Extension {
+		static fromArrayBuffer(buffer) {
+			if (!(buffer instanceof ArrayBuffer)) throw new Error("ArrayBuffer is expected");
+			let bytes = new Uint8Array(buffer);
+			let sharedBuffer = new SharedArrayBuffer(buffer.byteLength);
+			let sharedBytes = new Uint8Array(sharedBuffer);
+			sharedBytes.set(bytes);
+			return sharedBuffer;
+		}
+	}
 
-  var ArrayBufferExt = /*#__PURE__*/function (_Extension) {
-    _inherits(ArrayBufferExt, _Extension);
-    var _super = _createSuper(ArrayBufferExt);
-    function ArrayBufferExt() {
-      _classCallCheck(this, ArrayBufferExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(ArrayBufferExt, [{
-      key: "toBase64",
-      value: function toBase64() {
-        if (!String.fromCharArray) throw new Error("String extension is required");
-        var bytes = new Uint8Array(this);
-        return btoa(String.fromCharArray(bytes));
-      }
-    }], [{
-      key: "fromBase64",
-      value: function fromBase64(str) {
-        if (!String.prototype.toCharArray) throw new Error("String extension is required");
-        return atob(str).toCharArray(true).buffer;
-      }
-    }, {
-      key: "isTypedArray",
-      value: function isTypedArray(o) {
-        return ArrayBuffer.isView(o) && !(o instanceof DataView);
-      }
-    }]);
-    return ArrayBufferExt;
-  }(Extension);
+	const TYPES = ["Int8", "Uint8", "Uint8Clamped", "Int16", "Uint16", "Int32", "Uint32", "Float32", "Float64", "BigInt64", "BigUint64"];
+	class TypedArrayExt extends Extension {
+		clone() {
+			if (typeof SharedArrayBuffer != "undefined" && this.buffer instanceof SharedArrayBuffer) {
+				let buffer = new SharedArrayBuffer(this.byteLength);
+				let instance = new this.constructor(buffer);
+				instance.set(this, this.byteOffset);
+				return instance;
+			}
+			else
+				return new this.constructor(this, this.byteOffset, this.length);
+		}
+		concat(...others) {
+			let length = this.length;
+			let offset = this.length;
+			others.forEach(other => {
+				if (this.constructor != other.constructor) throw new Error(`Concat array from wrong type detected - expected ${this.constructor.name}, found ${other.constructor.name}`);
+				length += other.length;
+			});
+			let result;
+			if (typeof SharedArrayBuffer != "undefined" && this.buffer instanceof SharedArrayBuffer)
+				result = this.constructor.createSharedInstance(length);
+			else
+				result = new this.constructor(length);
+			result.set(this);
+			others.forEach(other => {
+				result.set(other, offset);
+				offset += other.length;
+			});
+			return result;
+		}
+		toArray() {
+			return Array.from(this);
+		}
+		static createSharedInstance(data = 0) {
+			if (data instanceof this) {
+				if (typeof SharedArrayBuffer == "undefined" || data.buffer instanceof SharedArrayBuffer)
+					return data;
+				else
+					return new this(SharedArrayBufferExt.fromArrayBuffer(data.buffer));
+			}
+			if (typeof data != "number" && !Array.isArray(data))
+				throw new Error("Expected data type is Array");
+			let length = (typeof data == "number") ? data : data.length;
+			if (typeof SharedArrayBuffer == "undefined")
+				return (typeof data == "number") ? new this(length) : new this(data);
+			else {
+				let buffer = new SharedArrayBuffer(length * this.BYTES_PER_ELEMENT);
+				if (typeof data == "number")
+					return new this(buffer);
+				else {
+					let instance = new this(buffer);
+					instance.set(data);
+					return instance;
+				}
+			}
+		}
+		static from(array) {
+			return new this(array);
+		}
+		static extend() {
+			TYPES.forEach(type => {
+				let success = Extension.extend(type + "Array", this);
+				if (success) {
+					let TypedArray = globalThis[type + "Array"];
+					Object.defineProperty(Array.prototype, "to" + type + "Array", {value: function() {
+						return TypedArray.from(this);
+					}, configurable: true});
+				}
+			});
+		}
+	}
 
-  var SharedArrayBufferExt = /*#__PURE__*/function (_Extension) {
-    _inherits(SharedArrayBufferExt, _Extension);
-    var _super = _createSuper(SharedArrayBufferExt);
-    function SharedArrayBufferExt() {
-      _classCallCheck(this, SharedArrayBufferExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(SharedArrayBufferExt, null, [{
-      key: "fromArrayBuffer",
-      value: function fromArrayBuffer(buffer) {
-        if (!(buffer instanceof ArrayBuffer)) throw new Error("ArrayBuffer is expected");
-        var bytes = new Uint8Array(buffer);
-        var sharedBuffer = new SharedArrayBuffer(buffer.byteLength);
-        var sharedBytes = new Uint8Array(sharedBuffer);
-        sharedBytes.set(bytes);
-        return sharedBuffer;
-      }
-    }]);
-    return SharedArrayBufferExt;
-  }(Extension);
+	class SetExt extends Extension {
+		map(callback) {
+			let set = new Set();
+			for (let value of this) {
+				value = callback(value);
+				if (value) set.add(value);
+			}
+			return set;
+		}
+		filter(callback) {
+			let set = new Set();
+			for (let value of this) {
+				if (callback(value))
+					set.add(value);
+			}
+			return set;
+		}
+	}
 
-  var TYPES = ["Int8", "Uint8", "Uint8Clamped", "Int16", "Uint16", "Int32", "Uint32", "Float32", "Float64", "BigInt64", "BigUint64"];
-  var TypedArrayExt = /*#__PURE__*/function (_Extension) {
-    _inherits(TypedArrayExt, _Extension);
-    var _super = _createSuper(TypedArrayExt);
-    function TypedArrayExt() {
-      _classCallCheck(this, TypedArrayExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(TypedArrayExt, [{
-      key: "clone",
-      value: function clone() {
-        if (typeof SharedArrayBuffer != "undefined" && this.buffer instanceof SharedArrayBuffer) {
-          var buffer = new SharedArrayBuffer(this.byteLength);
-          var instance = new this.constructor(buffer);
-          instance.set(this, this.byteOffset);
-          return instance;
-        } else return new this.constructor(this, this.byteOffset, this.length);
-      }
-    }, {
-      key: "concat",
-      value: function concat() {
-        var _this = this;
-        var length = this.length;
-        var offset = this.length;
-        for (var _len = arguments.length, others = new Array(_len), _key = 0; _key < _len; _key++) {
-          others[_key] = arguments[_key];
-        }
-        others.forEach(function (other) {
-          if (_this.constructor != other.constructor) throw new Error("Concat array from wrong type detected - expected ".concat(_this.constructor.name, ", found ").concat(other.constructor.name));
-          length += other.length;
-        });
-        var result;
-        if (typeof SharedArrayBuffer != "undefined" && this.buffer instanceof SharedArrayBuffer) result = this.constructor.createSharedInstance(length);else result = new this.constructor(length);
-        result.set(this);
-        others.forEach(function (other) {
-          result.set(other, offset);
-          offset += other.length;
-        });
-        return result;
-      }
-    }, {
-      key: "toArray",
-      value: function toArray() {
-        return Array.from(this);
-      }
-    }], [{
-      key: "createSharedInstance",
-      value: function createSharedInstance() {
-        var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-        if (data instanceof this) {
-          if (typeof SharedArrayBuffer == "undefined" || data.buffer instanceof SharedArrayBuffer) return data;else return new this(SharedArrayBufferExt.fromArrayBuffer(data.buffer));
-        }
-        if (typeof data != "number" && !Array.isArray(data)) throw new Error("Expected data type is Array");
-        var length = typeof data == "number" ? data : data.length;
-        if (typeof SharedArrayBuffer == "undefined") return typeof data == "number" ? new this(length) : new this(data);else {
-          var buffer = new SharedArrayBuffer(length * this.BYTES_PER_ELEMENT);
-          if (typeof data == "number") return new this(buffer);else {
-            var instance = new this(buffer);
-            instance.set(data);
-            return instance;
-          }
-        }
-      }
-    }, {
-      key: "from",
-      value: function from(array) {
-        return new this(array);
-      }
-    }, {
-      key: "extend",
-      value: function extend() {
-        var _this2 = this;
-        TYPES.forEach(function (type) {
-          var success = Extension.extend(type + "Array", _this2);
-          if (success) {
-            var TypedArray = globalThis[type + "Array"];
-            Object.defineProperty(Array.prototype, "to" + type + "Array", {
-              value: function value() {
-                return TypedArray.from(this);
-              },
-              configurable: true
-            });
-          }
-        });
-      }
-    }]);
-    return TypedArrayExt;
-  }(Extension);
+	let DOMSize$1 = class DOMSize {
+		constructor(width, height) {
+			this.width = width;
+			this.height = height;
+		}
+		toJSON() {
+			return {width: this.width, height: this.height};
+		}
+		toString() {
+			return `size(${this.width}, ${this.height})`;
+		}
+		static fromSize(value) {
+			if (value instanceof DOMSize) return value;
+			if (typeof value == "string") {
+				if (value.startsWith("size(")) {
+					let arr = value.substring(value.indexOf("(")+1, value.indexOf(")")).split(/,\s*/g);
+					value = {
+						width: parseFloat(arr[0]),
+						height: parseFloat(arr[1])
+					};
+				}
+				else
+					throw new Error("Invalid value found. Expected template - size(width, height).");
+			}
+			if (isNaN(value.width)) throw new Error("Invalid width found, expected number");
+			if (isNaN(value.height)) throw new Error("Invalid height found, expected number");
+			return new DOMSize(value.width, value.height);
+		}
+	};
 
-  var SetExt = /*#__PURE__*/function (_Extension) {
-    _inherits(SetExt, _Extension);
-    var _super = _createSuper(SetExt);
-    function SetExt() {
-      _classCallCheck(this, SetExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(SetExt, [{
-      key: "map",
-      value: function map(callback) {
-        var set = new Set();
-        var _iterator = _createForOfIteratorHelper(this),
-          _step;
-        try {
-          for (_iterator.s(); !(_step = _iterator.n()).done;) {
-            var value = _step.value;
-            value = callback(value);
-            if (value) set.add(value);
-          }
-        } catch (err) {
-          _iterator.e(err);
-        } finally {
-          _iterator.f();
-        }
-        return set;
-      }
-    }, {
-      key: "filter",
-      value: function filter(callback) {
-        var set = new Set();
-        var _iterator2 = _createForOfIteratorHelper(this),
-          _step2;
-        try {
-          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-            var value = _step2.value;
-            if (callback(value)) set.add(value);
-          }
-        } catch (err) {
-          _iterator2.e(err);
-        } finally {
-          _iterator2.f();
-        }
-        return set;
-      }
-    }]);
-    return SetExt;
-  }(Extension);
+	class ScreenExt extends Extension {
+		static properties = {
+			size: {get: () => new DOMSize$1(Math.floor(screen.width), Math.floor(screen.height)), configurable: true},
+			resolution: {get: () => new DOMSize$1(Math.floor(screen.width * devicePixelRatio), Math.floor(screen.height * devicePixelRatio)), configurable: true}
+		}
+	}
 
-  var DOMSize$1 = /*#__PURE__*/function () {
-    function DOMSize(width, height) {
-      _classCallCheck(this, DOMSize);
-      this.width = width;
-      this.height = height;
-    }
-    _createClass(DOMSize, [{
-      key: "toJSON",
-      value: function toJSON() {
-        return {
-          width: this.width,
-          height: this.height
-        };
-      }
-    }, {
-      key: "toString",
-      value: function toString() {
-        return "size(".concat(this.width, ", ").concat(this.height, ")");
-      }
-    }], [{
-      key: "fromSize",
-      value: function fromSize(value) {
-        if (value instanceof DOMSize) return value;
-        if (typeof value == "string") {
-          if (value.startsWith("size(")) {
-            var arr = value.substring(value.indexOf("(") + 1, value.indexOf(")")).split(/,\s*/g);
-            value = {
-              width: parseFloat(arr[0]),
-              height: parseFloat(arr[1])
-            };
-          } else throw new Error("Invalid value found. Expected template - size(width, height).");
-        }
-        if (isNaN(value.width)) throw new Error("Invalid width found, expected number");
-        if (isNaN(value.height)) throw new Error("Invalid height found, expected number");
-        return new DOMSize(value.width, value.height);
-      }
-    }]);
-    return DOMSize;
-  }();
+	class LocationExt extends Extension {
+		static get properties() {
+			return {
+				query: {
+					get: function() {
+						if (!this._query) {
+							let value = Object.assign({}, ...this.search.substring(1)
+								.split("&")
+								.filter(pair => pair)
+								.map(pair => pair.split("="))
+								.map(pair => ({[pair[0]]: decodeURIComponent(pair[1])}))
+							);
+							Object.defineProperty(this, "_query", {value});
+						}
+						return this._query;
+					},
+					configurable: true
+				}
+			};
+		}
+	}
 
-  var ScreenExt = /*#__PURE__*/function (_Extension) {
-    _inherits(ScreenExt, _Extension);
-    var _super = _createSuper(ScreenExt);
-    function ScreenExt() {
-      _classCallCheck(this, ScreenExt);
-      return _super.apply(this, arguments);
-    }
-    return _createClass(ScreenExt);
-  }(Extension);
-  _defineProperty(ScreenExt, "properties", {
-    size: {
-      get: function get() {
-        return new DOMSize$1(Math.floor(screen.width), Math.floor(screen.height));
-      },
-      configurable: true
-    },
-    resolution: {
-      get: function get() {
-        return new DOMSize$1(Math.floor(screen.width * devicePixelRatio), Math.floor(screen.height * devicePixelRatio));
-      },
-      configurable: true
-    }
-  });
+	class HTMLElementExt extends Extension {
+		static properties = {
+			computedStyle: {get: function() { return window.getComputedStyle(this); }, configurable: true}
+		}
+		getClientOffset(relative = false) {
+			let offsetParent = this;
+			let offsetLeft = 0;
+			let offsetTop  = 0;
+			do {
+				offsetLeft += offsetParent.offsetLeft;
+				offsetTop  += offsetParent.offsetTop;
+				offsetParent = offsetParent.offsetParent;
+			}
+			while (offsetParent);
+			let scrollParent = this;
+			let scrollLeft = 0;
+			let scrollTop  = 0;
+			if (!relative) {
+				do {
+					let position = scrollParent.computedStyle.position;
+					if (position == "absolute" || position == "fixed") {
+						scrollLeft = 0;
+						scrollTop  = 0;
+						break;
+					}
+					scrollLeft += scrollParent.scrollLeft;
+					scrollTop  += scrollParent.scrollTop;
+					scrollParent = scrollParent.parentNode;
+					if (scrollParent && scrollParent.host)
+						scrollParent = scrollParent.host;
+				}
+				while (scrollParent != document);
+			}
+			return new DOMPoint(offsetLeft - scrollLeft, offsetTop - scrollTop);
+		}
+		toRect() {
+			let display = this.style.display;
+			let visibility = this.style.visibility;
+			if (display == "none") {
+				this.style.visibility = "hidden";
+				this.style.display = "";
+			}
+			let computedStyle = window.getComputedStyle(this);
+			let margin = {
+				left: parseFloat(computedStyle.marginLeft),
+				top: parseFloat(computedStyle.marginTop),
+				right: parseFloat(computedStyle.marginRight),
+				bottom: parseFloat(computedStyle.marginBottom)
+			};
+			let outerWidth = this.offsetWidth + margin.left + margin.right;
+			let outerHeight = this.offsetHeight + margin.top + margin.bottom;
+			let result = new DOMRect(this.offsetLeft, this.offsetTop, this.offsetWidth, this.offsetHeight);
+			result.outerSize = new DOMSize(outerWidth, outerHeight);
+			if (display == "none") {
+				this.style.visibility = visibility;
+				this.style.display = "none";
+			}
+			return result;
+		}
+	}
 
-  var LocationExt = /*#__PURE__*/function (_Extension) {
-    _inherits(LocationExt, _Extension);
-    var _super = _createSuper(LocationExt);
-    function LocationExt() {
-      _classCallCheck(this, LocationExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(LocationExt, null, [{
-      key: "properties",
-      get: function get() {
-        return {
-          query: {
-            get: function get() {
-              if (!this._query) {
-                var value = Object.assign.apply(Object, [{}].concat(_toConsumableArray(this.search.substring(1).split("&").filter(function (pair) {
-                  return pair;
-                }).map(function (pair) {
-                  return pair.split("=");
-                }).map(function (pair) {
-                  return _defineProperty({}, pair[0], decodeURIComponent(pair[1]));
-                }))));
-                Object.defineProperty(this, "_query", {
-                  value: value
-                });
-              }
-              return this._query;
-            },
-            configurable: true
-          }
-        };
-      }
-    }]);
-    return LocationExt;
-  }(Extension);
+	class HTMLImageElementExt extends Extension {
+		toDataURL(type = "png") {
+			let canvas = document.createElement("canvas");
+			canvas.width = this.width;
+			canvas.height = this.height;
+			canvas.getContext("2d").drawImage(this, 0, 0);
+			return canvas.toDataURL(`image/${type}`);
+		}
+		toBlob(type = "png") {
+			return new Blob([this.toArrayBuffer(type)], {type: `image/${type}`});
+		}
+		toArrayBuffer(type) {
+			if (!ArrayBuffer.fromBase64) throw new Error("ArrayBuffer extension is required");
+			let dataURL = this.toDataURL(type);
+			let base64 = dataURL.split(",")[1];
+			return ArrayBuffer.fromBase64(base64);
+		}
+	}
 
-  var HTMLElementExt = /*#__PURE__*/function (_Extension) {
-    _inherits(HTMLElementExt, _Extension);
-    var _super = _createSuper(HTMLElementExt);
-    function HTMLElementExt() {
-      _classCallCheck(this, HTMLElementExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(HTMLElementExt, [{
-      key: "getClientOffset",
-      value: function getClientOffset() {
-        var relative = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-        var offsetParent = this;
-        var offsetLeft = 0;
-        var offsetTop = 0;
-        do {
-          offsetLeft += offsetParent.offsetLeft;
-          offsetTop += offsetParent.offsetTop;
-          offsetParent = offsetParent.offsetParent;
-        } while (offsetParent);
-        var scrollParent = this;
-        var scrollLeft = 0;
-        var scrollTop = 0;
-        if (!relative) {
-          do {
-            var position = scrollParent.computedStyle.position;
-            if (position == "absolute" || position == "fixed") {
-              scrollLeft = 0;
-              scrollTop = 0;
-              break;
-            }
-            scrollLeft += scrollParent.scrollLeft;
-            scrollTop += scrollParent.scrollTop;
-            scrollParent = scrollParent.parentNode;
-            if (scrollParent && scrollParent.host) scrollParent = scrollParent.host;
-          } while (scrollParent != document);
-        }
-        return new DOMPoint(offsetLeft - scrollLeft, offsetTop - scrollTop);
-      }
-    }, {
-      key: "toRect",
-      value: function toRect() {
-        var display = this.style.display;
-        var visibility = this.style.visibility;
-        if (display == "none") {
-          this.style.visibility = "hidden";
-          this.style.display = "";
-        }
-        var computedStyle = window.getComputedStyle(this);
-        var margin = {
-          left: parseFloat(computedStyle.marginLeft),
-          top: parseFloat(computedStyle.marginTop),
-          right: parseFloat(computedStyle.marginRight),
-          bottom: parseFloat(computedStyle.marginBottom)
-        };
-        var outerWidth = this.offsetWidth + margin.left + margin.right;
-        var outerHeight = this.offsetHeight + margin.top + margin.bottom;
-        var result = new DOMRect(this.offsetLeft, this.offsetTop, this.offsetWidth, this.offsetHeight);
-        result.outerSize = new DOMSize(outerWidth, outerHeight);
-        if (display == "none") {
-          this.style.visibility = visibility;
-          this.style.display = "none";
-        }
-        return result;
-      }
-    }]);
-    return HTMLElementExt;
-  }(Extension);
-  _defineProperty(HTMLElementExt, "properties", {
-    computedStyle: {
-      get: function get() {
-        return window.getComputedStyle(this);
-      },
-      configurable: true
-    }
-  });
+	class ImageExt extends Extension {
+		static fromBytes(bytes, type = "png", image = new Image()) {
+			return new Promise((resolve, reject) => {
+				image.onload = () => {
+					URL.revokeObjectURL(image.src);
+					resolve(image);
+				};
+				image.onerror = reject;
+				image.src = URL.createObjectURL(new Blob([bytes.buffer || bytes], {type : `image/${type}`}));
+			});
+		}
+	}
 
-  var HTMLImageElementExt = /*#__PURE__*/function (_Extension) {
-    _inherits(HTMLImageElementExt, _Extension);
-    var _super = _createSuper(HTMLImageElementExt);
-    function HTMLImageElementExt() {
-      _classCallCheck(this, HTMLImageElementExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(HTMLImageElementExt, [{
-      key: "toDataURL",
-      value: function toDataURL() {
-        var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "png";
-        var canvas = document.createElement("canvas");
-        canvas.width = this.width;
-        canvas.height = this.height;
-        canvas.getContext("2d").drawImage(this, 0, 0);
-        return canvas.toDataURL("image/".concat(type));
-      }
-    }, {
-      key: "toBlob",
-      value: function toBlob() {
-        var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "png";
-        return new Blob([this.toArrayBuffer(type)], {
-          type: "image/".concat(type)
-        });
-      }
-    }, {
-      key: "toArrayBuffer",
-      value: function toArrayBuffer(type) {
-        if (!ArrayBuffer.fromBase64) throw new Error("ArrayBuffer extension is required");
-        var dataURL = this.toDataURL(type);
-        var base64 = dataURL.split(",")[1];
-        return ArrayBuffer.fromBase64(base64);
-      }
-    }]);
-    return HTMLImageElementExt;
-  }(Extension);
+	class DOMPointExt extends Extension {
+		transform(matrix) {
+			if (!(matrix instanceof DOMMatrix)) matrix = DOMMatrix.fromMatrix(matrix);
+			return this.matrixTransform(matrix);
+		}
+		toString() {
+			return `point(${this.x}, ${this.y}, ${this.z})`;
+		}
+	}
 
-  var ImageExt = /*#__PURE__*/function (_Extension) {
-    _inherits(ImageExt, _Extension);
-    var _super = _createSuper(ImageExt);
-    function ImageExt() {
-      _classCallCheck(this, ImageExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(ImageExt, null, [{
-      key: "fromBytes",
-      value: function fromBytes(bytes) {
-        var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "png";
-        var image = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new Image();
-        return new Promise(function (resolve, reject) {
-          image.onload = function () {
-            URL.revokeObjectURL(image.src);
-            resolve(image);
-          };
-          image.onerror = reject;
-          image.src = URL.createObjectURL(new Blob([bytes.buffer || bytes], {
-            type: "image/".concat(type)
-          }));
-        });
-      }
-    }]);
-    return ImageExt;
-  }(Extension);
+	class DOMRectExt extends Extension {
+		static properties = {
+			size: {get: function() {return new DOMSize$1(this.width, this.height)}, configurable: true},
+			center: {get: function() {return new DOMPoint((this.left + this.right) / 2, (this.top + this.bottom) / 2)}, configurable: true}
+		}
+		union(rect) {
+			if (!rect) return this;
+			return DOMRect.ofEdges(
+				Math.min(this.left, rect.left),
+				Math.min(this.top, rect.top),
+				Math.max(this.right, rect.right),
+				Math.max(this.bottom, rect.bottom)
+			);
+		}
+		intersect(rect) {
+			if (!rect) return;
+			let result = DOMRect.ofEdges(
+				Math.max(this.left, rect.left),
+				Math.max(this.top, rect.top),
+				Math.min(this.right, rect.right),
+				Math.min(this.bottom, rect.bottom)
+			);
+			return (result.width > 0 && result.height > 0) ? result : undefined;
+		}
+		ceil(even = false) {
+			let left = Math.floor(this.left);
+			let top = Math.floor(this.top);
+			let right = Math.ceil(this.right);
+			let bottom = Math.ceil(this.bottom);
+			if (even) {
+				let width = this.width;
+				let height = this.height;
+				width += width % 2;
+				height += height % 2;
+				right = left + width;
+				bottom = top + height;
+			}
+			return DOMRect.ofEdges(left, top, right, bottom);
+		}
+		floor(even = false) {
+			let left = Math.ceil(this.left);
+			let top = Math.ceil(this.top);
+			let right = Math.floor(this.right);
+			let bottom = Math.floor(this.bottom);
+			if (even) {
+				let width = this.width;
+				let height = this.height;
+				width -= width % 2;
+				height -= height % 2;
+				right = left + width;
+				bottom = top + height;
+			}
+			return DOMRect.ofEdges(left, top, right, bottom);
+		}
+		contains(point) {
+			return this.left <= point.x && this.right >= point.x && this.top <= point.y && this.bottom >= point.y;
+		}
+		transform(matrix) {
+			if (!(matrix instanceof DOMMatrix)) matrix = DOMMatrix.fromMatrix(matrix);
+			let leftTop = DOMPoint.fromPoint({x: this.left, y: this.top}).transform(matrix);
+			let rightTop = DOMPoint.fromPoint({x: this.right, y: this.top}).transform(matrix);
+			let leftBottom = DOMPoint.fromPoint({x: this.left, y: this.bottom}).transform(matrix);
+			let rightBottom = DOMPoint.fromPoint({x: this.right, y: this.bottom}).transform(matrix);
+			let left = Math.min(leftTop.x, rightTop.x, leftBottom.x, rightBottom.x);
+			let top = Math.min(leftTop.y, rightTop.y, leftBottom.y, rightBottom.y);
+			let right = Math.max(leftTop.x, rightTop.x, leftBottom.x, rightBottom.x);
+			let bottom = Math.max(leftTop.y, rightTop.y, leftBottom.y, rightBottom.y);
+			return DOMRect.ofEdges(left, top, right, bottom);
+		}
+		toPath() {
+			let path = [];
+			path.push(this.left, this.top);
+			path.push(this.right, this.top);
+			path.push(this.right, this.bottom);
+			path.push(this.left, this.bottom);
+			path.push(this.left, this.top);
+			return path.toFloat32Array();
+		}
+		toString() {
+			return `rect(${this.x}, ${this.y}, ${this.width}, ${this.height})`;
+		}
+		static ofEdges(left, top, right, bottom) {
+			return new DOMRect(left, top, right - left, bottom - top);
+		}
+		static extend() {
+			let success = Extension.extend("DOMRect", this);
+			if (success)
+				globalThis.DOMSize = DOMSize$1;
+		}
+	}
 
-  var DOMPointExt = /*#__PURE__*/function (_Extension) {
-    _inherits(DOMPointExt, _Extension);
-    var _super = _createSuper(DOMPointExt);
-    function DOMPointExt() {
-      _classCallCheck(this, DOMPointExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(DOMPointExt, [{
-      key: "transform",
-      value: function transform(matrix) {
-        if (!(matrix instanceof DOMMatrix)) matrix = DOMMatrix.fromMatrix(matrix);
-        return this.matrixTransform(matrix);
-      }
-    }, {
-      key: "toString",
-      value: function toString() {
-        return "point(".concat(this.x, ", ").concat(this.y, ", ").concat(this.z, ")");
-      }
-    }]);
-    return DOMPointExt;
-  }(Extension);
+	let nativeFromMatrix;
+	let nativeToString;
+	let nativeMultiply;
+	let nativeMultiplySelf;
+	class DOMMatrixExt extends Extension {
+		static overrides = Extension.overrides.concat(["fromMatrix", "multiply", "multiplySelf", "transformPoint"]);
+		static properties = {
+			tx: {get: function() {return this.e}, set: function(value) {this.e = value;}, enumerable: true},
+			ty: {get: function() {return this.f}, set: function(value) {this.f = value;}, enumerable: true},
+			dx: {get: function() {return this.e}, set: function(value) {this.e = value;}, enumerable: true},
+			dy: {get: function() {return this.f}, set: function(value) {this.f = value;}, enumerable: true},
+			multiplicationType: {value: "POST", enumerable: true, writable: true}
+		};
+		static classProperties = {
+			MultiplicationType: {value: {PRE: "PRE", POST: "POST"}, enumerable: true}
+		};
+		preMultiply(delta) {
+			let result = delta.postMultiply(this);
+			result.multiplicationType = this.multiplicationType;
+			return result;
+		}
+		postMultiply(delta) {
+			return nativeMultiply.call(this, delta);
+		}
+		multiply(delta) {
+			if (!(delta instanceof DOMMatrix)) delta = DOMMatrix.fromMatrix(delta);
+			if (this.multiplicationType == DOMMatrix.MultiplicationType.POST)
+				return this.postMultiply(delta);
+			else {
+				let result = this.preMultiply(delta);
+				result.multiplicationType = DOMMatrix.MultiplicationType.PRE;
+				return result;
+			}
+		}
+		postMultiplySelf(delta) {
+			return nativeMultiplySelf.call(this, delta);
+		}
+		multiplySelf(delta) {
+			if (!(delta instanceof DOMMatrix)) delta = DOMMatrix.fromMatrix(delta);
+			if (this.multiplicationType == DOMMatrix.MultiplicationType.POST)
+				return this.postMultiplySelf(delta);
+			else
+				return this.preMultiplySelf(delta);
+		}
+		transformPoint(point) {
+			return DOMPoint.fromPoint(point).matrixTransform(this);
+		}
+		invert() {
+			return this.inverse();
+		}
+		decompose() {
+			return {
+				translate: {x: this.tx, y: this.ty},
+				rotate: {angle: Math.atan2(this.b, this.a)},
+				skew: {angleX: Math.tan(this.c), angleY: Math.tan(this.b)},
+				scale: {x: Math.sqrt(this.a * this.a + this.c * this.c), y: Math.sqrt(this.d * this.d + this.b * this.b)},
+				matrix: this
+			};
+		}
+		toString(textTable = false) {
+			if (!textTable) return nativeToString.call(this);
+			let format = n => ((n < 0 ? "" : " ") + n.toPrecision(6)).substring(0, 8);
+			return " Matrix 4x4" +
+				"\n" + "-".repeat(39) +
+				`\n${format(this.m11)}, ${format(this.m21)}, ${format(this.m31)}, ${format(this.m41)}` +
+				`\n${format(this.m12)}, ${format(this.m22)}, ${format(this.m32)}, ${format(this.m42)}` +
+				`\n${format(this.m13)}, ${format(this.m23)}, ${format(this.m33)}, ${format(this.m43)}` +
+				`\n${format(this.m14)}, ${format(this.m24)}, ${format(this.m34)}, ${format(this.m44)}`;
+		}
+		static fromMatrix(data, multiplicationType) {
+			let result;
+			if (typeof data == "string")
+				result = new DOMMatrix(data);
+			else {
+				if (!("e" in data)) data.e = data.tx || data.dx;
+				if (!("f" in data)) data.f = data.ty || data.dy;
+				result = nativeFromMatrix(data);
+			}
+			result.multiplicationType = multiplicationType || data.multiplicationType || DOMMatrix.MultiplicationType.POST;
+			return result;
+		}
+		static fromTranslate(offset) {
+			let translate = isFinite(offset) ? {tx: offset, ty: offset} : {tx: offset.x, ty: offset.y};
+			return DOMMatrix.fromMatrix(translate);
+		}
+		static fromRotate(alpha, origin) {
+			let sin = Math.sin(alpha);
+			let cos = Math.cos(alpha);
+			let rotate = {a: cos, b: sin, c: -sin, d: cos};
+			if (origin) {
+				rotate.tx = origin.x - origin.x * cos + origin.y * sin;
+				rotate.ty = origin.y - origin.x * sin - origin.y * cos;
+			}
+			return DOMMatrix.fromMatrix(rotate);
+		}
+		static fromScale(factor, origin) {
+			if (isFinite(factor)) factor = {x: factor, y: factor};
+			let scale = {a: factor.x, d: factor.y};
+			if (origin) {
+				scale.tx = origin.x - origin.x * factor.x;
+				scale.ty = origin.y - origin.y * factor.y;
+			}
+			return DOMMatrix.fromMatrix(scale);
+		}
+		static fromPoints(ps, pf) {
+			let O = DOMMatrix.fromMatrix({
+				m11: ps[0].x, m21: ps[1].x, m31: ps[2].x,
+				m12: ps[0].y, m22: ps[1].y, m32: ps[2].y,
+				m13: 1,       m23: 1,       m33: 1
+			});
+			let F = DOMMatrix.fromMatrix({
+				m11: pf[0].x, m21: pf[1].x, m31: pf[2].x,
+				m12: pf[0].y, m22: pf[1].y, m32: pf[2].y,
+				m13: 1,       m23: 1,       m33: 1
+			});
+			let X = O.invert().preMultiply(F);
+			return DOMMatrix.fromMatrix({a: X.m11, b: X.m12, c: X.m21, d: X.m22, tx: X.m31, ty: X.m32});
+		}
+		static extend() {
+			if (typeof DOMMatrix === "undefined" || nativeFromMatrix)
+				return false;
+			nativeFromMatrix = DOMMatrix.fromMatrix;
+			nativeToString = DOMMatrix.prototype.toString;
+			nativeMultiply = DOMMatrix.prototype.multiply;
+			nativeMultiplySelf = DOMMatrix.prototype.multiplySelf;
+			Extension.extend("DOMMatrix", this);
+		}
+	}
 
-  var DOMRectExt = /*#__PURE__*/function (_Extension) {
-    _inherits(DOMRectExt, _Extension);
-    var _super = _createSuper(DOMRectExt);
-    function DOMRectExt() {
-      _classCallCheck(this, DOMRectExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(DOMRectExt, [{
-      key: "union",
-      value: function union(rect) {
-        if (!rect) return this;
-        return DOMRect.ofEdges(Math.min(this.left, rect.left), Math.min(this.top, rect.top), Math.max(this.right, rect.right), Math.max(this.bottom, rect.bottom));
-      }
-    }, {
-      key: "intersect",
-      value: function intersect(rect) {
-        if (!rect) return;
-        var result = DOMRect.ofEdges(Math.max(this.left, rect.left), Math.max(this.top, rect.top), Math.min(this.right, rect.right), Math.min(this.bottom, rect.bottom));
-        return result.width > 0 && result.height > 0 ? result : undefined;
-      }
-    }, {
-      key: "ceil",
-      value: function ceil() {
-        var even = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-        var left = Math.floor(this.left);
-        var top = Math.floor(this.top);
-        var right = Math.ceil(this.right);
-        var bottom = Math.ceil(this.bottom);
-        if (even) {
-          var width = this.width;
-          var height = this.height;
-          width += width % 2;
-          height += height % 2;
-          right = left + width;
-          bottom = top + height;
-        }
-        return DOMRect.ofEdges(left, top, right, bottom);
-      }
-    }, {
-      key: "floor",
-      value: function floor() {
-        var even = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-        var left = Math.ceil(this.left);
-        var top = Math.ceil(this.top);
-        var right = Math.floor(this.right);
-        var bottom = Math.floor(this.bottom);
-        if (even) {
-          var width = this.width;
-          var height = this.height;
-          width -= width % 2;
-          height -= height % 2;
-          right = left + width;
-          bottom = top + height;
-        }
-        return DOMRect.ofEdges(left, top, right, bottom);
-      }
-    }, {
-      key: "contains",
-      value: function contains(point) {
-        return this.left <= point.x && this.right >= point.x && this.top <= point.y && this.bottom >= point.y;
-      }
-    }, {
-      key: "transform",
-      value: function transform(matrix) {
-        if (!(matrix instanceof DOMMatrix)) matrix = DOMMatrix.fromMatrix(matrix);
-        var leftTop = DOMPoint.fromPoint({
-          x: this.left,
-          y: this.top
-        }).transform(matrix);
-        var rightTop = DOMPoint.fromPoint({
-          x: this.right,
-          y: this.top
-        }).transform(matrix);
-        var leftBottom = DOMPoint.fromPoint({
-          x: this.left,
-          y: this.bottom
-        }).transform(matrix);
-        var rightBottom = DOMPoint.fromPoint({
-          x: this.right,
-          y: this.bottom
-        }).transform(matrix);
-        var left = Math.min(leftTop.x, rightTop.x, leftBottom.x, rightBottom.x);
-        var top = Math.min(leftTop.y, rightTop.y, leftBottom.y, rightBottom.y);
-        var right = Math.max(leftTop.x, rightTop.x, leftBottom.x, rightBottom.x);
-        var bottom = Math.max(leftTop.y, rightTop.y, leftBottom.y, rightBottom.y);
-        return DOMRect.ofEdges(left, top, right, bottom);
-      }
-    }, {
-      key: "toPath",
-      value: function toPath() {
-        var path = [];
-        path.push(this.left, this.top);
-        path.push(this.right, this.top);
-        path.push(this.right, this.bottom);
-        path.push(this.left, this.bottom);
-        path.push(this.left, this.top);
-        return path.toFloat32Array();
-      }
-    }, {
-      key: "toString",
-      value: function toString() {
-        return "rect(".concat(this.x, ", ").concat(this.y, ", ").concat(this.width, ", ").concat(this.height, ")");
-      }
-    }], [{
-      key: "ofEdges",
-      value: function ofEdges(left, top, right, bottom) {
-        return new DOMRect(left, top, right - left, bottom - top);
-      }
-    }, {
-      key: "extend",
-      value: function extend() {
-        var success = Extension.extend("DOMRect", this);
-        if (success) globalThis.DOMSize = DOMSize$1;
-      }
-    }]);
-    return DOMRectExt;
-  }(Extension);
-  _defineProperty(DOMRectExt, "properties", {
-    size: {
-      get: function get() {
-        return new DOMSize$1(this.width, this.height);
-      },
-      configurable: true
-    },
-    center: {
-      get: function get() {
-        return new DOMPoint((this.left + this.right) / 2, (this.top + this.bottom) / 2);
-      },
-      configurable: true
-    }
-  });
+	class CSSStyleSheetExt extends Extension {
+		findRule(selectorText) {
+			let result;
+			let rules = this.cssRules;
+			for (let rule of rules) {
+				if (rule.selectorText == selectorText) {
+					result = rule;
+					break;
+				}
+			}
+			return result;
+		}
+		findRules(selectorText) {
+			return Array.from(this.cssRules).filter(rule => (rule.selectorText == selectorText));
+		}
+		toTextList() {
+			return Array.from(this.cssRules).map(rule => rule.cssText);
+		}
+		toString() {
+			return Array.from(this.cssRules).map(rule => rule.cssText).join("\n");
+		}
+	}
 
-  var nativeFromMatrix;
-  var nativeToString;
-  var nativeMultiply;
-  var nativeMultiplySelf;
-  var DOMMatrixExt = /*#__PURE__*/function (_Extension) {
-    _inherits(DOMMatrixExt, _Extension);
-    var _super = _createSuper(DOMMatrixExt);
-    function DOMMatrixExt() {
-      _classCallCheck(this, DOMMatrixExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(DOMMatrixExt, [{
-      key: "preMultiply",
-      value: function preMultiply(delta) {
-        var result = delta.postMultiply(this);
-        result.multiplicationType = this.multiplicationType;
-        return result;
-      }
-    }, {
-      key: "postMultiply",
-      value: function postMultiply(delta) {
-        return nativeMultiply.call(this, delta);
-      }
-    }, {
-      key: "multiply",
-      value: function multiply(delta) {
-        if (!(delta instanceof DOMMatrix)) delta = DOMMatrix.fromMatrix(delta);
-        if (this.multiplicationType == DOMMatrix.MultiplicationType.POST) return this.postMultiply(delta);else {
-          var result = this.preMultiply(delta);
-          result.multiplicationType = DOMMatrix.MultiplicationType.PRE;
-          return result;
-        }
-      }
-    }, {
-      key: "postMultiplySelf",
-      value: function postMultiplySelf(delta) {
-        return nativeMultiplySelf.call(this, delta);
-      }
-    }, {
-      key: "multiplySelf",
-      value: function multiplySelf(delta) {
-        if (!(delta instanceof DOMMatrix)) delta = DOMMatrix.fromMatrix(delta);
-        if (this.multiplicationType == DOMMatrix.MultiplicationType.POST) return this.postMultiplySelf(delta);else return this.preMultiplySelf(delta);
-      }
-    }, {
-      key: "transformPoint",
-      value: function transformPoint(point) {
-        return DOMPoint.fromPoint(point).matrixTransform(this);
-      }
-    }, {
-      key: "invert",
-      value: function invert() {
-        return this.inverse();
-      }
-    }, {
-      key: "decompose",
-      value: function decompose() {
-        return {
-          translate: {
-            x: this.tx,
-            y: this.ty
-          },
-          rotate: {
-            angle: Math.atan2(this.b, this.a)
-          },
-          skew: {
-            angleX: Math.tan(this.c),
-            angleY: Math.tan(this.b)
-          },
-          scale: {
-            x: Math.sqrt(this.a * this.a + this.c * this.c),
-            y: Math.sqrt(this.d * this.d + this.b * this.b)
-          },
-          matrix: this
-        };
-      }
-    }, {
-      key: "toString",
-      value: function toString() {
-        var textTable = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-        if (!textTable) return nativeToString.call(this);
-        var format = function format(n) {
-          return ((n < 0 ? "" : " ") + n.toPrecision(6)).substring(0, 8);
-        };
-        return " Matrix 4x4" + "\n" + "-".repeat(39) + "\n".concat(format(this.m11), ", ").concat(format(this.m21), ", ").concat(format(this.m31), ", ").concat(format(this.m41)) + "\n".concat(format(this.m12), ", ").concat(format(this.m22), ", ").concat(format(this.m32), ", ").concat(format(this.m42)) + "\n".concat(format(this.m13), ", ").concat(format(this.m23), ", ").concat(format(this.m33), ", ").concat(format(this.m43)) + "\n".concat(format(this.m14), ", ").concat(format(this.m24), ", ").concat(format(this.m34), ", ").concat(format(this.m44));
-      }
-    }], [{
-      key: "fromMatrix",
-      value: function fromMatrix(data, multiplicationType) {
-        var result;
-        if (typeof data == "string") result = new DOMMatrix(data);else {
-          if (!("e" in data)) data.e = data.tx || data.dx;
-          if (!("f" in data)) data.f = data.ty || data.dy;
-          result = nativeFromMatrix(data);
-        }
-        result.multiplicationType = multiplicationType || data.multiplicationType || DOMMatrix.MultiplicationType.POST;
-        return result;
-      }
-    }, {
-      key: "fromTranslate",
-      value: function fromTranslate(offset) {
-        var translate = isFinite(offset) ? {
-          tx: offset,
-          ty: offset
-        } : {
-          tx: offset.x,
-          ty: offset.y
-        };
-        return DOMMatrix.fromMatrix(translate);
-      }
-    }, {
-      key: "fromRotate",
-      value: function fromRotate(alpha, origin) {
-        var sin = Math.sin(alpha);
-        var cos = Math.cos(alpha);
-        var rotate = {
-          a: cos,
-          b: sin,
-          c: -sin,
-          d: cos
-        };
-        if (origin) {
-          rotate.tx = origin.x - origin.x * cos + origin.y * sin;
-          rotate.ty = origin.y - origin.x * sin - origin.y * cos;
-        }
-        return DOMMatrix.fromMatrix(rotate);
-      }
-    }, {
-      key: "fromScale",
-      value: function fromScale(factor, origin) {
-        if (isFinite(factor)) factor = {
-          x: factor,
-          y: factor
-        };
-        var scale = {
-          a: factor.x,
-          d: factor.y
-        };
-        if (origin) {
-          scale.tx = origin.x - origin.x * factor.x;
-          scale.ty = origin.y - origin.y * factor.y;
-        }
-        return DOMMatrix.fromMatrix(scale);
-      }
-    }, {
-      key: "fromPoints",
-      value: function fromPoints(ps, pf) {
-        var O = DOMMatrix.fromMatrix({
-          m11: ps[0].x,
-          m21: ps[1].x,
-          m31: ps[2].x,
-          m12: ps[0].y,
-          m22: ps[1].y,
-          m32: ps[2].y,
-          m13: 1,
-          m23: 1,
-          m33: 1
-        });
-        var F = DOMMatrix.fromMatrix({
-          m11: pf[0].x,
-          m21: pf[1].x,
-          m31: pf[2].x,
-          m12: pf[0].y,
-          m22: pf[1].y,
-          m32: pf[2].y,
-          m13: 1,
-          m23: 1,
-          m33: 1
-        });
-        var X = O.invert().preMultiply(F);
-        return DOMMatrix.fromMatrix({
-          a: X.m11,
-          b: X.m12,
-          c: X.m21,
-          d: X.m22,
-          tx: X.m31,
-          ty: X.m32
-        });
-      }
-    }, {
-      key: "extend",
-      value: function extend() {
-        if (typeof DOMMatrix === "undefined" || nativeFromMatrix) return false;
-        nativeFromMatrix = DOMMatrix.fromMatrix;
-        nativeToString = DOMMatrix.prototype.toString;
-        nativeMultiply = DOMMatrix.prototype.multiply;
-        nativeMultiplySelf = DOMMatrix.prototype.multiplySelf;
-        Extension.extend("DOMMatrix", this);
-      }
-    }]);
-    return DOMMatrixExt;
-  }(Extension);
-  _defineProperty(DOMMatrixExt, "overrides", Extension.overrides.concat(["fromMatrix", "multiply", "multiplySelf", "transformPoint"]));
-  _defineProperty(DOMMatrixExt, "properties", {
-    tx: {
-      get: function get() {
-        return this.e;
-      },
-      set: function set(value) {
-        this.e = value;
-      },
-      enumerable: true
-    },
-    ty: {
-      get: function get() {
-        return this.f;
-      },
-      set: function set(value) {
-        this.f = value;
-      },
-      enumerable: true
-    },
-    dx: {
-      get: function get() {
-        return this.e;
-      },
-      set: function set(value) {
-        this.e = value;
-      },
-      enumerable: true
-    },
-    dy: {
-      get: function get() {
-        return this.f;
-      },
-      set: function set(value) {
-        this.f = value;
-      },
-      enumerable: true
-    },
-    multiplicationType: {
-      value: "POST",
-      enumerable: true,
-      writable: true
-    }
-  });
-  _defineProperty(DOMMatrixExt, "classProperties", {
-    MultiplicationType: {
-      value: {
-        PRE: "PRE",
-        POST: "POST"
-      },
-      enumerable: true
-    }
-  });
+	class ShadowRootExt extends Extension {
+		adoptStyleSheet(text) {
+			let sheet;
+			if (this.adoptedStyleSheets) {
+				sheet = new CSSStyleSheet();
+				sheet.replaceSync(text);
+				this.adoptedStyleSheets.push(sheet);
+			}
+			else {
+				let style = document.createElement("style");
+				style.innerHTML = text;
+				this.appendChild(style);
+				sheet = style.sheet;
+			}
+			return sheet;
+		}
+	}
 
-  var CSSStyleSheetExt = /*#__PURE__*/function (_Extension) {
-    _inherits(CSSStyleSheetExt, _Extension);
-    var _super = _createSuper(CSSStyleSheetExt);
-    function CSSStyleSheetExt() {
-      _classCallCheck(this, CSSStyleSheetExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(CSSStyleSheetExt, [{
-      key: "findRule",
-      value: function findRule(selectorText) {
-        var result;
-        var rules = this.cssRules;
-        var _iterator = _createForOfIteratorHelper(rules),
-          _step;
-        try {
-          for (_iterator.s(); !(_step = _iterator.n()).done;) {
-            var rule = _step.value;
-            if (rule.selectorText == selectorText) {
-              result = rule;
-              break;
-            }
-          }
-        } catch (err) {
-          _iterator.e(err);
-        } finally {
-          _iterator.f();
-        }
-        return result;
-      }
-    }, {
-      key: "findRules",
-      value: function findRules(selectorText) {
-        return Array.from(this.cssRules).filter(function (rule) {
-          return rule.selectorText == selectorText;
-        });
-      }
-    }, {
-      key: "toTextList",
-      value: function toTextList() {
-        return Array.from(this.cssRules).map(function (rule) {
-          return rule.cssText;
-        });
-      }
-    }, {
-      key: "toString",
-      value: function toString() {
-        return Array.from(this.cssRules).map(function (rule) {
-          return rule.cssText;
-        }).join("\n");
-      }
-    }]);
-    return CSSStyleSheetExt;
-  }(Extension);
+	var extensions = /*#__PURE__*/Object.freeze({
+		__proto__: null,
+		ArrayBufferExt: ArrayBufferExt,
+		ArrayExt: ArrayExt,
+		CSSStyleSheetExt: CSSStyleSheetExt,
+		DOMMatrixExt: DOMMatrixExt,
+		DOMPointExt: DOMPointExt,
+		DOMRectExt: DOMRectExt,
+		DateExt: DateExt,
+		FunctionExt: FunctionExt,
+		HTMLElementExt: HTMLElementExt,
+		HTMLImageElementExt: HTMLImageElementExt,
+		ImageExt: ImageExt,
+		LocationExt: LocationExt,
+		NumberExt: NumberExt,
+		ObjectExt: ObjectExt,
+		ScreenExt: ScreenExt,
+		SetExt: SetExt,
+		ShadowRootExt: ShadowRootExt,
+		SharedArrayBufferExt: SharedArrayBufferExt,
+		StringExt: StringExt,
+		TypedArrayExt: TypedArrayExt
+	});
 
-  var ShadowRootExt = /*#__PURE__*/function (_Extension) {
-    _inherits(ShadowRootExt, _Extension);
-    var _super = _createSuper(ShadowRootExt);
-    function ShadowRootExt() {
-      _classCallCheck(this, ShadowRootExt);
-      return _super.apply(this, arguments);
-    }
-    _createClass(ShadowRootExt, [{
-      key: "adoptStyleSheet",
-      value: function adoptStyleSheet(text) {
-        var sheet;
-        if (this.adoptedStyleSheets) {
-          sheet = new CSSStyleSheet();
-          sheet.replaceSync(text);
-          this.adoptedStyleSheets.push(sheet);
-        } else {
-          var style = document.createElement("style");
-          style.innerHTML = text;
-          this.appendChild(style);
-          sheet = style.sheet;
-        }
-        return sheet;
-      }
-    }]);
-    return ShadowRootExt;
-  }(Extension);
+	if (typeof globalThis == "undefined") {
+		if (typeof window !== "undefined") window.globalThis = window;
+		else if (typeof self !== "undefined") self.globalThis = self;
+		else if (typeof global !== "undefined") global.globalThis = global;
+	}
+	if (!globalThis["JS_EXT_SCOPE"]) {
+		const scope = Object.keys(extensions).map(name => name.substring(0, name.length - 3));
+		Object.defineProperty(globalThis, "JS_EXT_SCOPE", {value: scope, enumerable: true, configurable: true});
+	}
+	const extend = new Function("Extension", "name", "Extension.extend(name)");
+	for (let name of globalThis["JS_EXT_SCOPE"]) {
+		let Extension = extensions[`${name}Ext`];
+		if (!Extension)
+			throw new Error(`Extension ${name} not found`)
+		extend(Extension, name);
+	}
 
-  var extensions = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    ArrayBufferExt: ArrayBufferExt,
-    ArrayExt: ArrayExt,
-    CSSStyleSheetExt: CSSStyleSheetExt,
-    DOMMatrixExt: DOMMatrixExt,
-    DOMPointExt: DOMPointExt,
-    DOMRectExt: DOMRectExt,
-    DateExt: DateExt,
-    FunctionExt: FunctionExt,
-    HTMLElementExt: HTMLElementExt,
-    HTMLImageElementExt: HTMLImageElementExt,
-    ImageExt: ImageExt,
-    LocationExt: LocationExt,
-    NumberExt: NumberExt,
-    ObjectExt: ObjectExt,
-    ScreenExt: ScreenExt,
-    SetExt: SetExt,
-    ShadowRootExt: ShadowRootExt,
-    SharedArrayBufferExt: SharedArrayBufferExt,
-    StringExt: StringExt,
-    TypedArrayExt: TypedArrayExt
-  });
-
-  if (typeof globalThis == "undefined") {
-    if (typeof window !== "undefined") window.globalThis = window;else if (typeof self !== "undefined") self.globalThis = self;else if (typeof global !== "undefined") global.globalThis = global;
-  }
-  if (!globalThis["JS_EXT_SCOPE"]) {
-    var scope = Object.keys(extensions).map(function (name) {
-      return name.substring(0, name.length - 3);
-    });
-    Object.defineProperty(globalThis, "JS_EXT_SCOPE", {
-      value: scope,
-      enumerable: true,
-      configurable: true
-    });
-  }
-  var extend = new Function("Extension", "name", "Extension.extend(name)");
-  var _iterator = _createForOfIteratorHelper(globalThis["JS_EXT_SCOPE"]),
-    _step;
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var name = _step.value;
-      var _Extension = extensions["".concat(name, "Ext")];
-      if (!_Extension) throw new Error("Extension ".concat(name, " not found"));
-      extend(_Extension, name);
-    }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
-  }
-
-  exports.Extension = Extension;
-  exports.version = version;
+	exports.Extension = Extension;
+	exports.version = version;
 
 }));
