@@ -54,6 +54,16 @@ class DOMRectExt extends Extension {
 	}
 
 	/**
+	 * Check are 2 rects have common part
+	 *
+	 * @param {DOMRect} rect Intersect with area
+	 * @return {boolean} Intersection availability
+	 */
+	intersects(rect) {
+		return (this.left <= rect.right && this.right >= rect.left) && (this.top <= rect.bottom && this.bottom >= rect.top);
+	}
+
+	/**
 	 * Floor LeftTop, Ceil BottomRight points
 	 *
 	 * @param {boolean} [even=false] Rect width and height will be multiples of 2
@@ -113,6 +123,14 @@ class DOMRectExt extends Extension {
 	 */
 	contains(point) {
 		return this.left <= point.x && this.right >= point.x && this.top <= point.y && this.bottom >= point.y;
+	}
+
+	/**
+	 * @param {DOMRect} rect
+	 * @return {boolean} Is rect part from rect
+	 */
+	includes(rect) {
+		return this.left <= rect.left && this.right >= rect.right && this.top <= rect.top && this.bottom >= rect.bottom;
 	}
 
 	/**

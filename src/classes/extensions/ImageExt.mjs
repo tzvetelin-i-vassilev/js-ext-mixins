@@ -13,9 +13,9 @@ class ImageExt extends Extension {
 	 * @param {Uint8Array} bytes Image data
 	 * @param {string} [type=png] Image type, mime type second part
 	 * @param {Image} [image=new Image()] Data target
-	 * @returns {Promise<Image>} Promise resolution load bytes
+	 * @returns {Image} Rasterized bytes
 	 */
-	static fromBytes(bytes, type = "png", image = new Image()) {
+	static async fromBytes(bytes, type = "png", image = new Image()) {
 		return new Promise((resolve, reject) => {
 			image.onload = () => {
 				URL.revokeObjectURL(image.src);

@@ -1,5 +1,13 @@
 # js-ext-mixins ChangeLog
 
+## 1.0.7
+
+_2023-07-01_
+
+### Updates
+- DOMRectExt - methods intersects and includes impl
+- ImageExt - method fromBytes as promise
+
 ## 1.0.6
 
 _2022-02-01_
