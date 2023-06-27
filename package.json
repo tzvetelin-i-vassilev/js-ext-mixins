@@ -52,8 +52,10 @@
     "dist",
     "src",
     "scripts",
-    "tests",
-    "*.*"
+    "test",
+    "*.md",
+    "*.json",
+    "*.mjs"
   ],
   "repository": "https://github.com/tzvetelin-i-vassilev/js-ext-mixins.git",
   "author": "Tzvetelin Vassilev",
