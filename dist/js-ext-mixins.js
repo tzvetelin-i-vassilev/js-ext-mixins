@@ -8,13 +8,13 @@
 	 * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
 	 *
 	 * @namespace jsExt
-	 * @version 1.0.6
+	 * @version 1.0.7
 	 * @author Tzvetelin Vassilev
 	 * @copyright Tzvetelin Vassilev 2020-2023
 	 * @license ISC
 	 */
 
-	var version = "1.0.6";
+	var version = "1.0.7";
 
 	class Extension {
 		static overrides = ["toString"];
@@ -586,7 +586,7 @@
 	}
 
 	class ImageExt extends Extension {
-		static fromBytes(bytes, type = "png", image = new Image()) {
+		static async fromBytes(bytes, type = "png", image = new Image()) {
 			return new Promise((resolve, reject) => {
 				image.onload = () => {
 					URL.revokeObjectURL(image.src);
@@ -632,6 +632,9 @@
 			);
 			return (result.width > 0 && result.height > 0) ? result : undefined;
 		}
+		intersects(rect) {
+			return (this.left <= rect.right && this.right >= rect.left) && (this.top <= rect.bottom && this.bottom >= rect.top);
+		}
 		ceil(even = false) {
 			let left = Math.floor(this.left);
 			let top = Math.floor(this.top);
@@ -664,6 +667,9 @@
 		}
 		contains(point) {
 			return this.left <= point.x && this.right >= point.x && this.top <= point.y && this.bottom >= point.y;
+		}
+		includes(rect) {
+			return this.left <= rect.left && this.right >= rect.right && this.top <= rect.top && this.bottom >= rect.bottom;
 		}
 		transform(matrix) {
 			if (!(matrix instanceof DOMMatrix)) matrix = DOMMatrix.fromMatrix(matrix);
