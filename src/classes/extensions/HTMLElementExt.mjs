@@ -38,7 +38,7 @@ class HTMLElementExt extends Extension {
 			do {
 				let position = scrollParent.computedStyle.position;
 
-				if (position == "absolute" || position == "fixed") {
+				if (position == "fixed") {
 					scrollLeft = 0;
 					scrollTop  = 0;
 

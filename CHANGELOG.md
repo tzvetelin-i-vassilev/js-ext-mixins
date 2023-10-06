@@ -1,5 +1,12 @@
 # js-ext-mixins ChangeLog
 
+## 1.0.8
+
+_2023-10-01_
+
+### Updates
+- HTMLElementExt - getClientOffset bug-fix when scroll and position absolute
+
 ## 1.0.7
 
 _2023-07-01_
