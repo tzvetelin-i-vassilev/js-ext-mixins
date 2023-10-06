@@ -8,13 +8,13 @@
 	 * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
 	 *
 	 * @namespace jsExt
-	 * @version 1.0.7
+	 * @version 1.0.8
 	 * @author Tzvetelin Vassilev
 	 * @copyright Tzvetelin Vassilev 2020-2023
 	 * @license ISC
 	 */
 
-	var version = "1.0.7";
+	var version = "1.0.8";
 
 	class Extension {
 		static overrides = ["toString"];
@@ -525,7 +525,7 @@
 			if (!relative) {
 				do {
 					let position = scrollParent.computedStyle.position;
-					if (position == "absolute" || position == "fixed") {
+					if (position == "fixed") {
 						scrollLeft = 0;
 						scrollTop  = 0;
 						break;
