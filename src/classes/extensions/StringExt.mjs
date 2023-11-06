@@ -52,21 +52,11 @@ class StringExt extends Extension {
 	/**
 	 * Converts char array to string
 	 *
-	 * @param {Array<int> | Uint8Array} data Bytes to serialize
+	 * @param {Array<byte> | Uint8Array} data Bytes to serialize
 	 * @returns {string} Binary data as string
 	 */
 	static fromCharArray(data) {
-		let binary = "";
-
-		try {
-			binary = String.fromCharCode.apply(null, data);
-		}
-		catch(e) {
-			for (let i = 0; i < data.length; i++)
-				binary += String.fromCharCode(data[i]);
-		}
-
-		return binary;
+		return data.reduce((binary, byte) => binary + String.fromCharCode(byte), "");
 	}
 }
 

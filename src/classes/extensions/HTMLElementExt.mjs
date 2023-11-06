@@ -22,6 +22,23 @@ class HTMLElementExt extends Extension {
 		let offsetLeft = 0;
 		let offsetTop  = 0;
 
+		let computedStyle = window.getComputedStyle(this);
+
+		if (computedStyle.transform != "none") {
+			let matrix = DOMMatrix.fromMatrix(computedStyle.transform);
+
+			let transformOrigin = computedStyle.transformOrigin.split(" ").map(v => parseFloat(v));
+			let origin = new DOMPoint(transformOrigin[0], transformOrigin[1]);
+
+			let point = origin.transform(matrix);
+
+			let tx = origin.x - point.x + matrix.tx;
+			let ty = origin.y - point.y + matrix.ty;
+
+			offsetLeft += tx;
+			offsetTop += ty;
+		}
+
 		do {
 			offsetLeft += offsetParent.offsetLeft;
 			offsetTop  += offsetParent.offsetTop;
