@@ -170,15 +170,7 @@ class StringExt extends Extension {
 		return list;
 	}
 	static fromCharArray(data) {
-		let binary = "";
-		try {
-			binary = String.fromCharCode.apply(null, data);
-		}
-		catch(e) {
-			for (let i = 0; i < data.length; i++)
-				binary += String.fromCharCode(data[i]);
-		}
-		return binary;
+		return data.reduce((binary, byte) => binary + String.fromCharCode(byte), "");
 	}
 }
 
@@ -507,6 +499,17 @@ class HTMLElementExt extends Extension {
 		let offsetParent = this;
 		let offsetLeft = 0;
 		let offsetTop  = 0;
+		let computedStyle = window.getComputedStyle(this);
+		if (computedStyle.transform != "none") {
+			let matrix = DOMMatrix.fromMatrix(computedStyle.transform);
+			let transformOrigin = computedStyle.transformOrigin.split(" ").map(v => parseFloat(v));
+			let origin = new DOMPoint(transformOrigin[0], transformOrigin[1]);
+			let point = origin.transform(matrix);
+			let tx = origin.x - point.x + matrix.tx;
+			let ty = origin.y - point.y + matrix.ty;
+			offsetLeft += tx;
+			offsetTop += ty;
+		}
 		do {
 			offsetLeft += offsetParent.offsetLeft;
 			offsetTop  += offsetParent.offsetTop;

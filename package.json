@@ -42,7 +42,7 @@
   },
   "scripts": {
     "doc": "del docs && jsdoc -c jsdoc.config.json ./README.md",
-    "build": "del dist && ./scripts/build-version-js.js && rollup -c && npm run doc && npm run test",
+    "build": "del dist && ./scripts/build-version-mjs.mjs && rollup -c && npm run doc && npm run test",
     "test": "mocha"
   },
   "engines": {
