@@ -167,6 +167,170 @@
     
 
     
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="parseBool"><span class="type-signature"></span>parseBool<span class="signature">(value)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>The parseBool() function parses any and returns a boolean value.</p>
+<ul>
+<li>string is true when value is &quot;true&quot; or not empty, is false when is &quot;false&quot; or empty</li>
+<li>number is true when value is not 0</li>
+<li>object is true when value is not null</li>
+<li>undefined is always false</li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Value to parse</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Parsed value</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
 
     
         <h3 class="subsection-title">Type Definitions</h3>
@@ -386,7 +550,7 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="add-ons.html">add-ons</a></li><li><a href="extensions.html">extensions</a></li></ul><h3>Classes</h3><ul><li><a href="add-ons.DOMSize.html">DOMSize</a></li><li><a href="add-ons.EnumValue.html">EnumValue</a></li><li><a href="extensions.ArrayBufferExt.html">ArrayBufferExt</a></li><li><a href="extensions.ArrayExt.html">ArrayExt</a></li><li><a href="extensions.CSSStyleSheetExt.html">CSSStyleSheetExt</a></li><li><a href="extensions.DOMMatrixExt.html">DOMMatrixExt</a></li><li><a href="extensions.DOMPointExt.html">DOMPointExt</a></li><li><a href="extensions.DOMRectExt.html">DOMRectExt</a></li><li><a href="extensions.DateExt.html">DateExt</a></li><li><a href="extensions.FunctionExt.html">FunctionExt</a></li><li><a href="extensions.HTMLElementExt.html">HTMLElementExt</a></li><li><a href="extensions.HTMLImageElementExt.html">HTMLImageElementExt</a></li><li><a href="extensions.ImageExt.html">ImageExt</a></li><li><a href="extensions.LocationExt.html">LocationExt</a></li><li><a href="extensions.NumberExt.html">NumberExt</a></li><li><a href="extensions.ObjectExt.html">ObjectExt</a></li><li><a href="extensions.ScreenExt.html">ScreenExt</a></li><li><a href="extensions.SetExt.html">SetExt</a></li><li><a href="extensions.ShadowRootExt.html">ShadowRootExt</a></li><li><a href="extensions.SharedArrayBufferExt.html">SharedArrayBufferExt</a></li><li><a href="extensions.StringExt.html">StringExt</a></li><li><a href="extensions.TypedArrayExt.html">TypedArrayExt</a></li><li><a href="polyfills.CSSStyleSheet.html">CSSStyleSheet</a></li></ul><h3>Global</h3><ul><li><a href="global.html#version">version</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="add-ons.html">add-ons</a></li><li><a href="extensions.html">extensions</a></li></ul><h3>Classes</h3><ul><li><a href="add-ons.DOMSize.html">DOMSize</a></li><li><a href="add-ons.EnumValue.html">EnumValue</a></li><li><a href="extensions.ArrayBufferExt.html">ArrayBufferExt</a></li><li><a href="extensions.ArrayExt.html">ArrayExt</a></li><li><a href="extensions.CSSStyleSheetExt.html">CSSStyleSheetExt</a></li><li><a href="extensions.DOMMatrixExt.html">DOMMatrixExt</a></li><li><a href="extensions.DOMPointExt.html">DOMPointExt</a></li><li><a href="extensions.DOMRectExt.html">DOMRectExt</a></li><li><a href="extensions.DateExt.html">DateExt</a></li><li><a href="extensions.FunctionExt.html">FunctionExt</a></li><li><a href="extensions.HTMLElementExt.html">HTMLElementExt</a></li><li><a href="extensions.HTMLImageElementExt.html">HTMLImageElementExt</a></li><li><a href="extensions.ImageExt.html">ImageExt</a></li><li><a href="extensions.LocationExt.html">LocationExt</a></li><li><a href="extensions.NumberExt.html">NumberExt</a></li><li><a href="extensions.ObjectExt.html">ObjectExt</a></li><li><a href="extensions.ScreenExt.html">ScreenExt</a></li><li><a href="extensions.SetExt.html">SetExt</a></li><li><a href="extensions.ShadowRootExt.html">ShadowRootExt</a></li><li><a href="extensions.SharedArrayBufferExt.html">SharedArrayBufferExt</a></li><li><a href="extensions.StringExt.html">StringExt</a></li><li><a href="extensions.TypedArrayExt.html">TypedArrayExt</a></li><li><a href="polyfills.CSSStyleSheet.html">CSSStyleSheet</a></li></ul><h3>Global</h3><ul><li><a href="global.html#parseBool">parseBool</a></li><li><a href="global.html#version">version</a></li></ul>
 </nav>
 
 <br class="clear">

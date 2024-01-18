@@ -11,6 +11,17 @@ if (typeof globalThis == "undefined") {
 }
 
 if (!globalThis.parseBool) {
+	/**
+	 * The parseBool() function parses any and returns a boolean value.
+	 *   * string is true when value is "true" or not empty, is false when is "false" or empty
+	 *   * number is true when value is not 0
+	 *   * object is true when value is not null
+	 *   * undefined is always false
+	 *
+	 * @global
+	 * @param {any} value Value to parse
+	 * @returns {boolean} Parsed value
+	 */
 	globalThis.parseBool = function parseBool(value) {
 		let result;
 
