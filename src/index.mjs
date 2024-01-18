@@ -10,6 +10,48 @@ if (typeof globalThis == "undefined") {
 	else if (typeof global !== "undefined") global.globalThis = global;
 }
 
+if (!globalThis.parseBool) {
+	globalThis.parseBool = function parseBool(value) {
+		let result;
+
+		if (typeof value == "string" && value != "" && isFinite(value))
+			value = parseFloat(value);
+
+		switch (typeof value) {
+			case "boolean":
+				result = value;
+				break;
+
+			case "string":
+				if (value == "true")
+					result = true;
+				else if (value == "false")
+					result = false;
+				else
+					result = value != "";
+
+				break;
+
+			case "number":
+				result = value != 0;
+				break;
+
+			case "undefined":
+				result = false;
+				break;
+
+			case "object":
+				result = value != null;
+				break;
+
+			default:
+				throw new Error(`value '${value}' of type ${typeof value} is not processed`);
+		}
+
+		return result;
+	}
+}
+
 if (!globalThis["JS_EXT_SCOPE"]) {
 	// substring Ext suffix
 	const scope = Object.keys(extensions).map(name => name.substring(0, name.length - 3));
