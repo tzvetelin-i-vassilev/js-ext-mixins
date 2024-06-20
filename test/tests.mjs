@@ -58,7 +58,7 @@ describe("js-ext-mixins test suite", () => {
 		let inputA = {n: 1}
 		let inputB = {n: 1}
 
-		it(`A: ${JSON.stringify(inputA)}, B: ${JSON.stringify(inputA)}`, () => {
+		it(`A: ${JSON.stringify(inputA)}, B: ${JSON.stringify(inputB)}`, () => {
 			assert.notEqual(inputA, inputB);
 			assert.ok(Object.equals(inputA, inputB));
 
@@ -67,9 +67,10 @@ describe("js-ext-mixins test suite", () => {
 
 			assert.notEqual(inputA, inputC);
 
-			Object.defineEnum(inputA, "MyEnum", ["VALUE_A", "VALUE_B", "VALUE_C", "VALUE_Z"]);
+			Object.defineEnum(inputA, "MyEnum", ["VALUE_A", "VALUE_B", "VALUE_C", "VALUE_Z"], true);
+			Object.defineEnum(inputA, "MyEnum", ["VALUE_X", "VALUE_Y", "VALUE_Z"]);
 
-			assert.equal(inputA.MyEnum.VALUE_A.name, "VALUE_A");
+			assert.equal(inputA.MyEnum.VALUE_X.name, "VALUE_X");
 		})
 	})
 })

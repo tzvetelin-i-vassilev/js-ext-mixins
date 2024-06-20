@@ -103,11 +103,10 @@ class ObjectExt extends Extension {
 	 * @param {object} target Enum context
 	 * @param {string} name Enum name
 	 * @param {Array<string>} values Enum values
+	 * @param {boolean} [configurable=false]
 	 * @returns {Enum} Created Enum
 	 */
-	static defineEnum(target, name, values) {
-		if (target[name]) throw new Error(`Already exist property: ${name}`);
-
+	static defineEnum(target, name, values, configurable = false) {
 		let type = {
 			name,
 			values: values.map((value, index) => new EnumValue(name, value, index))
@@ -118,7 +117,7 @@ class ObjectExt extends Extension {
 			Object.defineProperty(type, value.value, {value: value, enumerable: true});
 		});
 
-		Object.defineProperty(target, name, {value: type, enumerable: true});
+		Object.defineProperty(target, name, {value: type, enumerable: true, configurable});
 
 		return type;
 	}
