@@ -1,7 +1,7 @@
 {
   "name": "js-ext-mixins",
   "productName": "JavaScript Extensions",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Additional functionality provider",
   "main": "./dist/js-ext-mixins-min.cjs",
   "module": "./dist/js-ext-mixins-min.mjs",

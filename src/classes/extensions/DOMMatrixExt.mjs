@@ -6,6 +6,8 @@ let nativeToString;
 let nativeMultiply;
 let nativeMultiplySelf;
 
+// https://www.javascripture.com/DOMMatrix
+
 /**
  * Controlls multiply of matrices order
  *

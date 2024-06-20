@@ -8,13 +8,13 @@
 	 * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
 	 *
 	 * @namespace jsExt
-	 * @version 1.0.8
+	 * @version 1.0.9
 	 * @author Tzvetelin Vassilev
-	 * @copyright Tzvetelin Vassilev 2020-2023
+	 * @copyright Tzvetelin Vassilev 2020-2024
 	 * @license ISC
 	 */
 
-	var version = "1.0.8";
+	var version = "1.0.9";
 
 	class Extension {
 		static overrides = ["toString"];
@@ -142,8 +142,7 @@
 			}
 			return deepCopy(oReferance);
 		}
-		static defineEnum(target, name, values) {
-			if (target[name]) throw new Error(`Already exist property: ${name}`);
+		static defineEnum(target, name, values, configurable = false) {
 			let type = {
 				name,
 				values: values.map((value, index) => new EnumValue(name, value, index))
@@ -152,7 +151,7 @@
 				Object.defineProperty(type, value.name, {value: value, enumerable: true});
 				Object.defineProperty(type, value.value, {value: value, enumerable: true});
 			});
-			Object.defineProperty(target, name, {value: type, enumerable: true});
+			Object.defineProperty(target, name, {value: type, enumerable: true, configurable});
 			return type;
 		}
 	}
@@ -906,6 +905,38 @@
 		if (typeof window !== "undefined") window.globalThis = window;
 		else if (typeof self !== "undefined") self.globalThis = self;
 		else if (typeof global !== "undefined") global.globalThis = global;
+	}
+	if (!globalThis.parseBool) {
+		globalThis.parseBool = function parseBool(value) {
+			let result;
+			if (typeof value == "string" && value != "" && isFinite(value))
+				value = parseFloat(value);
+			switch (typeof value) {
+				case "boolean":
+					result = value;
+					break;
+				case "string":
+					if (value == "true")
+						result = true;
+					else if (value == "false")
+						result = false;
+					else
+						result = value != "";
+					break;
+				case "number":
+					result = value != 0;
+					break;
+				case "undefined":
+					result = false;
+					break;
+				case "object":
+					result = value != null;
+					break;
+				default:
+					throw new Error(`value '${value}' of type ${typeof value} is not processed`);
+			}
+			return result;
+		};
 	}
 	if (!globalThis["JS_EXT_SCOPE"]) {
 		const scope = Object.keys(extensions).map(name => name.substring(0, name.length - 3));
