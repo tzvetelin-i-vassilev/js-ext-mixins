@@ -57,7 +57,10 @@
     "*.json",
     "*.mjs"
   ],
-  "repository": "https://github.com/tzvetelin-i-vassilev/js-ext-mixins.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tzvetelin-i-vassilev/js-ext-mixins.git"
+  },
   "author": "Tzvetelin Vassilev",
   "homepage": "https://github.com/tzvetelin-i-vassilev/js-ext-mixins",
   "bugs": {
