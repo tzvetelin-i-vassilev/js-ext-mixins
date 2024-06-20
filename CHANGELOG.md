@@ -1,5 +1,12 @@
 # js-ext-mixins ChangeLog
 
+## 1.0.9
+
+_2024-06-20_
+
+### Updates
+- ObjectExt - defineEnum redefine enum update
+
 ## 1.0.8
 
 _2023-10-01_
