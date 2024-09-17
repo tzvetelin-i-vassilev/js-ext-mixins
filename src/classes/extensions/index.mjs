@@ -21,6 +21,7 @@ import LocationExt from "./LocationExt.mjs"
 import HTMLElementExt from "./HTMLElementExt.mjs"
 import HTMLImageElementExt from "./HTMLImageElementExt.mjs"
 import ImageExt from "./ImageExt.mjs"
+import PromiseExt from "./PromiseExt.mjs"
 import DOMPointExt from "./DOMPointExt.mjs"
 import DOMRectExt from "./DOMRectExt.mjs"
 import DOMMatrixExt from "./DOMMatrixExt.mjs"
@@ -43,6 +44,7 @@ export {
 	HTMLElementExt,
 	HTMLImageElementExt,
 	ImageExt,
+	PromiseExt,
 	DOMPointExt,
 	DOMRectExt,
 	DOMMatrixExt,

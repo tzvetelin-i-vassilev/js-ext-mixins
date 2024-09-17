@@ -1,5 +1,12 @@
 # js-ext-mixins ChangeLog
 
+## 1.0.10
+
+_2024-09-17_
+
+### Updates
+- PromiseExt - static sleep method impl
+
 ## 1.0.9
 
 _2024-06-20_

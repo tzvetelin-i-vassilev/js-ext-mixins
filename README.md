@@ -35,6 +35,7 @@ import "js-ext-mixins/polyfills/css-style-sheet"
  * Location
  * Number
  * Object
+ * Promise
  * Screen
  * Set
  * ShadowRoot
