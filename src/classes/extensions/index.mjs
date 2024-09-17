@@ -6,6 +6,10 @@
  * @namespace add-ons
  */
 
+/**
+ * @namespace polyfills
+ */
+
 import ObjectExt from "./ObjectExt.mjs"
 import StringExt from "./StringExt.mjs"
 import NumberExt from "./NumberExt.mjs"

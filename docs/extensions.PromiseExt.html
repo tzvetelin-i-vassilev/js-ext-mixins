@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: NumberExt</title>
+    <title>JSDoc: Class: PromiseExt</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: NumberExt</h1>
+    <h1 class="page-title">Class: PromiseExt</h1>
 
     
 
@@ -29,9 +29,9 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="extensions.html">extensions</a>.</span>NumberExt</h2>
+            <span class="ancestors"><a href="extensions.html">extensions</a>.</span>PromiseExt</h2>
         
-            <div class="class-description"><p>Number extension</p></div>
+            <div class="class-description"><p>Promise extension</p></div>
         
     
 </header>
@@ -135,7 +135,7 @@
     
 
     
-    <h4 class="name" id="format"><span class="type-signature"></span>format<span class="signature">(pattern)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id=".sleep"><span class="type-signature">(async, static) </span>sleep<span class="signature">(time<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -143,8 +143,7 @@
 
 
 <div class="description">
-    <p>Formats underlying number.
-It should be positive integer else Error is thrown.</p>
+    <p>Pause execution for desired time</p>
 </div>
 
 
@@ -168,7 +167,11 @@ It should be positive integer else Error is thrown.</p>
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -180,23 +183,39 @@ It should be positive integer else Error is thrown.</p>
 
         <tr>
             
-                <td class="name"><code>pattern</code></td>
+                <td class="name"><code>time</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">int</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"></td>
+            
+                <td class="default">
+                
+                    16
+                
+                </td>
+            
+
+            <td class="description last"><p>Sleep time in milliseconds</p></td>
         </tr>
 
     
@@ -257,35 +276,8 @@ It should be positive integer else Error is thrown.</p>
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Formatted number</p>
-</div>
 
 
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>formatted number 158 with pattern '00000' will result to  '00158'</code></pre>
 
 
 
