@@ -1,8 +1,8 @@
-import version from "./version.mjs"
+import version from "./version.js"
 
 // https://javascript.info/mixins
-import * as extensions from "./classes/extensions/index.mjs"
-import Extension from "./classes/Extension.mjs"
+import * as extensions from "./classes/extensions/index.js"
+import Extension from "./classes/Extension.js"
 
 if (typeof globalThis == "undefined") {
 	if (typeof window !== "undefined") window.globalThis = window;

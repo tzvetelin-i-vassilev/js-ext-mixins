@@ -1,6 +1,6 @@
-import Extension from "../Extension.mjs"
+import Extension from "../Extension.js"
 
-import EnumValue from "../add-ons/EnumValue.mjs"
+import EnumValue from "../add-ons/EnumValue.js"
 
 /**
  * Object extension

@@ -6,7 +6,7 @@ import cleanup from "rollup-plugin-cleanup"
 
 import pkg from "./package.json" assert {type: "json"}
 
-const input = "./src/index.mjs";
+const input = "./src/index.js";
 const name = "jsExt";
 
 function getLicenseHeader(polyfill) {
@@ -101,7 +101,7 @@ export default [
 	},
 	/* ************** Polyfill CSSStyleSheet - UMD ************** */
 	{
-		input: "./src/classes/polyfills/CSSStyleSheet.mjs",
+		input: "./src/classes/polyfills/CSSStyleSheet.js",
 		output: {
 			format: "umd",
 			name: "CSSStyleSheet",
@@ -114,7 +114,7 @@ export default [
 		]
 	},
 	{
-		input,
+		input: "./src/classes/polyfills/CSSStyleSheet.js",
 		output: {
 			format: "umd",
 			name: "CSSStyleSheet",
@@ -127,7 +127,7 @@ export default [
 	},
 	/* ************** Polyfill CSSStyleSheet - ESM ************** */
 	{
-		input: "./src/classes/polyfills/CSSStyleSheet.mjs",
+		input: "./src/classes/polyfills/CSSStyleSheet.js",
 		output: {
 			format: "esm",
 			intro: getLicenseHeader("css-style-sheet"),
@@ -138,7 +138,7 @@ export default [
 		]
 	},
 	{
-		input: "./src/classes/polyfills/CSSStyleSheet.mjs",
+		input: "./src/classes/polyfills/CSSStyleSheet.js",
 		output: {
 			format: "esm",
 			intro: getLicenseHeader("css-style-sheet"),

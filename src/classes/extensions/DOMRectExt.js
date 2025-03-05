@@ -1,6 +1,6 @@
-import Extension from "../Extension.mjs"
+import Extension from "../Extension.js"
 
-import DOMSize from "../add-ons/DOMSize.mjs"
+import DOMSize from "../add-ons/DOMSize.js"
 
 /**
  * DOMRect extension

@@ -3,9 +3,9 @@
   "productName": "JavaScript Extensions",
   "version": "1.0.10",
   "description": "Additional functionality provider",
+  "type": "module",
   "main": "./dist/js-ext-mixins-min.cjs",
   "module": "./dist/js-ext-mixins-min.mjs",
-  "browser": "./dist/js-ext-mixins-min.js",
   "exports": {
     ".": {
       "require": "./dist/js-ext-mixins-min.cjs",
@@ -17,7 +17,7 @@
       "import": "./dist/js-ext-mixins.mjs",
       "default": "./dist/js-ext-mixins.js"
     },
-    "./dev": "./src/index.mjs",
+    "./dev": "./src/index.js",
     "./polyfills/css-style-sheet": {
       "import": "./dist/polyfills/css-style-sheet-min.mjs",
       "default": "./dist/polyfills/css-style-sheet-min.js"
@@ -42,7 +42,7 @@
   },
   "scripts": {
     "doc": "./scripts/build-doc.sh",
-    "build": "del dist && ./scripts/build-version-mjs.mjs && rollup -c && npm run doc && npm run test",
+    "build": "del dist && ./scripts/build-version-js.mjs && rollup -c && npm run doc && npm run test",
     "test": "mocha"
   },
   "engines": {
@@ -50,12 +50,12 @@
   },
   "files": [
     "dist",
-    "src/**/*.mjs",
+    "src/**/*.js",
     "scripts",
     "test",
     "*.md",
     "*.json",
-    "*.mjs"
+    "*.js"
   ],
   "repository": {
     "type": "git",

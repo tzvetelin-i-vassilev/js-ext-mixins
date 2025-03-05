@@ -1,4 +1,4 @@
-import Extension from "../Extension.mjs"
+import Extension from "../Extension.js"
 
 /**
  * Image extension

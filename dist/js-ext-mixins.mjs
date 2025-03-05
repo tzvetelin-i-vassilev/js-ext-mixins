@@ -2,13 +2,13 @@
  * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
  *
  * @namespace jsExt
- * @version 1.0.9
+ * @version 1.0.10
  * @author Tzvetelin Vassilev
- * @copyright Tzvetelin Vassilev 2020-2024
+ * @copyright Tzvetelin Vassilev 2020-2025
  * @license ISC
  */
 
-var version = "1.0.9";
+var version = "1.0.10";
 
 class Extension {
 	static overrides = ["toString"];
@@ -594,6 +594,12 @@ class ImageExt extends Extension {
 	}
 }
 
+class PromiseExt extends Extension {
+	static async sleep(time = 16) {
+		return new Promise((resolve, reject) => setTimeout(resolve, time));
+	}
+}
+
 class DOMPointExt extends Extension {
 	transform(matrix) {
 		if (!(matrix instanceof DOMMatrix)) matrix = DOMMatrix.fromMatrix(matrix);
@@ -887,6 +893,7 @@ var extensions = /*#__PURE__*/Object.freeze({
 	LocationExt: LocationExt,
 	NumberExt: NumberExt,
 	ObjectExt: ObjectExt,
+	PromiseExt: PromiseExt,
 	ScreenExt: ScreenExt,
 	SetExt: SetExt,
 	ShadowRootExt: ShadowRootExt,

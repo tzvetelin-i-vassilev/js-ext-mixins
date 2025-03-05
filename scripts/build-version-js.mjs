@@ -14,4 +14,4 @@ const src = `
 export default "${pkg.version}"
 `;
 
-fs.writeFileSync("src/version.mjs", `${src.trim()}\n`);
+fs.writeFileSync("src/version.js", `${src.trim()}\n`);
