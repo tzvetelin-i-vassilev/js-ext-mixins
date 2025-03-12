@@ -27,6 +27,7 @@ import HTMLImageElementExt from "./HTMLImageElementExt.js"
 import ImageExt from "./ImageExt.js"
 import PromiseExt from "./PromiseExt.js"
 import DOMPointExt from "./DOMPointExt.js"
+import DOMQuadExt from "./DOMQuadExt.js"
 import DOMRectExt from "./DOMRectExt.js"
 import DOMMatrixExt from "./DOMMatrixExt.js"
 import CSSStyleSheetExt from "./CSSStyleSheetExt.js"
@@ -50,6 +51,7 @@ export {
 	ImageExt,
 	PromiseExt,
 	DOMPointExt,
+	DOMQuadExt,
 	DOMRectExt,
 	DOMMatrixExt,
 	CSSStyleSheetExt,

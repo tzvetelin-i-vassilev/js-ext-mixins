@@ -26,6 +26,7 @@ import "js-ext-mixins/polyfills/css-style-sheet"
  * CSSStyleSheet
  * DOMMatrix
  * DOMPoint
+ * DOMQuad
  * DOMRect
  * Date
  * Function

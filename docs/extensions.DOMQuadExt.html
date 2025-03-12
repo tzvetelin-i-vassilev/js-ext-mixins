@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: FunctionExt</title>
+    <title>JSDoc: Class: DOMQuadExt</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: FunctionExt</h1>
+    <h1 class="page-title">Class: DOMQuadExt</h1>
 
     
 
@@ -29,9 +29,9 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="extensions.html">extensions</a>.</span>FunctionExt</h2>
+            <span class="ancestors"><a href="extensions.html">extensions</a>.</span>DOMQuadExt</h2>
         
-            <div class="class-description"><p>Function extension</p></div>
+            <div class="class-description"><p>DOMQuad extension</p></div>
         
     
 </header>
@@ -135,7 +135,7 @@
     
 
     
-    <h4 class="name" id="createClass"><span class="type-signature"></span>createClass<span class="signature">(name, parentClass, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Class}</span></h4>
+    <h4 class="name" id="contains"><span class="type-signature"></span>contains<span class="signature">(point)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
     
@@ -143,7 +143,8 @@
 
 
 <div class="description">
-    <p>Create class with name as argument</p>
+    <p>Is point part from quad.
+Inside test (only convex polygons): Point lies on the same side of each quad's vertex AB, BC, CD, DA.</p>
 </div>
 
 
@@ -167,11 +168,7 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -183,109 +180,23 @@
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>point</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">DOMPoint</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                </td>
-            
 
-            <td class="description last"><p>Class name</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>parentClass</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Class</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>Class definition extends this class</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">JSON</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    {}
-                
-                </td>
-            
-
-            <td class="description last"><p>Class semantic</p></td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -350,7 +261,7 @@
 
         
 <div class="param-desc">
-    <p>Class definition</p>
+    <p>Is point part from quad</p>
 </div>
 
 
@@ -361,7 +272,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Class</span>
+<span class="param-type">boolean</span>
 
 
     </dd>
@@ -372,22 +283,259 @@
 
 
 
-    <h5>Example</h5>
+
+        
+            
+
     
-        <p class="code-caption">Options sample</p>
+
     
-    <pre class="prettyprint"><code>{
-  constructorSrc: `
-    this.#init();
-  `,
-  methods: `
-    #init() {
-      let options = helper.getConfiguration();
-      // set custom configuration
-    }
-  `,
-  args: {helper: MyHelper}
-}</code></pre>
+    <h4 class="name" id="toString"><span class="type-signature"></span>toString<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Value formatted as 'quad(point(x, y), point(x, y), point(x, y), point(x, y))'</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="transform"><span class="type-signature"></span>transform<span class="signature">(matrix)</span><span class="type-signature"> &rarr; {DOMQuad}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Transforms underlying quad</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>matrix</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">DOMMatrix</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Transform matrix</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Transformed quad</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">DOMQuad</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
 
 
 

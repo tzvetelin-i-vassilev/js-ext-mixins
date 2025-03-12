@@ -19,10 +19,11 @@ class DOMPointExt extends Extension {
 	}
 
 	/**
+	 * @param {boolean} [point2D=false] When true 'z' is excluded
 	 * @returns {string} Value formatted as 'point(x, y, z)'
 	 */
-	toString() {
-		return `point(${this.x}, ${this.y}, ${this.z})`;
+	toString(point2D = false) {
+		return `point(${this.x}, ${this.y}${point2D ? "" : `, ${this.z}`})`;
 	}
 }
 

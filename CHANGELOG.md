@@ -1,5 +1,12 @@
 # js-ext-mixins ChangeLog
 
+## 1.0.11
+
+_2025-03-12_
+
+### Updates
+- DOMQuadExt extension added
+
 ## 1.0.10
 
 _2024-09-17_

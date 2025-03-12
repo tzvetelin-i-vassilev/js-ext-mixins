@@ -2,13 +2,13 @@
  * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
  *
  * @namespace jsExt
- * @version 1.0.10
+ * @version 1.0.11
  * @author Tzvetelin Vassilev
  * @copyright Tzvetelin Vassilev 2020-2025
  * @license ISC
  */
 
-var version = "1.0.10";
+var version = "1.0.11";
 
 class Extension {
 	static overrides = ["toString"];
@@ -605,8 +605,26 @@ class DOMPointExt extends Extension {
 		if (!(matrix instanceof DOMMatrix)) matrix = DOMMatrix.fromMatrix(matrix);
 		return this.matrixTransform(matrix);
 	}
+	toString(point2D = false) {
+		return `point(${this.x}, ${this.y}${point2D ? "" : `, ${this.z}`})`;
+	}
+}
+
+class DOMQuadExt extends Extension {
+	transform(matrix) {
+		if (!(matrix instanceof DOMMatrix)) matrix = DOMMatrix.fromMatrix(matrix);
+		return new DOMQuad(this.p1.transform(matrix), this.p2.transform(matrix), this.p3.transform(matrix), this.p4.transform(matrix));
+	}
+	contains(point) {
+		let isLeftXZ = (a, b) => ((b.x - a.x) * (point.y - a.y) - (b.y - a.y) * (point.x - a.x)) > 0;
+		let sideMatch = isLeftXZ(this.p1, this.p2);
+		if (isLeftXZ(this.p2, this.p3) != sideMatch) return false;
+		if (isLeftXZ(this.p3, this.p4) != sideMatch) return false;
+		if (isLeftXZ(this.p4, this.p1) != sideMatch) return false;
+		return true;
+	}
 	toString() {
-		return `point(${this.x}, ${this.y}, ${this.z})`;
+		return `quad(${this.p1.toString(true)}, ${this.p2.toString(true)}, ${this.p3.toString(true)}, ${this.p4.toString(true)})`;
 	}
 }
 
@@ -884,6 +902,7 @@ var extensions = /*#__PURE__*/Object.freeze({
 	CSSStyleSheetExt: CSSStyleSheetExt,
 	DOMMatrixExt: DOMMatrixExt,
 	DOMPointExt: DOMPointExt,
+	DOMQuadExt: DOMQuadExt,
 	DOMRectExt: DOMRectExt,
 	DateExt: DateExt,
 	FunctionExt: FunctionExt,
