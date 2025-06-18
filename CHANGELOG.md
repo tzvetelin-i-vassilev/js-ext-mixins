@@ -1,5 +1,12 @@
 # js-ext-mixins ChangeLog
 
+## 1.0.12
+
+_2025-06-18_
+
+### Updates
+- Number - compareTo method impl
+
 ## 1.0.11
 
 _2025-03-12_

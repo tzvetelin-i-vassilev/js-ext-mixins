@@ -61,25 +61,25 @@ class ObjectExt extends Extension {
 	/**
 	 * Deep copy of the input
 	 *
-	 * @param {any} oReferance Clone source
+	 * @param {any} oReference Clone source
 	 * @param {boolean} [bDataOnly=false] When is true functions are ignored
 	 * @returns {any} Input copy
 	 */
-	static clone(oReferance, bDataOnly = false) {
-		let aReferances = new Array();
+	static clone(oReference, bDataOnly = false) {
+		let aReferences = new Array();
 
 		function deepCopy(oSource) {
 			if (oSource === null) return null;
 			if (typeof(oSource) !== "object" || oSource.immutable) return oSource;
 			if (typeof oSource.clone === "function") return oSource.clone();
 
-			for (let i = 0; i < aReferances.length; i++) {
-				if (aReferances[i][0] === oSource)
-					return aReferances[i][1];
+			for (let i = 0; i < aReferences.length; i++) {
+				if (aReferences[i][0] === oSource)
+					return aReferences[i][1];
 			}
 
 			let oCopy = Object.create(Object.getPrototypeOf(oSource));
-			aReferances.push([oSource, oCopy]);
+			aReferences.push([oSource, oCopy]);
 
 			for (let sPropertyName in oSource) {
 				if (bDataOnly && typeof oSource[sPropertyName] === "function")
@@ -92,7 +92,7 @@ class ObjectExt extends Extension {
 			return oCopy;
 		}
 
-		return deepCopy(oReferance);
+		return deepCopy(oReference);
 	}
 
 	/**

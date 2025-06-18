@@ -43,6 +43,21 @@ class NumberExt extends Extension {
 		else
 			return this.toString();
 	}
+
+	/**
+	 * Compares this instance to a specified number and returns an indication of their relative values
+	 *
+	 * @param {number} value A number to compare
+	 * @returns {number} When equals - 0, when this is less than b - -1, else 1
+	 */
+	compareTo(value) {
+		if (this < value)
+			return -1;
+		else if (this > value)
+			return 1;
+		else
+			return 0;
+	}
 }
 
 export default NumberExt

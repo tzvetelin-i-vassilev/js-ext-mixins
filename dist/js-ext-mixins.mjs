@@ -2,13 +2,13 @@
  * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
  *
  * @namespace jsExt
- * @version 1.0.11
+ * @version 1.0.12
  * @author Tzvetelin Vassilev
  * @copyright Tzvetelin Vassilev 2020-2025
  * @license ISC
  */
 
-var version = "1.0.11";
+var version = "1.0.12";
 
 class Extension {
 	static overrides = ["toString"];
@@ -114,18 +114,18 @@ class ObjectExt extends Extension {
 		}
 		return true;
 	}
-	static clone(oReferance, bDataOnly = false) {
-		let aReferances = new Array();
+	static clone(oReference, bDataOnly = false) {
+		let aReferences = new Array();
 		function deepCopy(oSource) {
 			if (oSource === null) return null;
 			if (typeof(oSource) !== "object" || oSource.immutable) return oSource;
 			if (typeof oSource.clone === "function") return oSource.clone();
-			for (let i = 0; i < aReferances.length; i++) {
-				if (aReferances[i][0] === oSource)
-					return aReferances[i][1];
+			for (let i = 0; i < aReferences.length; i++) {
+				if (aReferences[i][0] === oSource)
+					return aReferences[i][1];
 			}
 			let oCopy = Object.create(Object.getPrototypeOf(oSource));
-			aReferances.push([oSource, oCopy]);
+			aReferences.push([oSource, oCopy]);
 			for (let sPropertyName in oSource) {
 				if (bDataOnly && typeof oSource[sPropertyName] === "function")
 					continue;
@@ -134,7 +134,7 @@ class ObjectExt extends Extension {
 			}
 			return oCopy;
 		}
-		return deepCopy(oReferance);
+		return deepCopy(oReference);
 	}
 	static defineEnum(target, name, values, configurable = false) {
 		let type = {
@@ -187,6 +187,14 @@ class NumberExt extends Extension {
 			return pattern.substring(0, pattern.length - this.toString().length) + this;
 		else
 			return this.toString();
+	}
+	compareTo(value) {
+		if (this < value)
+			return -1;
+		else if (this > value)
+			return 1;
+		else
+			return 0;
 	}
 }
 
