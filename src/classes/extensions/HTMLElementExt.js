@@ -76,6 +76,34 @@ class HTMLElementExt extends Extension {
 	}
 
 	/**
+	 * Extract and parse CSS property transform-origin
+	 *
+	 * @returns {DOMPoint} Element transform origin
+	 */
+	getTransformOrigin() {
+		let display = this.style.display;
+		let visibility = this.style.visibility;
+
+		let computedStyle = window.getComputedStyle(this);
+		let [ox, oy] = computedStyle.transformOrigin.split(" ");
+		let parse = (value, size) => value.endsWith("%") ? (parseFloat(value) / 100) * size : parseFloat(value);
+
+		if (display == "none") {
+			this.style.visibility = "hidden";
+			this.style.display = "";
+		}
+
+		let transformOrigin = new DOMPoint(parse(ox, this.offsetWidth), parse(oy, this.offsetHeight));
+
+		if (display == "none") {
+			this.style.visibility = visibility;
+			this.style.display = "none";
+		}
+
+		return transformOrigin;
+	}
+
+	/**
 	 * Calculate offset rect of the underlyimg element in the coordinate system of it's offset parent.
 	 *
 	 * @returns {DOMRect} Offset rect with prop 'outerSize', where it includes margins
@@ -90,6 +118,7 @@ class HTMLElementExt extends Extension {
 		}
 
 		let computedStyle = window.getComputedStyle(this);
+
 		let margin = {
 			left: parseFloat(computedStyle.marginLeft),
 			top: parseFloat(computedStyle.marginTop),
@@ -100,15 +129,15 @@ class HTMLElementExt extends Extension {
 		let outerWidth = this.offsetWidth + margin.left + margin.right;
 		let outerHeight = this.offsetHeight + margin.top + margin.bottom;
 
-		let result = new DOMRect(this.offsetLeft, this.offsetTop, this.offsetWidth, this.offsetHeight);
-		result.outerSize = new DOMSize(outerWidth, outerHeight);
+		let rect = new DOMRect(this.offsetLeft, this.offsetTop, this.offsetWidth, this.offsetHeight);
+		rect.outerSize = new DOMSize(outerWidth, outerHeight);
 
 		if (display == "none") {
 			this.style.visibility = visibility;
 			this.style.display = "none";
 		}
 
-		return result;
+		return rect;
 	}
 }
 

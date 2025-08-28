@@ -205,18 +205,18 @@ class DOMMatrixExt extends Extension {
 	 * Creates delta rotate matrix
 	 *
 	 * @param {float} alpha Value should be in rad
-	 * @param {DOMPoint} [origin={x: 0, y: 0}] Transform origin
+	 * @param {DOMPoint} [anchor={x: 0, y: 0}] Transform pivot point
 	 * @returns {DOMMatrix} Transform as new Matrix
 	 */
-	static fromRotate(alpha, origin) {
+	static fromRotate(alpha, anchor) {
 		let sin = Math.sin(alpha);
 		let cos = Math.cos(alpha);
 
 		let rotate = {a: cos, b: sin, c: -sin, d: cos};
 
-		if (origin) {
-			rotate.tx = origin.x - origin.x * cos + origin.y * sin;
-			rotate.ty = origin.y - origin.x * sin - origin.y * cos;
+		if (anchor) {
+			rotate.tx = anchor.x - (anchor.x * cos - anchor.y * sin);
+			rotate.ty = anchor.y - (anchor.x * sin + anchor.y * cos);
 		}
 
 		return DOMMatrix.fromMatrix(rotate);
@@ -226,17 +226,17 @@ class DOMMatrixExt extends Extension {
 	 * Creates delta scale matrix
 	 *
 	 * @param {Scale | float} factor Scale factor
-	 * @param {DOMPoint} [origin={x: 0, y: 0}] Transform origin
+	 * @param {DOMPoint} [anchor={x: 0, y: 0}] Transform pivot point
 	 * @returns {DOMMatrix} Transform as new Matrix
 	 */
-	static fromScale(factor, origin) {
+	static fromScale(factor, anchor) {
 		if (isFinite(factor)) factor = {x: factor, y: factor};
 
 		let scale = {a: factor.x, d: factor.y};
 
-		if (origin) {
-			scale.tx = origin.x - origin.x * factor.x;
-			scale.ty = origin.y - origin.y * factor.y;
+		if (anchor) {
+			scale.tx = anchor.x - anchor.x * factor.x;
+			scale.ty = anchor.y - anchor.y * factor.y;
 		}
 
 		return DOMMatrix.fromMatrix(scale);
