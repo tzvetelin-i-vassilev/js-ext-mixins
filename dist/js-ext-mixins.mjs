@@ -2,13 +2,13 @@
  * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
  *
  * @namespace jsExt
- * @version 1.0.12
+ * @version 1.0.13
  * @author Tzvetelin Vassilev
  * @copyright Tzvetelin Vassilev 2020-2025
  * @license ISC
  */
 
-var version = "1.0.12";
+var version = "1.0.13";
 
 class Extension {
 	static overrides = ["toString"];
@@ -544,6 +544,23 @@ class HTMLElementExt extends Extension {
 		}
 		return new DOMPoint(offsetLeft - scrollLeft, offsetTop - scrollTop);
 	}
+	getTransformOrigin() {
+		let display = this.style.display;
+		let visibility = this.style.visibility;
+		let computedStyle = window.getComputedStyle(this);
+		let [ox, oy] = computedStyle.transformOrigin.split(" ");
+		let parse = (value, size) => value.endsWith("%") ? (parseFloat(value) / 100) * size : parseFloat(value);
+		if (display == "none") {
+			this.style.visibility = "hidden";
+			this.style.display = "";
+		}
+		let transformOrigin = new DOMPoint(parse(ox, this.offsetWidth), parse(oy, this.offsetHeight));
+		if (display == "none") {
+			this.style.visibility = visibility;
+			this.style.display = "none";
+		}
+		return transformOrigin;
+	}
 	toRect() {
 		let display = this.style.display;
 		let visibility = this.style.visibility;
@@ -560,13 +577,13 @@ class HTMLElementExt extends Extension {
 		};
 		let outerWidth = this.offsetWidth + margin.left + margin.right;
 		let outerHeight = this.offsetHeight + margin.top + margin.bottom;
-		let result = new DOMRect(this.offsetLeft, this.offsetTop, this.offsetWidth, this.offsetHeight);
-		result.outerSize = new DOMSize(outerWidth, outerHeight);
+		let rect = new DOMRect(this.offsetLeft, this.offsetTop, this.offsetWidth, this.offsetHeight);
+		rect.outerSize = new DOMSize(outerWidth, outerHeight);
 		if (display == "none") {
 			this.style.visibility = visibility;
 			this.style.display = "none";
 		}
-		return result;
+		return rect;
 	}
 }
 
@@ -818,22 +835,22 @@ class DOMMatrixExt extends Extension {
 		let translate = isFinite(offset) ? {tx: offset, ty: offset} : {tx: offset.x, ty: offset.y};
 		return DOMMatrix.fromMatrix(translate);
 	}
-	static fromRotate(alpha, origin) {
+	static fromRotate(alpha, anchor) {
 		let sin = Math.sin(alpha);
 		let cos = Math.cos(alpha);
 		let rotate = {a: cos, b: sin, c: -sin, d: cos};
-		if (origin) {
-			rotate.tx = origin.x - origin.x * cos + origin.y * sin;
-			rotate.ty = origin.y - origin.x * sin - origin.y * cos;
+		if (anchor) {
+			rotate.tx = anchor.x - (anchor.x * cos - anchor.y * sin);
+			rotate.ty = anchor.y - (anchor.x * sin + anchor.y * cos);
 		}
 		return DOMMatrix.fromMatrix(rotate);
 	}
-	static fromScale(factor, origin) {
+	static fromScale(factor, anchor) {
 		if (isFinite(factor)) factor = {x: factor, y: factor};
 		let scale = {a: factor.x, d: factor.y};
-		if (origin) {
-			scale.tx = origin.x - origin.x * factor.x;
-			scale.ty = origin.y - origin.y * factor.y;
+		if (anchor) {
+			scale.tx = anchor.x - anchor.x * factor.x;
+			scale.ty = anchor.y - anchor.y * factor.y;
 		}
 		return DOMMatrix.fromMatrix(scale);
 	}

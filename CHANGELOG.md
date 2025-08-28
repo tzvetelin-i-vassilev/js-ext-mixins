@@ -1,11 +1,18 @@
 # js-ext-mixins ChangeLog
 
+## 1.0.13
+
+_2025-08-28_
+
+### Updates
+- _HTMLElementExt_ - getTransformOrigin method impl
+
 ## 1.0.12
 
 _2025-06-18_
 
 ### Updates
-- Number - compareTo method impl
+- _NumberExt_ - compareTo method impl
 
 ## 1.0.11
 
@@ -19,14 +26,14 @@ _2025-03-12_
 _2024-09-17_
 
 ### Updates
-- PromiseExt - static sleep method impl
+- PromiseExt - extension added, static sleep method impl
 
 ## 1.0.9
 
 _2024-06-20_
 
 ### Updates
-- ObjectExt - defineEnum redefine enum update
+- _ObjectExt_ - defineEnum redefine enum update
 
 ## 1.0.8
 
@@ -40,8 +47,8 @@ _2023-10-01_
 _2023-07-01_
 
 ### Updates
-- DOMRectExt - methods intersects and includes impl
-- ImageExt - method fromBytes as promise
+- _DOMRectExt_ - methods intersects and includes impl
+- _ImageExt_ - method fromBytes as promise
 
 ## 1.0.6
 
