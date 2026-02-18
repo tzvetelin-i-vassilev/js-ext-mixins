@@ -9,7 +9,7 @@
 	 * @namespace jsExt
 	 * @version 1.0.13
 	 * @author Tzvetelin Vassilev
-	 * @copyright Tzvetelin Vassilev 2020-2025
+	 * @copyright Tzvetelin Vassilev 2020-2026
 	 * @license ISC
 	 */
 

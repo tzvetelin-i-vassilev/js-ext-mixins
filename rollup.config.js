@@ -4,7 +4,7 @@ import eslint from "@rollup/plugin-eslint"
 import terser from "@rollup/plugin-terser"
 import cleanup from "rollup-plugin-cleanup"
 
-import pkg from "./package.json" assert {type: "json"}
+import pkg from "./package.json" with {type: "json"}
 
 const input = "./src/index.js";
 const name = "jsExt";
@@ -23,14 +23,6 @@ function getLicenseHeader(polyfill) {
 	`.trim().replaceAll("\t", "");
 }
 
-const eslintOptions = {
-	overrideConfig: {
-		globals: {
-			DOMSize: "readonly"
-		}
-	}
-};
-
 export default [
 	/* ************** UMD ************** */
 	{
@@ -42,7 +34,7 @@ export default [
 			file: `./dist/${pkg.name}.js`
 		},
 		plugins: [
-			eslint(eslintOptions),
+			eslint(),
 			resolve(),
 			commonjs(),
 			cleanup()
@@ -109,7 +101,7 @@ export default [
 			file: "./dist/polyfills/css-style-sheet.js"
 		},
 		plugins: [
-			eslint(eslintOptions),
+			eslint(),
 			cleanup()
 		]
 	},

@@ -28,16 +28,16 @@
     }
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^28.0.6",
-    "@rollup/plugin-eslint": "^9.0.5",
-    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-eslint": "9.2.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^0.4.4",
-    "del-cli": "^6.0.0",
-    "eslint": "^9.34.0",
-    "espree": "^10.1.0",
-    "jsdoc": "^4.0.3",
-    "mocha": "^11.7.1",
-    "rollup": "^4.49.0",
+    "del-cli": "^7.0.0",
+    "eslint": "^9.39.2",
+    "espree": "^11.1.0",
+    "jsdoc": "^4.0.5",
+    "mocha": "^11.7.5",
+    "rollup": "^4.57.1",
     "rollup-plugin-cleanup": "^3.2.1"
   },
   "scripts": {

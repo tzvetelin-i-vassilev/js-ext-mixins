@@ -14,11 +14,33 @@ class HTMLElementExt extends Extension {
 	/**
 	 * Calculate top left position of the underlyimg dom element in the client coordinate system.
 	 *
+	 * @param {HTMLElement} [parent=root] Relative parent
+	 * @returns {DOMPoint} Offset position
+	 */
+	getOffsetRelativeTo(parent) {
+		let element = this;
+
+		let left = 0;
+		let top = 0;
+
+		while (element && element !== parent) {
+			left += element.offsetLeft;
+			top += element.offsetTop;
+
+			element = element.offsetParent;
+		}
+
+		return new DOMPoint(left, top);
+	}
+
+	/**
+	 * Calculate top left position of the underlyimg dom element in the client coordinate system.
+	 *
 	 * @param {boolean} [relative=false] Skip scroller offset
 	 * @returns {DOMPoint} Offset position (origin position)
 	 */
 	getClientOffset(relative = false) {
-		let offsetParent = this;
+		let element = this;
 		let offsetLeft = 0;
 		let offsetTop  = 0;
 
@@ -40,12 +62,12 @@ class HTMLElementExt extends Extension {
 		}
 
 		do {
-			offsetLeft += offsetParent.offsetLeft;
-			offsetTop  += offsetParent.offsetTop;
+			offsetLeft += element.offsetLeft;
+			offsetTop  += element.offsetTop;
 
-			offsetParent = offsetParent.offsetParent;
+			element = element.offsetParent;
 		}
-		while (offsetParent);
+		while (element);
 
 		let scrollParent = this;
 		let scrollLeft = 0;

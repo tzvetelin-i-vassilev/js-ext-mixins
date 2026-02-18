@@ -14,7 +14,8 @@ import DOMSize from "../add-ons/DOMSize.js"
 class DOMRectExt extends Extension {
 	static properties = {
 		size: {get: function() {return new DOMSize(this.width, this.height)}, configurable: true},
-		center: {get: function() {return new DOMPoint((this.left + this.right) / 2, (this.top + this.bottom) / 2)}, configurable: true}
+		center: {get: function() {return new DOMPoint((this.left + this.right) / 2, (this.top + this.bottom) / 2)}, configurable: true},
+		area: {get: function() {return this.width * this.height}, configurable: true}
 	}
 
 	/**

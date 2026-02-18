@@ -5,7 +5,8 @@
 _2025-08-28_
 
 ### Updates
-- _HTMLElementExt_ - getTransformOrigin method impl
+- _HTMLElementExt_ - getTransformOrigin, getOffsetRelativeTo methods impl
+- _DOMRectExt_ - center and area properties added
 
 ## 1.0.12
 

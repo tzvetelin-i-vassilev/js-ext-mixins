@@ -4,7 +4,7 @@
  * @namespace jsExt
  * @version 1.0.13
  * @author Tzvetelin Vassilev
- * @copyright Tzvetelin Vassilev 2020-2025
+ * @copyright Tzvetelin Vassilev 2020-2026
  * @license ISC
  */
 
@@ -502,8 +502,19 @@ class HTMLElementExt extends Extension {
 	static properties = {
 		computedStyle: {get: function() { return window.getComputedStyle(this); }, configurable: true}
 	}
+	getOffsetRelativeTo(parent) {
+		let element = this;
+		let left = 0;
+		let top = 0;
+		while (element && element !== parent) {
+			left += element.offsetLeft;
+			top += element.offsetTop;
+			element = element.offsetParent;
+		}
+		return new DOMPoint(left, top);
+	}
 	getClientOffset(relative = false) {
-		let offsetParent = this;
+		let element = this;
 		let offsetLeft = 0;
 		let offsetTop  = 0;
 		let computedStyle = window.getComputedStyle(this);
@@ -518,11 +529,11 @@ class HTMLElementExt extends Extension {
 			offsetTop += ty;
 		}
 		do {
-			offsetLeft += offsetParent.offsetLeft;
-			offsetTop  += offsetParent.offsetTop;
-			offsetParent = offsetParent.offsetParent;
+			offsetLeft += element.offsetLeft;
+			offsetTop  += element.offsetTop;
+			element = element.offsetParent;
 		}
-		while (offsetParent);
+		while (element);
 		let scrollParent = this;
 		let scrollLeft = 0;
 		let scrollTop  = 0;
@@ -656,7 +667,8 @@ class DOMQuadExt extends Extension {
 class DOMRectExt extends Extension {
 	static properties = {
 		size: {get: function() {return new DOMSize$1(this.width, this.height)}, configurable: true},
-		center: {get: function() {return new DOMPoint((this.left + this.right) / 2, (this.top + this.bottom) / 2)}, configurable: true}
+		center: {get: function() {return new DOMPoint((this.left + this.right) / 2, (this.top + this.bottom) / 2)}, configurable: true},
+		area: {get: function() {return this.width * this.height}, configurable: true}
 	}
 	union(rect) {
 		if (!rect) return this;
