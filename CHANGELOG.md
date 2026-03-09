@@ -1,5 +1,12 @@
 # js-ext-mixins ChangeLog
 
+## 1.0.14
+
+_2026-03-09_
+
+### Updates
+- _StringExt_ - conversion bewtween notations - camel, pascal, snake, kebab
+
 ## 1.0.13
 
 _2025-08-28_

@@ -160,6 +160,42 @@
 		padStart(length, char = "-") {
 			return (this.length < length) ? (new Array(length - this.length + 1)).join(char) + this : this.toString();
 		}
+		toCamelCase(sourceCase) {
+			switch (sourceCase) {
+				case "camel": return this;
+				case "pascal": return this.replace(/^./, c => c.toLowerCase());
+				case "snake": return this.toLowerCase().replace(/_([a-z])/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toLowerCase());
+				case "kebab": return this.toLowerCase().replace(/-([a-z])/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toLowerCase());
+				default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab)`);
+			}
+		}
+		toPascalCase(sourceCase) {
+			switch (sourceCase) {
+				case "pascal": return this;
+				case "camel": return this.replace(/^./, c => c.toUpperCase());
+				case "snake": return this.toLowerCase().replace(/_([a-z])/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toUpperCase());
+				case "kebab": return this.toLowerCase().replace(/-([a-z])/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toUpperCase());
+				default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab)`);
+			}
+		}
+		toSnakeCase(sourceCase) {
+			switch (sourceCase) {
+				case "snake": return this;
+				case "kebab": return this.replaceAll("-", "_");
+				case "camel": return this.replace(/[A-Z]/g, m => "_" + m);
+				case "pascal": return this.replace(/([a-z])([A-Z])/g, "$1_$2");
+				default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab)`);
+			}
+		}
+		toKebabCase(sourceCase) {
+			switch (sourceCase) {
+				case "kebab": return this;
+				case "snake": return this.replaceAll("_", "-");
+				case "camel": return this.replace(/([a-z])([A-Z])/g, "$1-$2");
+				case "pascal": return this.replace(/([a-z])([A-Z])/g, "$1-$2");
+				default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab)`);
+			}
+		}
 		toCharArray(bytes = false) {
 			let list = [];
 			let byteList = true;

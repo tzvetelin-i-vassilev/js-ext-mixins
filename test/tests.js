@@ -10,6 +10,22 @@ describe("js-ext-mixins test suite", () => {
 			assert.deepEqual(input.toCharArray(), [97, 66, 1094, 50, 51, 64]);
 			assert.equal(String.fromCharArray([97, 66, 1094, 50, 51, 64]), input);
 			assert.equal(input.padStart(8, "+"), "++aBц23@");
+
+			assert.equal("PascalCase".toCamelCase("pascal"), "pascalCase");
+			assert.equal("snake_case".toCamelCase("snake"), "snakeCase");
+			assert.equal("kebab-case".toCamelCase("kebab"), "kebabCase");
+
+			assert.equal("camelCase".toPascalCase("camel"), "CamelCase");
+			assert.equal("snake_case".toPascalCase("snake"), "SnakeCase");
+			assert.equal("kebab-case".toPascalCase("kebab"), "KebabCase");
+
+			assert.equal("camelCase".toSnakeCase("camel"), "camel_Case");
+			assert.equal("PascalCase".toSnakeCase("pascal"), "Pascal_Case");
+			assert.equal("kebab-case".toSnakeCase("kebab"), "kebab_case");
+
+			assert.equal("camelCase".toKebabCase("camel"), "camel-Case");
+			assert.equal("PascalCase".toKebabCase("pascal"), "Pascal-Case");
+			assert.equal("snake_case".toKebabCase("snake"), "snake-case");
 		})
 	})
 
