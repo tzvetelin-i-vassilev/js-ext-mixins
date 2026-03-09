@@ -4,13 +4,13 @@
  * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
  *
  * @namespace jsExt
- * @version 1.0.13
+ * @version 1.0.14
  * @author Tzvetelin Vassilev
  * @copyright Tzvetelin Vassilev 2020-2026
  * @license ISC
  */
 
-var version = "1.0.13";
+var version = "1.0.14";
 
 class Extension {
 	static overrides = ["toString"];
