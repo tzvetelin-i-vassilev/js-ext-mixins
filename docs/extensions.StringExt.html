@@ -357,7 +357,7 @@
 
 
 <div class="description">
-    <p>Converts string in ('PascalCase' | 'SNAKE_case' | 'KEBAB-case') notation to 'camelCase' string notation</p>
+    <p>Converts string in ('PascalCase' | 'SNAKE_case' | 'KEBAB-case' | 'DOT.notation') notation to 'camelCase' string notation</p>
 </div>
 
 
@@ -409,7 +409,7 @@
 
             
 
-            <td class="description last"><p>Source string notation, oneof(camel, pascal, snake, kebab)</p></td>
+            <td class="description last"><p>Source string notation, oneof(camel, pascal, snake, kebab, dot)</p></td>
         </tr>
 
     
@@ -680,7 +680,7 @@
     
 
     
-    <h4 class="name" id="toKebabCase"><span class="type-signature"></span>toKebabCase<span class="signature">(sourceCase)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="toDotNotation"><span class="type-signature"></span>toDotNotation<span class="signature">(sourceCase, keepCase<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -688,7 +688,7 @@
 
 
 <div class="description">
-    <p>Converts string in ('camelCase' | 'PascalCase' | 'SNAKE_case') notation to 'KEBAB-case' string notation</p>
+    <p>Converts string in ('camelCase' | 'PascalCase' | 'SNAKE_case' | 'KEBAB-case') notation to 'dot.Notation' string notation</p>
 </div>
 
 
@@ -712,7 +712,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -737,10 +741,270 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><p>Source string notation, oneof(camel, pascal, snake, kebab)</p></td>
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Source string notation, oneof(camel, pascal, snake, kebab, dot)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>keepCase</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>By default result is in lower register</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>'DOT.notation' value</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="toKebabCase"><span class="type-signature"></span>toKebabCase<span class="signature">(sourceCase, keepCase<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Converts string in ('camelCase' | 'PascalCase' | 'SNAKE_case' | 'DOT.notation') notation to 'KEBAB-case' string notation</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>sourceCase</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Source string notation, oneof(camel, pascal, snake, kebab, dot)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>keepCase</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>By default result is in lower register</p></td>
         </tr>
 
     
@@ -842,7 +1106,7 @@
 
 
 <div class="description">
-    <p>Converts string in ('camelCase' | 'SNAKE_case' | 'KEBAB-case') notation to 'PascalCase' string notation</p>
+    <p>Converts string in ('camelCase' | 'SNAKE_case' | 'KEBAB-case' | 'DOT.notation') notation to 'PascalCase' string notation</p>
 </div>
 
 
@@ -894,7 +1158,7 @@
 
             
 
-            <td class="description last"><p>Source string notation, oneof(camel, pascal, snake, kebab)</p></td>
+            <td class="description last"><p>Source string notation, oneof(camel, pascal, snake, kebab, dot)</p></td>
         </tr>
 
     
@@ -988,7 +1252,7 @@
     
 
     
-    <h4 class="name" id="toSnakeCase"><span class="type-signature"></span>toSnakeCase<span class="signature">(sourceCase)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="toSnakeCase"><span class="type-signature"></span>toSnakeCase<span class="signature">(sourceCase, keepCase<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -996,7 +1260,7 @@
 
 
 <div class="description">
-    <p>Converts string in ('camelCase' | 'PascalCase' | 'KEBAB-case') notation to 'SNAKE_case' string notation</p>
+    <p>Converts string in ('camelCase' | 'PascalCase' | 'KEBAB-case' | 'DOT.notation') notation to 'SNAKE_case' string notation</p>
 </div>
 
 
@@ -1020,7 +1284,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -1045,10 +1313,61 @@
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><p>Source string notation, oneof(camel, pascal, snake, kebab)</p></td>
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Source string notation, oneof(camel, pascal, snake, kebab, dot)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>keepCase</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>By default result is in lower register</p></td>
         </tr>
 
     

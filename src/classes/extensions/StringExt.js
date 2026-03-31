@@ -25,9 +25,9 @@ class StringExt extends Extension {
 	}
 */
 	/**
-	 * Converts string in ('PascalCase' | 'SNAKE_case' | 'KEBAB-case') notation to 'camelCase' string notation
+	 * Converts string in ('PascalCase' | 'SNAKE_case' | 'KEBAB-case' | 'DOT.notation') notation to 'camelCase' string notation
 	 *
-	 * @param {string} sourceCase Source string notation, oneof(camel, pascal, snake, kebab)
+	 * @param {string} sourceCase Source string notation, oneof(camel, pascal, snake, kebab, dot)
 	 * @return {string} 'camelCase' notation value
 	 */
 	toCamelCase(sourceCase) {
@@ -36,15 +36,16 @@ class StringExt extends Extension {
 			case "pascal": return this.replace(/^./, c => c.toLowerCase());
 			case "snake": return this.toLowerCase().replace(/_([a-z])/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toLowerCase());
 			case "kebab": return this.toLowerCase().replace(/-([a-z])/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toLowerCase());
+			case "dot": return this.toLowerCase().replace(/\.([a-z])/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toLowerCase());
 
-			default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab)`);
+			default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab, dot)`);
 		}
 	}
 
 	/**
-	 * Converts string in ('camelCase' | 'SNAKE_case' | 'KEBAB-case') notation to 'PascalCase' string notation
+	 * Converts string in ('camelCase' | 'SNAKE_case' | 'KEBAB-case' | 'DOT.notation') notation to 'PascalCase' string notation
 	 *
-	 * @param {string} sourceCase Source string notation, oneof(camel, pascal, snake, kebab)
+	 * @param {string} sourceCase Source string notation, oneof(camel, pascal, snake, kebab, dot)
 	 * @return {string} 'PascalCase' notation value
 	 */
 	toPascalCase(sourceCase) {
@@ -53,43 +54,121 @@ class StringExt extends Extension {
 			case "camel": return this.replace(/^./, c => c.toUpperCase());
 			case "snake": return this.toLowerCase().replace(/_([a-z])/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toUpperCase());
 			case "kebab": return this.toLowerCase().replace(/-([a-z])/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toUpperCase());
+			case "dot": return this.toLowerCase().replace(/\.([a-z])/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toUpperCase());
 
-			default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab)`);
+			default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab, dot)`);
 		}
 	}
 
 	/**
-	 * Converts string in ('camelCase' | 'PascalCase' | 'KEBAB-case') notation to 'SNAKE_case' string notation
+	 * Converts string in ('camelCase' | 'PascalCase' | 'KEBAB-case' | 'DOT.notation') notation to 'SNAKE_case' string notation
 	 *
-	 * @param {string} sourceCase Source string notation, oneof(camel, pascal, snake, kebab)
+	 * @param {string} sourceCase Source string notation, oneof(camel, pascal, snake, kebab, dot)
+	 * @param {boolean} [keepCase=false] By default result is in lower register
 	 * @return {string} 'SNAKE_case' notation value
 	 */
-	toSnakeCase(sourceCase) {
-		switch (sourceCase) {
-			case "snake": return this;
-			case "kebab": return this.replaceAll("-", "_");
-			case "camel": return this.replace(/[A-Z]/g, m => "_" + m);
-			case "pascal": return this.replace(/([a-z])([A-Z])/g, "$1_$2");
+	toSnakeCase(sourceCase, keepCase = false) {
+		let value;
 
-			default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab)`);
+		switch (sourceCase) {
+			case "snake":
+				value = this;
+				break;
+
+			case "kebab":
+				value = this.replaceAll("-", "_");
+				break;
+
+			case "dot":
+				value = this.replaceAll(".", "_");
+				break;
+
+			case "camel":
+				value = this.replace(/[A-Z]/g, m => "_" + m);
+				break;
+
+			case "pascal":
+				value = this.replace(/([a-z])([A-Z])/g, "$1_$2");
+				break;
+
+			default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab, dot)`);
 		}
+
+		return keepCase ? value : value.toLowerCase();
 	}
 
 	/**
-	 * Converts string in ('camelCase' | 'PascalCase' | 'SNAKE_case') notation to 'KEBAB-case' string notation
+	 * Converts string in ('camelCase' | 'PascalCase' | 'SNAKE_case' | 'DOT.notation') notation to 'KEBAB-case' string notation
 	 *
-	 * @param {string} sourceCase Source string notation, oneof(camel, pascal, snake, kebab)
+	 * @param {string} sourceCase Source string notation, oneof(camel, pascal, snake, kebab, dot)
+	 * @param {boolean} [keepCase=false] By default result is in lower register
 	 * @return {string} 'KEBAB-case' notation value
 	 */
-	toKebabCase(sourceCase) {
-		switch (sourceCase) {
-			case "kebab": return this;
-			case "snake": return this.replaceAll("_", "-");
-			case "camel": return this.replace(/([a-z])([A-Z])/g, "$1-$2");
-			case "pascal": return this.replace(/([a-z])([A-Z])/g, "$1-$2");
+	toKebabCase(sourceCase, keepCase = false) {
+		let value;
 
-			default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab)`);
+		switch (sourceCase) {
+			case "kebab":
+				value = this;
+				break;
+
+			case "snake":
+				value = this.replaceAll("_", "-");
+				break;
+
+			case "dot":
+				value = this.replaceAll(".", "-");
+				break;
+
+			case "camel":
+				value = this.replace(/([a-z])([A-Z])/g, "$1-$2");
+				break;
+
+			case "pascal":
+				value = this.replace(/([a-z])([A-Z])/g, "$1-$2");
+				break;
+
+			default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab, dot)`);
 		}
+
+		return keepCase ? value : value.toLowerCase();
+	}
+
+	/**
+	 * Converts string in ('camelCase' | 'PascalCase' | 'SNAKE_case' | 'KEBAB-case') notation to 'dot.Notation' string notation
+	 *
+	 * @param {string} sourceCase Source string notation, oneof(camel, pascal, snake, kebab, dot)
+	 * @param {boolean} [keepCase=false] By default result is in lower register
+	 * @return {string} 'DOT.notation' value
+	 */
+	toDotNotation(sourceCase, keepCase = false) {
+		let value;
+
+		switch (sourceCase) {
+			case "dot":
+				value = this;
+				break;
+
+			case "snake":
+				value = this.replaceAll("_", ".");
+				break;
+
+			case "kebab":
+				value = this.replaceAll("-", ".");
+				break;
+
+			case "camel":
+				value = this.replace(/([a-z])([A-Z])/g, "$1.$2");
+				break;
+
+			case "pascal":
+				value = this.replace(/([a-z])([A-Z])/g, "$1.$2");
+				break;
+
+			default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab, dot)`);
+		}
+
+		return keepCase ? value : value.toLowerCase();
 	}
 
 	/**

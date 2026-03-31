@@ -166,7 +166,8 @@
 				case "pascal": return this.replace(/^./, c => c.toLowerCase());
 				case "snake": return this.toLowerCase().replace(/_([a-z])/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toLowerCase());
 				case "kebab": return this.toLowerCase().replace(/-([a-z])/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toLowerCase());
-				default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab)`);
+				case "dot": return this.toLowerCase().replace(/\.([a-z])/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toLowerCase());
+				default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab, dot)`);
 			}
 		}
 		toPascalCase(sourceCase) {
@@ -175,26 +176,75 @@
 				case "camel": return this.replace(/^./, c => c.toUpperCase());
 				case "snake": return this.toLowerCase().replace(/_([a-z])/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toUpperCase());
 				case "kebab": return this.toLowerCase().replace(/-([a-z])/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toUpperCase());
-				default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab)`);
+				case "dot": return this.toLowerCase().replace(/\.([a-z])/g, (m, c) => c.toUpperCase()).replace(/^./, c => c.toUpperCase());
+				default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab, dot)`);
 			}
 		}
-		toSnakeCase(sourceCase) {
+		toSnakeCase(sourceCase, keepCase = false) {
+			let value;
 			switch (sourceCase) {
-				case "snake": return this;
-				case "kebab": return this.replaceAll("-", "_");
-				case "camel": return this.replace(/[A-Z]/g, m => "_" + m);
-				case "pascal": return this.replace(/([a-z])([A-Z])/g, "$1_$2");
-				default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab)`);
+				case "snake":
+					value = this;
+					break;
+				case "kebab":
+					value = this.replaceAll("-", "_");
+					break;
+				case "dot":
+					value = this.replaceAll(".", "_");
+					break;
+				case "camel":
+					value = this.replace(/[A-Z]/g, m => "_" + m);
+					break;
+				case "pascal":
+					value = this.replace(/([a-z])([A-Z])/g, "$1_$2");
+					break;
+				default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab, dot)`);
 			}
+			return keepCase ? value : value.toLowerCase();
 		}
-		toKebabCase(sourceCase) {
+		toKebabCase(sourceCase, keepCase = false) {
+			let value;
 			switch (sourceCase) {
-				case "kebab": return this;
-				case "snake": return this.replaceAll("_", "-");
-				case "camel": return this.replace(/([a-z])([A-Z])/g, "$1-$2");
-				case "pascal": return this.replace(/([a-z])([A-Z])/g, "$1-$2");
-				default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab)`);
+				case "kebab":
+					value = this;
+					break;
+				case "snake":
+					value = this.replaceAll("_", "-");
+					break;
+				case "dot":
+					value = this.replaceAll(".", "-");
+					break;
+				case "camel":
+					value = this.replace(/([a-z])([A-Z])/g, "$1-$2");
+					break;
+				case "pascal":
+					value = this.replace(/([a-z])([A-Z])/g, "$1-$2");
+					break;
+				default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab, dot)`);
 			}
+			return keepCase ? value : value.toLowerCase();
+		}
+		toDotNotation(sourceCase, keepCase = false) {
+			let value;
+			switch (sourceCase) {
+				case "dot":
+					value = this;
+					break;
+				case "snake":
+					value = this.replaceAll("_", ".");
+					break;
+				case "kebab":
+					value = this.replaceAll("-", ".");
+					break;
+				case "camel":
+					value = this.replace(/([a-z])([A-Z])/g, "$1.$2");
+					break;
+				case "pascal":
+					value = this.replace(/([a-z])([A-Z])/g, "$1.$2");
+					break;
+				default: throw new Error(`Unsupported source case: ${sourceCase}, expected oneof(camel, pascal, snake, kebab, dot)`);
+			}
+			return keepCase ? value : value.toLowerCase();
 		}
 		toCharArray(bytes = false) {
 			let list = [];

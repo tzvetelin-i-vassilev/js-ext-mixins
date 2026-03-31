@@ -14,18 +14,27 @@ describe("js-ext-mixins test suite", () => {
 			assert.equal("PascalCase".toCamelCase("pascal"), "pascalCase");
 			assert.equal("snake_case".toCamelCase("snake"), "snakeCase");
 			assert.equal("kebab-case".toCamelCase("kebab"), "kebabCase");
+			assert.equal("dot.notation".toCamelCase("dot"), "dotNotation");
 
 			assert.equal("camelCase".toPascalCase("camel"), "CamelCase");
 			assert.equal("snake_case".toPascalCase("snake"), "SnakeCase");
 			assert.equal("kebab-case".toPascalCase("kebab"), "KebabCase");
+			assert.equal("dot.notation".toPascalCase("dot"), "DotNotation");
 
-			assert.equal("camelCase".toSnakeCase("camel"), "camel_Case");
-			assert.equal("PascalCase".toSnakeCase("pascal"), "Pascal_Case");
-			assert.equal("kebab-case".toSnakeCase("kebab"), "kebab_case");
+			assert.equal("camelCase".toSnakeCase("camel", true), "camel_Case");
+			assert.equal("PascalCase".toSnakeCase("pascal", true), "Pascal_Case");
+			assert.equal("kebab-case".toSnakeCase("kebab", true), "kebab_case");
+			assert.equal("dot.notation".toSnakeCase("dot", true), "dot_notation");
 
-			assert.equal("camelCase".toKebabCase("camel"), "camel-Case");
-			assert.equal("PascalCase".toKebabCase("pascal"), "Pascal-Case");
-			assert.equal("snake_case".toKebabCase("snake"), "snake-case");
+			assert.equal("camelCase".toKebabCase("camel", true), "camel-Case");
+			assert.equal("PascalCase".toKebabCase("pascal", true), "Pascal-Case");
+			assert.equal("snake_case".toKebabCase("snake", true), "snake-case");
+			assert.equal("dot.notation".toKebabCase("dot", true), "dot-notation");
+
+			assert.equal("camelCase".toDotNotation("camel"), "camel.case");
+			assert.equal("PascalCase".toDotNotation("pascal"), "pascal.case");
+			assert.equal("snake_case".toDotNotation("snake"), "snake.case");
+			assert.equal("kebab-case".toDotNotation("kebab"), "kebab.case");
 		})
 	})
 

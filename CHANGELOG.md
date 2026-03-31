@@ -1,5 +1,12 @@
 # js-ext-mixins ChangeLog
 
+## 1.0.15
+
+_2026-03-09_
+
+### Updates
+- _StringExt_ - dot notation conversion included
+
 ## 1.0.14
 
 _2026-03-09_
