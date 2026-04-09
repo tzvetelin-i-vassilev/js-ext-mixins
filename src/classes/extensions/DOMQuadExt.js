@@ -14,7 +14,6 @@ class DOMQuadExt extends Extension {
 	 * @returns {DOMQuad} Transformed quad
 	 */
 	transform(matrix) {
-		if (!(matrix instanceof DOMMatrix)) matrix = DOMMatrix.fromMatrix(matrix);
 		return new DOMQuad(this.p1.transform(matrix), this.p2.transform(matrix), this.p3.transform(matrix), this.p4.transform(matrix));
 	}
 

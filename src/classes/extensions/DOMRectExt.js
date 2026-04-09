@@ -141,8 +141,6 @@ class DOMRectExt extends Extension {
 	 * @returns {DOMRect} Transformed rect
 	 */
 	transform(matrix) {
-		if (!(matrix instanceof DOMMatrix)) matrix = DOMMatrix.fromMatrix(matrix);
-
 		let leftTop = DOMPoint.fromPoint({x: this.left, y: this.top}).transform(matrix);
 		let rightTop = DOMPoint.fromPoint({x: this.right, y: this.top}).transform(matrix);
 		let leftBottom = DOMPoint.fromPoint({x: this.left, y: this.bottom}).transform(matrix);

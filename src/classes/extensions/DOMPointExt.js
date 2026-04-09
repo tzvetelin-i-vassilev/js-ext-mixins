@@ -11,11 +11,14 @@ class DOMPointExt extends Extension {
 	 * Transform underlying point. matrixTransform alias.
 	 *
 	 * @param {DOMMatrix} matrix Transform matrix
+	 * @param {boolean} [round=false] Should round numbers after transform
 	 * @returns {DOMPoint} Transformed point
 	 */
-	transform(matrix) {
-		if (!(matrix instanceof DOMMatrix)) matrix = DOMMatrix.fromMatrix(matrix);
-		return this.matrixTransform(matrix);
+	transform(matrix, round = false) {
+		let point = this.matrixTransform(matrix);
+		if (round) point = new DOMPoint(Math.round(point.x), Math.round(point.y), Math.round(point.z));
+
+		return point;
 	}
 
 	/**
