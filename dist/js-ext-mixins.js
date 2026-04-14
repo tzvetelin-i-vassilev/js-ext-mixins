@@ -8,13 +8,13 @@
 	 * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
 	 *
 	 * @namespace jsExt
-	 * @version 1.0.15
+	 * @version 2.0.0
 	 * @author Tzvetelin Vassilev
 	 * @copyright Tzvetelin Vassilev 2020-2026
 	 * @license ISC
 	 */
 
-	var version = "1.0.15";
+	var version = "2.0.0";
 
 	class Extension {
 		static overrides = ["toString"];
@@ -729,9 +729,10 @@
 	}
 
 	class DOMPointExt extends Extension {
-		transform(matrix) {
-			if (!(matrix instanceof DOMMatrix)) matrix = DOMMatrix.fromMatrix(matrix);
-			return this.matrixTransform(matrix);
+		transform(matrix, round = false) {
+			let point = this.matrixTransform(matrix);
+			if (round) point = new DOMPoint(Math.round(point.x), Math.round(point.y), Math.round(point.z));
+			return point;
 		}
 		toString(point2D = false) {
 			return `point(${this.x}, ${this.y}${point2D ? "" : `, ${this.z}`})`;
@@ -740,7 +741,6 @@
 
 	class DOMQuadExt extends Extension {
 		transform(matrix) {
-			if (!(matrix instanceof DOMMatrix)) matrix = DOMMatrix.fromMatrix(matrix);
 			return new DOMQuad(this.p1.transform(matrix), this.p2.transform(matrix), this.p3.transform(matrix), this.p4.transform(matrix));
 		}
 		contains(point) {
@@ -821,7 +821,6 @@
 			return this.left <= rect.left && this.right >= rect.right && this.top <= rect.top && this.bottom >= rect.bottom;
 		}
 		transform(matrix) {
-			if (!(matrix instanceof DOMMatrix)) matrix = DOMMatrix.fromMatrix(matrix);
 			let leftTop = DOMPoint.fromPoint({x: this.left, y: this.top}).transform(matrix);
 			let rightTop = DOMPoint.fromPoint({x: this.right, y: this.top}).transform(matrix);
 			let leftBottom = DOMPoint.fromPoint({x: this.left, y: this.bottom}).transform(matrix);
@@ -856,8 +855,6 @@
 
 	let nativeFromMatrix;
 	let nativeToString;
-	let nativeMultiply;
-	let nativeMultiplySelf;
 	class DOMMatrixExt extends Extension {
 		static overrides = Extension.overrides.concat(["fromMatrix", "multiply", "multiplySelf", "transformPoint"]);
 		static properties = {
@@ -865,39 +862,11 @@
 			ty: {get: function() {return this.f}, set: function(value) {this.f = value;}, enumerable: true},
 			dx: {get: function() {return this.e}, set: function(value) {this.e = value;}, enumerable: true},
 			dy: {get: function() {return this.f}, set: function(value) {this.f = value;}, enumerable: true},
-			multiplicationType: {value: "POST", enumerable: true, writable: true}
+			translated: {get: function() {return {x: this.tx, y: this.ty}}, enumerable: true},
+			rotated: {get: function() {return {angle: Math.atan2(this.b, this.a)}}, enumerable: true},
+			scaled: {get: function() {return {x: Math.hypot(this.a, this.c), y: Math.hypot(this.b, this.d)}}, enumerable: true},
+			skewed: {get: function() {return {angleX: Math.tan(this.c), angleY: Math.tan(this.b)}}, enumerable: true}
 		};
-		static classProperties = {
-			MultiplicationType: {value: {PRE: "PRE", POST: "POST"}, enumerable: true}
-		};
-		preMultiply(delta) {
-			let result = delta.postMultiply(this);
-			result.multiplicationType = this.multiplicationType;
-			return result;
-		}
-		postMultiply(delta) {
-			return nativeMultiply.call(this, delta);
-		}
-		multiply(delta) {
-			if (!(delta instanceof DOMMatrix)) delta = DOMMatrix.fromMatrix(delta);
-			if (this.multiplicationType == DOMMatrix.MultiplicationType.POST)
-				return this.postMultiply(delta);
-			else {
-				let result = this.preMultiply(delta);
-				result.multiplicationType = DOMMatrix.MultiplicationType.PRE;
-				return result;
-			}
-		}
-		postMultiplySelf(delta) {
-			return nativeMultiplySelf.call(this, delta);
-		}
-		multiplySelf(delta) {
-			if (!(delta instanceof DOMMatrix)) delta = DOMMatrix.fromMatrix(delta);
-			if (this.multiplicationType == DOMMatrix.MultiplicationType.POST)
-				return this.postMultiplySelf(delta);
-			else
-				return this.preMultiplySelf(delta);
-		}
 		transformPoint(point) {
 			return DOMPoint.fromPoint(point).matrixTransform(this);
 		}
@@ -905,11 +874,12 @@
 			return this.inverse();
 		}
 		decompose() {
+			console.warn("This method is deprecated. Use the following props instead - translated, rotated, scaled, skewed");
 			return {
-				translate: {x: this.tx, y: this.ty},
-				rotate: {angle: Math.atan2(this.b, this.a)},
-				skew: {angleX: Math.tan(this.c), angleY: Math.tan(this.b)},
-				scale: {x: Math.sqrt(this.a * this.a + this.c * this.c), y: Math.sqrt(this.d * this.d + this.b * this.b)},
+				translate: this.translated,
+				rotate: this.rotated,
+				scale: this.scaled,
+				skew: this.skewed,
 				matrix: this
 			};
 		}
@@ -923,40 +893,59 @@
 				`\n${format(this.m13)}, ${format(this.m23)}, ${format(this.m33)}, ${format(this.m43)}` +
 				`\n${format(this.m14)}, ${format(this.m24)}, ${format(this.m34)}, ${format(this.m44)}`;
 		}
-		static fromMatrix(data, multiplicationType) {
-			let result;
+		static fromMatrix(data) {
+			let matrix;
 			if (typeof data == "string")
-				result = new DOMMatrix(data);
+				matrix = new DOMMatrix(data);
 			else {
-				if (!("e" in data)) data.e = data.tx || data.dx;
-				if (!("f" in data)) data.f = data.ty || data.dy;
-				result = nativeFromMatrix(data);
+				if (!("e" in data)) data.e = data.tx ?? data.dx ?? 0;
+				if (!("f" in data)) data.f = data.ty ?? data.dy ?? 0;
+				matrix = nativeFromMatrix(data);
 			}
-			result.multiplicationType = multiplicationType || data.multiplicationType || DOMMatrix.MultiplicationType.POST;
-			return result;
+			return matrix;
+		}
+		at(pivot) {
+			const t = DOMMatrix.fromTranslate(pivot);
+			const inv = DOMMatrix.fromTranslate({x: -pivot.x, y: -pivot.y});
+			return t.multiply(this).multiply(inv);
+		}
+		static toLocal(matrix, pivot) {
+			const t = DOMMatrix.fromTranslate(pivot);
+			const inv = DOMMatrix.fromTranslate({x: -pivot.x, y: -pivot.y});
+			return inv.multiply(matrix).multiply(t);
+		}
+		static inSpace(matrix, space) {
+			if (!(space instanceof DOMMatrix)) space = DOMMatrix.fromMatrix(space);
+			return space.inverse().multiply(matrix).multiply(space);
+		}
+		static toSpace(matrix, space) {
+			if (!(space instanceof DOMMatrix)) space = DOMMatrix.fromMatrix(space);
+			return space.multiply(matrix).multiply(space.inverse());
 		}
 		static fromTranslate(offset) {
-			let translate = isFinite(offset) ? {tx: offset, ty: offset} : {tx: offset.x, ty: offset.y};
+			let translate = (typeof offset === "number") ? {tx: offset, ty: offset} : {tx: offset.x, ty: offset.y};
 			return DOMMatrix.fromMatrix(translate);
 		}
-		static fromRotate(alpha, anchor) {
-			let sin = Math.sin(alpha);
-			let cos = Math.cos(alpha);
-			let rotate = {a: cos, b: sin, c: -sin, d: cos};
-			if (anchor) {
-				rotate.tx = anchor.x - (anchor.x * cos - anchor.y * sin);
-				rotate.ty = anchor.y - (anchor.x * sin + anchor.y * cos);
-			}
-			return DOMMatrix.fromMatrix(rotate);
+		static fromRotate(angle, focus) {
+			const sin = Math.sin(angle);
+			const cos = Math.cos(angle);
+			let m = new DOMMatrix();
+			m.a = cos;
+			m.b = sin;
+			m.c = -sin;
+			m.d = cos;
+			if (focus)
+				m = m.at(focus);
+			return m;
 		}
-		static fromScale(factor, anchor) {
-			if (isFinite(factor)) factor = {x: factor, y: factor};
-			let scale = {a: factor.x, d: factor.y};
-			if (anchor) {
-				scale.tx = anchor.x - anchor.x * factor.x;
-				scale.ty = anchor.y - anchor.y * factor.y;
-			}
-			return DOMMatrix.fromMatrix(scale);
+		static fromScale(factor, focus) {
+			if (typeof factor === "number") factor = {x: factor, y: factor};
+			let m = new DOMMatrix();
+			m.a = factor.x;
+			m.d = factor.y;
+			if (focus)
+				m = m.at(focus);
+			return m;
 		}
 		static fromPoints(ps, pf) {
 			let O = DOMMatrix.fromMatrix({
@@ -969,7 +958,7 @@
 				m12: pf[0].y, m22: pf[1].y, m32: pf[2].y,
 				m13: 1,       m23: 1,       m33: 1
 			});
-			let X = O.invert().preMultiply(F);
+			let X = F.multiply(O.inverse());
 			return DOMMatrix.fromMatrix({a: X.m11, b: X.m12, c: X.m21, d: X.m22, tx: X.m31, ty: X.m32});
 		}
 		static extend() {
@@ -977,8 +966,6 @@
 				return false;
 			nativeFromMatrix = DOMMatrix.fromMatrix;
 			nativeToString = DOMMatrix.prototype.toString;
-			nativeMultiply = DOMMatrix.prototype.multiply;
-			nativeMultiplySelf = DOMMatrix.prototype.multiplySelf;
 			Extension.extend("DOMMatrix", this);
 		}
 	}

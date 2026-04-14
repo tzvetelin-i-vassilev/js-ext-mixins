@@ -1,5 +1,18 @@
 # js-ext-mixins ChangeLog
 
+## 2.0.0
+
+_2026-04-14_
+
+### Breaking Changes
+- _DOMMatrixExt_ - MultiplicationType discarded, removed methods preMultiply, postMultiply, postMultiplySelf
+- _DOMMatrixExt_ - decompose method deprecated in favour of props - translated, rotated, scaled, skewed
+
+### Updates
+- _DOMMatrixExt_ - new method impl - at
+- _DOMMatrixExt_ - new static methods impl - toLocal, inSpace, toSpace
+- _DOMPointExt_ - transform method, round arg included
+
 ## 1.0.15
 
 _2026-03-31_
