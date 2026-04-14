@@ -1,22 +1,9 @@
 import Extension from "../Extension.js"
 
 let nativeFromMatrix;
-
 let nativeToString;
-let nativeMultiply;
-let nativeMultiplySelf;
 
 // https://www.javascripture.com/DOMMatrix
-
-/**
- * Controlls multiply of matrices order
- *
- * @readonly
- * @typedef MultiplicationType
- * @memberof extensions.DOMMatrixExt
- * @property {string} PRE Multiplication order is 'pre'
- * @property {string} POST Multiplication order is 'post'
- */
 
 /**
  * DOMMatrix extension
@@ -25,7 +12,6 @@ let nativeMultiplySelf;
  * @property {float} ty Translate y, 'f' alias
  * @property {float} dx Translate x, 'e' alias
  * @property {float} dy Translate y, 'f' alias
- * @property {MultiplicationType} [multiplicationType=POST]
  *
  * @hideconstructor
  * @memberof extensions
@@ -38,82 +24,12 @@ class DOMMatrixExt extends Extension {
 		ty: {get: function() {return this.f}, set: function(value) {this.f = value}, enumerable: true},
 		dx: {get: function() {return this.e}, set: function(value) {this.e = value}, enumerable: true},
 		dy: {get: function() {return this.f}, set: function(value) {this.f = value}, enumerable: true},
-		multiplicationType: {value: "POST", enumerable: true, writable: true}
+
+		translated: {get: function() {return {x: this.tx, y: this.ty}}, enumerable: true},
+		rotated: {get: function() {return {angle: Math.atan2(this.b, this.a)}}, enumerable: true},
+		scaled: {get: function() {return {x: Math.hypot(this.a, this.c), y: Math.hypot(this.b, this.d)}}, enumerable: true},
+		skewed: {get: function() {return {angleX: Math.tan(this.c), angleY: Math.tan(this.b)}}, enumerable: true}
 	};
-
-	static classProperties = {
-		MultiplicationType: {value: {PRE: "PRE", POST: "POST"}, enumerable: true}
-	};
-
-	/**
-	 * Pre multiplication (fixed coordinate system (fixed frame), moving point)
-	 * The original matrix is not altered.
-	 *
-	 * @param {DOMMatrix} delta
-	 * @returns {DOMMatrix} Transform as new Matrix
-	 */
-	preMultiply(delta) {
-		let result = delta.postMultiply(this);
-		result.multiplicationType = this.multiplicationType;
-
-		return result;
-	}
-
-	/**
-	 * Post multiplication (moving coordinate system (Euler frame), fixed point)
-	 * The original matrix is not altered.
-	 *
-	 * @param {DOMMatrix} delta
-	 * @returns {DOMMatrix} Transform as new Matrix
-	 */
-	postMultiply(delta) {
-		return nativeMultiply.call(this, delta);
-	}
-
-	/**
-	 * Multiplies with matrix by post or pre multiplying (specified by multiplication type).
-	 * The original matrix is not altered.
-	 *
-	 * @param {DOMMatrix} delta
-	 * @returns {DOMMatrix} Transform as new Matrix
-	 */
-	multiply(delta) {
-		if (!(delta instanceof DOMMatrix)) delta = DOMMatrix.fromMatrix(delta);
-
-		if (this.multiplicationType == DOMMatrix.MultiplicationType.POST)
-			return this.postMultiply(delta);
-		else {
-			let result = this.preMultiply(delta);
-			result.multiplicationType = DOMMatrix.MultiplicationType.PRE;
-
-			return result;
-		}
-	}
-
-	/**
-	 * Post multiplication (moving coordinate system (Euler frame), fixed point)
-	 *
-	 * @param {DOMMatrix} delta
-	 * @returns {DOMMatrix} self
-	 */
-	postMultiplySelf(delta) {
-		return nativeMultiplySelf.call(this, delta);
-	}
-
-	/**
-	 * Modifies the matrix by post or pre multiplying (specified by multiplication type) it with the specified Matrix
-	 *
-	 * @param {DOMMatrix} delta
-	 * @returns {DOMMatrix} self
-	 */
-	multiplySelf(delta) {
-		if (!(delta instanceof DOMMatrix)) delta = DOMMatrix.fromMatrix(delta);
-
-		if (this.multiplicationType == DOMMatrix.MultiplicationType.POST)
-			return this.postMultiplySelf(delta);
-		else
-			return this.preMultiplySelf(delta);
-	}
 
 	/**
 	 * Transform point
@@ -134,17 +50,15 @@ class DOMMatrixExt extends Extension {
 		return this.inverse();
 	}
 
-	/**
-	 * Decompose matrix to translate, rotate, skew and scale
-	 *
-	 * @returns {MatrixData} Decomposed matrix
-	 */
+	// TODO: remove later
 	decompose() {
+		console.warn("This method is deprecated. Use the following props instead - translated, rotated, scaled, skewed");
+
 		return {
-			translate: {x: this.tx, y: this.ty},
-			rotate: {angle: Math.atan2(this.b, this.a)},
-			skew: {angleX: Math.tan(this.c), angleY: Math.tan(this.b)},
-			scale: {x: Math.sqrt(this.a * this.a + this.c * this.c), y: Math.sqrt(this.d * this.d + this.b * this.b)},
+			translate: this.translated,
+			rotate: this.rotated,
+			scale: this.scaled,
+			skew: this.skewed,
 			matrix: this
 		};
 	}
@@ -168,35 +82,108 @@ class DOMMatrixExt extends Extension {
 	/**
 	 * Factory method for Matrix creation
 	 *
-	 * @param {Matrix2D | Matrix3D} data
-	 * @param {DOMMatrix.MultiplicationType} [multiplicationType=POST]
+	 * @param {Matrix2D | Matrix3D | CSSMatrix} data
 	 * @returns {DOMMatrix} Matrix based on data
 	 */
-	static fromMatrix(data, multiplicationType) {
-		let result;
+	static fromMatrix(data) {
+		let matrix;
 
 		if (typeof data == "string")
-			result = new DOMMatrix(data);
+			matrix = new DOMMatrix(data);
 		else {
-			if (!("e" in data)) data.e = data.tx || data.dx;
-			if (!("f" in data)) data.f = data.ty || data.dy;
+			if (!("e" in data)) data.e = data.tx ?? data.dx ?? 0;
+			if (!("f" in data)) data.f = data.ty ?? data.dy ?? 0;
 
-			result = nativeFromMatrix(data);
+			matrix = nativeFromMatrix(data);
 		}
 
-		result.multiplicationType = multiplicationType || data.multiplicationType || DOMMatrix.MultiplicationType.POST;
-
-		return result;
+		return matrix;
 	}
 
 	/**
-	 * Creates delta translate matrix
+	 * Applies a transformation around a given pivot point.
+	 * Converts a transform from local(model) space into a world(view) space
+	 * defined by a reference point (pivot)
+	 *
+	 * The transform is conjugated as: T(pivot) · M · T(-pivot)
+	 *
+	 * This effectively rotates/scales/translates the matrix
+	 * around the specified point instead of the origin.
+	 *
+	 * @param {DOMPointInit} pivot The point to transform around (focus/pivot point)
+	 * @returns {DOMMatrix} A new transformed matrix
+	 */
+	at(pivot) {
+		const t = DOMMatrix.fromTranslate(pivot);
+		const inv = DOMMatrix.fromTranslate({x: -pivot.x, y: -pivot.y});
+
+		return t.multiply(this).multiply(inv);
+	}
+
+	/**
+	 * Converts a transform from world(view) space into a local(model) space
+	 * defined by a reference point (pivot)
+	 *
+	 * This performs a change of basis: T(-pivot) · M · T(pivot)
+	 *
+	 * Use this when you want to interpret a global transform
+	 * as if the pivot point were the origin of the coordinate system.
+	 *
+	 * @param {DOMMatrix} matrix The transform in world(view) space
+	 * @param {DOMPointInit} pivot The reference point defining the local space origin
+	 * @returns {DOMMatrix} The transform expressed in local space
+	 */
+	static toLocal(matrix, pivot) {
+		const t = DOMMatrix.fromTranslate(pivot);
+		const inv = DOMMatrix.fromTranslate({x: -pivot.x, y: -pivot.y});
+
+		return inv.multiply(matrix).multiply(t);
+	}
+
+	/**
+	 * Applies a transformation in the coordinate space defined by another matrix.
+	 *
+	 * This performs: S⁻¹ · M · S
+	 *
+	 * This allows a transform to behave as if it were defined
+	 * relative to a different space (e.g. pivot, object, or view space).
+	 *
+	 * @param {DOMMatrix} matrix - The transformation to apply.
+	 * @param {DOMMatrix} space - The matrix defining the reference space.
+	 * @returns {DOMMatrix} A new matrix representing the transformed delta.
+	 */
+	static inSpace(matrix, space) {
+		if (!(space instanceof DOMMatrix)) space = DOMMatrix.fromMatrix(space);
+
+		return space.inverse().multiply(matrix).multiply(space);
+	}
+
+	/**
+	 * Converts a transformation into the coordinate space defined by another matrix.
+	 *
+	 * This performs a change of basis: S · M · S⁻¹
+	 *
+	 * Use this to reinterpret a transform as if it were defined
+	 * in the coordinate system described by the given space matrix.
+	 *
+	 * @param {DOMMatrix} matrix - The transformation to convert.
+	 * @param {DOMMatrix} space - The matrix defining the target coordinate space.
+	 * @returns {DOMMatrix} The transformation expressed in the target space.
+	 */
+	static toSpace(matrix, space) {
+		if (!(space instanceof DOMMatrix)) space = DOMMatrix.fromMatrix(space);
+
+		return space.multiply(matrix).multiply(space.inverse());
+	}
+
+	/**
+	 * Creates translate matrix
 	 *
 	 * @param {Translate} offset
 	 * @returns {DOMMatrix} Transform as new Matrix
 	 */
 	static fromTranslate(offset) {
-		let translate = isFinite(offset) ? {tx: offset, ty: offset} : {tx: offset.x, ty: offset.y};
+		let translate = (typeof offset === "number") ? {tx: offset, ty: offset} : {tx: offset.x, ty: offset.y};
 
 		return DOMMatrix.fromMatrix(translate);
 	}
@@ -204,42 +191,46 @@ class DOMMatrixExt extends Extension {
 	/**
 	 * Creates delta rotate matrix
 	 *
-	 * @param {float} alpha Value should be in rad
-	 * @param {DOMPoint} [anchor={x: 0, y: 0}] Transform pivot point
+	 * @param {float} angle Value should be in rad
+	 * @param {DOMPoint} [focus={x: 0, y: 0}] Transform pivot point
 	 * @returns {DOMMatrix} Transform as new Matrix
 	 */
-	static fromRotate(alpha, anchor) {
-		let sin = Math.sin(alpha);
-		let cos = Math.cos(alpha);
+	static fromRotate(angle, focus) {
+		const sin = Math.sin(angle);
+		const cos = Math.cos(angle);
 
-		let rotate = {a: cos, b: sin, c: -sin, d: cos};
+		let m = new DOMMatrix();
 
-		if (anchor) {
-			rotate.tx = anchor.x - (anchor.x * cos - anchor.y * sin);
-			rotate.ty = anchor.y - (anchor.x * sin + anchor.y * cos);
-		}
+		m.a = cos;
+		m.b = sin;
+		m.c = -sin;
+		m.d = cos;
 
-		return DOMMatrix.fromMatrix(rotate);
+		if (focus)
+			m = m.at(focus);
+
+		return m;
 	}
 
 	/**
 	 * Creates delta scale matrix
 	 *
 	 * @param {Scale | float} factor Scale factor
-	 * @param {DOMPoint} [anchor={x: 0, y: 0}] Transform pivot point
+	 * @param {DOMPoint} [focus={x: 0, y: 0}] Transform pivot point
 	 * @returns {DOMMatrix} Transform as new Matrix
 	 */
-	static fromScale(factor, anchor) {
-		if (isFinite(factor)) factor = {x: factor, y: factor};
+	static fromScale(factor, focus) {
+		if (typeof factor === "number") factor = {x: factor, y: factor};
 
-		let scale = {a: factor.x, d: factor.y};
+		let m = new DOMMatrix();
 
-		if (anchor) {
-			scale.tx = anchor.x - anchor.x * factor.x;
-			scale.ty = anchor.y - anchor.y * factor.y;
-		}
+		m.a = factor.x;
+		m.d = factor.y;
 
-		return DOMMatrix.fromMatrix(scale);
+		if (focus)
+			m = m.at(focus);
+
+		return m;
 	}
 
 	/**
@@ -264,7 +255,7 @@ class DOMMatrixExt extends Extension {
 
 		// O * X = F
 		// inv(O) * O * X = inv(O) * F
-		let X = O.invert().preMultiply(F);
+		let X = F.multiply(O.inverse());
 
 		// convert to homogeneous coordinates
 		return DOMMatrix.fromMatrix({a: X.m11, b: X.m12, c: X.m21, d: X.m22, tx: X.m31, ty: X.m32});
@@ -276,8 +267,6 @@ class DOMMatrixExt extends Extension {
 
 		nativeFromMatrix = DOMMatrix.fromMatrix;
 		nativeToString = DOMMatrix.prototype.toString;
-		nativeMultiply = DOMMatrix.prototype.multiply;
-		nativeMultiplySelf = DOMMatrix.prototype.multiplySelf;
 
 		Extension.extend("DOMMatrix", this);
 	}
