@@ -722,6 +722,24 @@
 		}
 	}
 
+	class FormDataExt extends Extension {
+		toObject() {
+			let data = {};
+			for (let [key, value] of this.entries()) {
+				if (data[key]) {
+					if (Array.isArray(data[key]))
+						data[key].push(value);
+					else {
+						data[key] = [data[key], value];
+					}
+				}
+				else
+					data[key] = value;
+			}
+			return data;
+		}
+	}
+
 	class PromiseExt extends Extension {
 		static async sleep(time = 16) {
 			return new Promise((resolve, reject) => setTimeout(resolve, time));
@@ -856,7 +874,7 @@
 	let nativeFromMatrix;
 	let nativeToString;
 	class DOMMatrixExt extends Extension {
-		static overrides = Extension.overrides.concat(["fromMatrix", "multiply", "multiplySelf", "transformPoint"]);
+		static overrides = ["toString", "fromMatrix"];
 		static properties = {
 			tx: {get: function() {return this.e}, set: function(value) {this.e = value;}, enumerable: true},
 			ty: {get: function() {return this.f}, set: function(value) {this.f = value;}, enumerable: true},
@@ -864,12 +882,9 @@
 			dy: {get: function() {return this.f}, set: function(value) {this.f = value;}, enumerable: true},
 			translated: {get: function() {return {x: this.tx, y: this.ty}}, enumerable: true},
 			rotated: {get: function() {return {angle: Math.atan2(this.b, this.a)}}, enumerable: true},
-			scaled: {get: function() {return {x: Math.hypot(this.a, this.c), y: Math.hypot(this.b, this.d)}}, enumerable: true},
+			scaled: {get: function() {return {x: Math.hypot(this.a, this.c), y: Math.hypot(this.d, this.b)}}, enumerable: true},
 			skewed: {get: function() {return {angleX: Math.tan(this.c), angleY: Math.tan(this.b)}}, enumerable: true}
 		};
-		transformPoint(point) {
-			return DOMPoint.fromPoint(point).matrixTransform(this);
-		}
 		invert() {
 			return this.inverse();
 		}
@@ -926,7 +941,7 @@
 			let translate = (typeof offset === "number") ? {tx: offset, ty: offset} : {tx: offset.x, ty: offset.y};
 			return DOMMatrix.fromMatrix(translate);
 		}
-		static fromRotate(angle, focus) {
+		static fromRotate(angle, pivot) {
 			const sin = Math.sin(angle);
 			const cos = Math.cos(angle);
 			let m = new DOMMatrix();
@@ -934,17 +949,17 @@
 			m.b = sin;
 			m.c = -sin;
 			m.d = cos;
-			if (focus)
-				m = m.at(focus);
+			if (pivot)
+				m = m.at(pivot);
 			return m;
 		}
-		static fromScale(factor, focus) {
+		static fromScale(factor, pivot) {
 			if (typeof factor === "number") factor = {x: factor, y: factor};
 			let m = new DOMMatrix();
 			m.a = factor.x;
 			m.d = factor.y;
-			if (focus)
-				m = m.at(focus);
+			if (pivot)
+				m = m.at(pivot);
 			return m;
 		}
 		static fromPoints(ps, pf) {
@@ -1021,6 +1036,7 @@
 		DOMQuadExt: DOMQuadExt,
 		DOMRectExt: DOMRectExt,
 		DateExt: DateExt,
+		FormDataExt: FormDataExt,
 		FunctionExt: FunctionExt,
 		HTMLElementExt: HTMLElementExt,
 		HTMLImageElementExt: HTMLImageElementExt,
