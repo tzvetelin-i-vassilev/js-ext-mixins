@@ -25,6 +25,7 @@ import LocationExt from "./LocationExt.js"
 import HTMLElementExt from "./HTMLElementExt.js"
 import HTMLImageElementExt from "./HTMLImageElementExt.js"
 import ImageExt from "./ImageExt.js"
+import FormDataExt from "./FormDataExt.js"
 import PromiseExt from "./PromiseExt.js"
 import DOMPointExt from "./DOMPointExt.js"
 import DOMQuadExt from "./DOMQuadExt.js"
@@ -49,6 +50,7 @@ export {
 	HTMLElementExt,
 	HTMLImageElementExt,
 	ImageExt,
+	FormDataExt,
 	PromiseExt,
 	DOMPointExt,
 	DOMQuadExt,

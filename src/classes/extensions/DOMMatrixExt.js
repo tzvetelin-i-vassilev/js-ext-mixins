@@ -13,11 +13,16 @@ let nativeToString;
  * @property {float} dx Translate x, 'e' alias
  * @property {float} dy Translate y, 'f' alias
  *
+ * @property {Translation} translated Axis X and Y translation
+ * @property {Rotation} rotated Z axis rotation angle in rad
+ * @property {Scale} scaled Axis X and Y scale factor
+ * @property {Skew} skewed Axis X and Y skew angle in rad
+ *
  * @hideconstructor
  * @memberof extensions
  */
 class DOMMatrixExt extends Extension {
-	static overrides = Extension.overrides.concat(["fromMatrix", "multiply", "multiplySelf", "transformPoint"]);
+	static overrides = ["toString", "fromMatrix"];
 
 	static properties = {
 		tx: {get: function() {return this.e}, set: function(value) {this.e = value}, enumerable: true},
@@ -27,19 +32,9 @@ class DOMMatrixExt extends Extension {
 
 		translated: {get: function() {return {x: this.tx, y: this.ty}}, enumerable: true},
 		rotated: {get: function() {return {angle: Math.atan2(this.b, this.a)}}, enumerable: true},
-		scaled: {get: function() {return {x: Math.hypot(this.a, this.c), y: Math.hypot(this.b, this.d)}}, enumerable: true},
+		scaled: {get: function() {return {x: Math.hypot(this.a, this.c), y: Math.hypot(this.d, this.b)}}, enumerable: true},
 		skewed: {get: function() {return {angleX: Math.tan(this.c), angleY: Math.tan(this.b)}}, enumerable: true}
 	};
-
-	/**
-	 * Transform point
-	 *
-	 * @param {DOMPoint} point Point to transform
-	 * @returns {DOMPoint} Transformed point
-	 */
-	transformPoint(point) {
-		return DOMPoint.fromPoint(point).matrixTransform(this);
-	}
 
 	/**
 	 * Inverts matrix. The original matrix is not altered. Alias of 'inverse'.
@@ -192,10 +187,10 @@ class DOMMatrixExt extends Extension {
 	 * Creates delta rotate matrix
 	 *
 	 * @param {float} angle Value should be in rad
-	 * @param {DOMPoint} [focus={x: 0, y: 0}] Transform pivot point
+	 * @param {DOMPoint} [pivot={x: 0, y: 0}] Transform pivot point
 	 * @returns {DOMMatrix} Transform as new Matrix
 	 */
-	static fromRotate(angle, focus) {
+	static fromRotate(angle, pivot) {
 		const sin = Math.sin(angle);
 		const cos = Math.cos(angle);
 
@@ -206,8 +201,8 @@ class DOMMatrixExt extends Extension {
 		m.c = -sin;
 		m.d = cos;
 
-		if (focus)
-			m = m.at(focus);
+		if (pivot)
+			m = m.at(pivot);
 
 		return m;
 	}
@@ -216,10 +211,10 @@ class DOMMatrixExt extends Extension {
 	 * Creates delta scale matrix
 	 *
 	 * @param {Scale | float} factor Scale factor
-	 * @param {DOMPoint} [focus={x: 0, y: 0}] Transform pivot point
+	 * @param {DOMPoint} [pivot={x: 0, y: 0}] Transform pivot point
 	 * @returns {DOMMatrix} Transform as new Matrix
 	 */
-	static fromScale(factor, focus) {
+	static fromScale(factor, pivot) {
 		if (typeof factor === "number") factor = {x: factor, y: factor};
 
 		let m = new DOMMatrix();
@@ -227,8 +222,8 @@ class DOMMatrixExt extends Extension {
 		m.a = factor.x;
 		m.d = factor.y;
 
-		if (focus)
-			m = m.at(focus);
+		if (pivot)
+			m = m.at(pivot);
 
 		return m;
 	}

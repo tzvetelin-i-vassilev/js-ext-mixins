@@ -1,7 +1,7 @@
 {
   "name": "js-ext-mixins",
   "productName": "JavaScript Extensions",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Additional functionality provider",
   "type": "module",
   "main": "./dist/js-ext-mixins-min.cjs",
@@ -28,7 +28,7 @@
     }
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^29.0.2",
+    "@rollup/plugin-commonjs": "^29.0.3",
     "@rollup/plugin-eslint": "9.2.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^1.0.0",
@@ -36,8 +36,8 @@
     "eslint": "^9.39.4",
     "espree": "^11.2.0",
     "jsdoc": "^4.0.5",
-    "mocha": "^11.7.5",
-    "rollup": "^4.60.1",
+    "mocha": "^11.7.6",
+    "rollup": "^4.62.2",
     "rollup-plugin-cleanup": "^3.2.1"
   },
   "scripts": {

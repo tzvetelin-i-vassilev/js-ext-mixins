@@ -2,7 +2,7 @@
 
 ## 2.0.0
 
-_2026-04-14_
+_2026-06-16_
 
 ### Breaking Changes
 - _DOMMatrixExt_ - MultiplicationType discarded, removed methods preMultiply, postMultiply, postMultiplySelf
@@ -12,6 +12,7 @@ _2026-04-14_
 - _DOMMatrixExt_ - new method impl - at
 - _DOMMatrixExt_ - new static methods impl - toLocal, inSpace, toSpace
 - _DOMPointExt_ - transform method, round arg included
+- FormDataExt - extension added
 
 ## 1.0.15
 
