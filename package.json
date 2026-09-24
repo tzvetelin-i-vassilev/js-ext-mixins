@@ -1,7 +1,7 @@
 {
   "name": "js-ext-mixins",
   "productName": "JavaScript Extensions",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Additional functionality provider",
   "type": "module",
   "main": "./dist/js-ext-mixins-min.cjs",
@@ -18,6 +18,15 @@
       "default": "./dist/js-ext-mixins.js"
     },
     "./dev": "./src/index.js",
+    "./custom-elements": {
+      "import": "./dist/custom-elements-min.mjs",
+      "default": "./dist/custom-elements-min.js"
+    },
+    "./custom-elements/src": {
+      "import": "./dist/custom-elements.mjs",
+      "default": "./dist/custom-elements.js"
+    },
+    "./custom-elements/dev": "./src/custom-elements.js",
     "./polyfills/css-style-sheet": {
       "import": "./dist/polyfills/css-style-sheet-min.mjs",
       "default": "./dist/polyfills/css-style-sheet-min.js"
@@ -28,16 +37,18 @@
     }
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@rollup/plugin-commonjs": "^29.0.3",
-    "@rollup/plugin-eslint": "9.2.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^1.0.0",
+    "@ungap/custom-elements": "^1.3.0",
     "del-cli": "^7.0.0",
-    "eslint": "^9.39.4",
+    "eslint": "^10.11.0",
     "espree": "^11.2.0",
+    "globals": "^17.12.0",
     "jsdoc": "^4.0.5",
-    "mocha": "^11.7.6",
-    "rollup": "^4.62.2",
+    "mocha": "^12.0.2",
+    "rollup": "^4.63.5",
     "rollup-plugin-cleanup": "^3.2.1"
   },
   "scripts": {
