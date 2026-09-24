@@ -31,6 +31,12 @@ class EnumValue {
 		Object.defineProperty(this, "value", {value: index, enumerable: true});
 	}
 
+	/**
+	 * The entry's name, so an enum value printed or joined reads as what it is called rather
+	 * than as [object Object].
+	 *
+	 * @returns {string} The name
+	 */
 	toString() {
 		return this.name;
 	}

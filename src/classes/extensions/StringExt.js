@@ -28,7 +28,7 @@ class StringExt extends Extension {
 	 * Converts string in ('PascalCase' | 'SNAKE_case' | 'KEBAB-case' | 'DOT.notation') notation to 'camelCase' string notation
 	 *
 	 * @param {string} sourceCase Source string notation, oneof(camel, pascal, snake, kebab, dot)
-	 * @return {string} 'camelCase' notation value
+	 * @returns {string} 'camelCase' notation value
 	 */
 	toCamelCase(sourceCase) {
 		switch (sourceCase) {
@@ -46,7 +46,7 @@ class StringExt extends Extension {
 	 * Converts string in ('camelCase' | 'SNAKE_case' | 'KEBAB-case' | 'DOT.notation') notation to 'PascalCase' string notation
 	 *
 	 * @param {string} sourceCase Source string notation, oneof(camel, pascal, snake, kebab, dot)
-	 * @return {string} 'PascalCase' notation value
+	 * @returns {string} 'PascalCase' notation value
 	 */
 	toPascalCase(sourceCase) {
 		switch (sourceCase) {
@@ -65,7 +65,7 @@ class StringExt extends Extension {
 	 *
 	 * @param {string} sourceCase Source string notation, oneof(camel, pascal, snake, kebab, dot)
 	 * @param {boolean} [keepCase=false] By default result is in lower register
-	 * @return {string} 'SNAKE_case' notation value
+	 * @returns {string} 'SNAKE_case' notation value
 	 */
 	toSnakeCase(sourceCase, keepCase = false) {
 		let value;
@@ -102,7 +102,7 @@ class StringExt extends Extension {
 	 *
 	 * @param {string} sourceCase Source string notation, oneof(camel, pascal, snake, kebab, dot)
 	 * @param {boolean} [keepCase=false] By default result is in lower register
-	 * @return {string} 'KEBAB-case' notation value
+	 * @returns {string} 'KEBAB-case' notation value
 	 */
 	toKebabCase(sourceCase, keepCase = false) {
 		let value;
@@ -139,7 +139,7 @@ class StringExt extends Extension {
 	 *
 	 * @param {string} sourceCase Source string notation, oneof(camel, pascal, snake, kebab, dot)
 	 * @param {boolean} [keepCase=false] By default result is in lower register
-	 * @return {string} 'DOT.notation' value
+	 * @returns {string} 'DOT.notation' value
 	 */
 	toDotNotation(sourceCase, keepCase = false) {
 		let value;

@@ -12,6 +12,12 @@ const protoProps = Object.getOwnPropertyNames(CSSStyleSheetOrigin.prototype).sli
  * @memberof polyfills
  */
 class CSSStyleSheet {
+	/**
+	 * True, and defined only here - the platform's own CSSStyleSheet has no such member, so this
+	 * is how a page tells which of the two it is holding.
+	 *
+	 * @type {boolean}
+	 */
 	static get polyfill() { return true; }
 
 	#sheet;

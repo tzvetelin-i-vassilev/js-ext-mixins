@@ -61,6 +61,7 @@ is.
 holding as a number.
 
 **Function** - `createClass(name, parentClass, options)`, a class whose name is decided at run time.
+Plus `body`, the source between the braces with the signature left off.
 
 **Array** - `clear`, `clone` (deep), `unique` (by reference), `insert(item, index)`,
 `indicesOf(item)`, `remove(...items)` (every occurrence), `removeAt(index, count)`,
@@ -77,7 +78,9 @@ for the test that has no operator.
 
 **TypedArray** - `clone`, `concat(...others)` of the same kind, `toArray`, `TypedArray.from(array)`,
 and `createSharedInstance(data)`, which is shared memory where it is allowed and an ordinary buffer
-where it is not.
+where it is not. There is no class of that name, so this one is applied to each of the eleven
+concrete kinds - and each of them leaves the way back on `Array` itself: `toInt8Array`,
+`toFloat32Array` and the nine others, which is `TypedArray.from` read from the other end.
 
 **Promise** - `Promise.sleep(time)`, a pause that can be awaited. The default is 16ms, about a
 frame.
@@ -85,6 +88,15 @@ frame.
 **Location** - `query`, the search string already decoded into an object.
 
 **Screen** - `size` and `resolution`, the second in device pixels, both as a `DOMSize`.
+
+**Document** - `createElement(name, {is})` remembers what the element was asked to be. The platform
+keeps that `is` inside the element and gives nothing to read it back, so one made in code cannot be
+told from a plain one; here it becomes both a property and an attribute, which is what the parser
+gives for `<button is="my-button">` anyway.
+
+**HTMLCollection** - `HTMLCollection.fromHTML(markup)`, the top level elements of a piece of html
+with no wrapper around them and nothing run - it is parsed through a template, where scripts stay
+inert.
 
 **HTMLElement** - `computedStyle` as a property; `toRect()` for the element's box in its offset
 parent's coordinates; `getClientOffset(relative)` and `getOffsetRelativeTo(parent)` for where it
@@ -112,7 +124,9 @@ readable `toString`.
 **DOMRect** - `union`, `intersect`, `intersects`, `contains(point)`, `includes(rect)`,
 `transform(matrix)` (the bounds of the transformed edges), `ceil` / `floor` which round a rect
 outwards or inwards rather than each number on its own, and `DOMRect.ofEdges(left, top, right,
-bottom)` for the rect one naturally has the edges of.
+bottom)` for the rect one naturally has the edges of. As properties, `size`, `center` and `area`;
+and `toPath()`, the four corners closed back onto the first, for what takes a path rather than a
+rect.
 
 **DOMMatrix** - the transform arithmetic a canvas or an editor keeps rewriting:
 
@@ -127,6 +141,44 @@ bottom)` for the rect one naturally has the edges of.
 | `DOMMatrix.toLocal(matrix, pivot)` | and the way back out of that point's space |
 | `DOMMatrix.inSpace(matrix, space)` `toSpace` | the same transform as another space would perform it, and as that space would read it |
 | `toString(textTable)` | one line, or laid out as a table to be looked at |
+
+## Custom elements
+
+`customElements.define` takes a name and a class, and a component usually needs to say more than
+that at the moment it is registered: where it was served from, so it can find its own icons; a
+stylesheet meant for the document rather than for a shadow root; a font to declare. This gives the
+platform's define a third argument for all of it.
+
+```js
+import "js-ext-mixins"
+import "js-ext-mixins/custom-elements"
+
+customElements.define("my-thing", MyThing, {clazzURL: import.meta.url, assets: true});
+```
+
+| | |
+|---|---|
+| `clazzURL` | the address of the module doing the registering - `import.meta.url` - from which the folder it was served from becomes `baseURL` on the class |
+| `assets` | puts `icon(path)`, `image(path)` and `html()` on the class, each resolving under `baseURL` and under the element's own tag name; `true` in place of the tag name asks for the folder that belongs to no single element |
+| `style` | a `CSSStyleSheet` to adopt into the document, named after the element |
+| `font` | `{name, format}`, a `@font-face` built and adopted, its sources read from `baseURL/fonts/<tag>/<name>.<ext>` |
+| `abstract` | do everything else and register nothing, which is what a base class needs |
+| `extends` | the built-in element being customized, as the platform means it; the class also gets an `is` of its own |
+| `define` | options to hand to the platform's own define instead of these |
+
+It has an import of its own for two reasons, and both are about order. It has to be the outermost
+patch of `define`, so the custom elements polyfill it stands on is imported beside it, where the
+order cannot be got wrong - and that polyfill reads `self` as it loads, so a library carrying it
+could not be imported in Node at all.
+
+Being outside the main import also puts it outside `JS_EXT_SCOPE` and outside `Extension.applied`:
+it is asked for by importing it, and nothing else. `CustomElementRegistry._ext` is how a page tells
+whether the options above are understood - the mark the patch leaves, and what stops it being done
+twice.
+
+It is the one extension here that does not derive from `Extension`. What the others add is members,
+put on a class that is missing them; what this adds is a meaning for an argument the platform
+ignores, which is a different kind of thing and is not reached by putting members anywhere.
 
 ## Add-ons
 
@@ -156,7 +208,9 @@ does not do. `JS_EXT_SCOPE` is the list of classes to extend, which is also how 
 An extension is a class deriving from `Extension`, holding the members to be added.
 `src/classes/TemplateExt.js` is the shape of one, with the three ways of adding something written
 out: methods on the prototype, `properties` for accessors, `classProperties` for what goes on the
-class itself.
+class itself. A method is documented with a block of its own; an accessor with a block on
+its entry, carrying an `@name` - a class level `@property` does not survive `@hideconstructor`, which
+every one of these classes has.
 
 A member that already exists is skipped. To replace one on purpose, name it in `overrides` - which
 is read for methods only: an accessor is never put over one the class already has, whatever the list
@@ -192,7 +246,17 @@ library run from source.
 | `js-ext-mixins` | the built library, minified |
 | `js-ext-mixins/src` | the same, unminified |
 | `js-ext-mixins/dev` | the sources, for debugging through them |
+| `js-ext-mixins/custom-elements` | the registry extension and the polyfill under it |
 | `js-ext-mixins/polyfills/css-style-sheet` | the polyfill, on its own |
+
+The custom elements entry has an unminified `/src` and a plain source `/dev` beside it, on the
+pattern of the first three; the polyfill has a `/src` and nothing further.
+
+A `/dev` entry is the source as it stands, so what it imports is resolved where it is read from. That
+matters for one of them: `custom-elements/dev` imports `@ungap/custom-elements` by name, and the
+polyfill is a dev dependency here rather than one this package installs - every built entry carries
+its own copy of it. So that path is for debugging inside this repository, or through a link to it,
+rather than from an install.
 
 ## Building
 

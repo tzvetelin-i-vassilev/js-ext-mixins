@@ -3,14 +3,19 @@ import Extension from "../Extension.js"
 /**
  * Location extension
  *
- * @property {JSON} query Decoded query parameters
- *
  * @hideconstructor
  * @memberof extensions
  */
 class LocationExt extends Extension {
 	static get properties() {
 		return {
+			/**
+			 * Decoded query parameters
+			 *
+			 * @name extensions.LocationExt#query
+			 * @type {JSON}
+			 * @readonly
+			 */
 			query: {
 				get: function() {
 					return Object.assign({}, ...this.search.substring(1)

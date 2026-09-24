@@ -8,6 +8,13 @@ import Extension from "../Extension.js"
  */
 class FunctionExt extends Extension {
 	static properties = {
+		/**
+		 * The source of the function between its braces, the signature left out
+		 *
+		 * @name extensions.FunctionExt#body
+		 * @type {string}
+		 * @readonly
+		 */
 		body: {
 			get: function() {
 				let body = this.toString();

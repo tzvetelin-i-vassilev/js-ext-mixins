@@ -15,11 +15,13 @@ Object.defineProperty(document, "cookies", {
 	}, configurable: true
 });
 
+// eslint-disable-next-line no-unused-vars
 function setCookie(name, value, expires) {
 	let d = new Date(expires);
 	document.cookie = `${name}=${value}; expires=${d.toUTCString()}; path=/`;
 }
 
+// eslint-disable-next-line no-unused-vars
 function clearCookie(name) {
 	document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: FormDataExt</title>
+    <title>JSDoc: Class: DocumentExt</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: FormDataExt</h1>
+    <h1 class="page-title">Class: DocumentExt</h1>
 
     
 
@@ -29,9 +29,9 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="extensions.html">extensions</a>.</span>FormDataExt</h2>
+            <span class="ancestors"><a href="extensions.html">extensions</a>.</span>DocumentExt</h2>
         
-            <div class="class-description"><p>FormData extension</p></div>
+            <div class="class-description"><p>Document extension</p></div>
         
     
 </header>
@@ -135,7 +135,7 @@
     
 
     
-    <h4 class="name" id="toObject"><span class="type-signature"></span>toObject<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="createElement"><span class="type-signature"></span>createElement<span class="signature">(name, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {HTMLElement}</span></h4>
     
 
     
@@ -143,7 +143,12 @@
 
 
 <div class="description">
-    <p>Represents form data as object. Suitable for debugging.</p>
+    <p>Creates an element, and remembers what it was asked to be.</p>
+<p>Creating a customized built-in leaves no trace of it: the specification keeps the 'is' value
+inside the element, does not write it as an attribute, and gives no property to read it back.
+So an element created in code cannot be told from a plain one - not by a selector, not by
+serialising it, not by looking. Both are put here, which is also what the parser gives when the
+same element is written as &lt;button is=&quot;my-button&quot;&gt;.</p>
 </div>
 
 
@@ -152,6 +157,98 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Tag name</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>As the platform takes them, 'is' included</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -211,7 +308,7 @@
 
         
 <div class="param-desc">
-    <p>Readable data</p>
+    <p>The element</p>
 </div>
 
 
@@ -222,7 +319,7 @@
     </dt>
     <dd>
         
-<span class="param-type">object</span>
+<span class="param-type">HTMLElement</span>
 
 
     </dd>

@@ -8,11 +8,18 @@ import Extension from "../Extension.js"
  */
 class HTMLElementExt extends Extension {
 	static properties = {
+		/**
+		 * The resolved style of the element, as window.getComputedStyle gives it
+		 *
+		 * @name extensions.HTMLElementExt#computedStyle
+		 * @type {CSSStyleDeclaration}
+		 * @readonly
+		 */
 		computedStyle: {get: function() { return window.getComputedStyle(this); }, configurable: true}
 	}
 
 	/**
-	 * Calculate top left position of the underlyimg dom element in the client coordinate system.
+	 * Calculate top left position of the underlying dom element in the client coordinate system.
 	 *
 	 * @param {HTMLElement} [parent=root] Relative parent
 	 * @returns {DOMPoint} Offset position
@@ -34,7 +41,7 @@ class HTMLElementExt extends Extension {
 	}
 
 	/**
-	 * Calculate top left position of the underlyimg dom element in the client coordinate system.
+	 * Calculate top left position of the underlying dom element in the client coordinate system.
 	 *
 	 * @param {boolean} [relative=false] Skip scroller offset
 	 * @returns {DOMPoint} Offset position (origin position)
@@ -126,7 +133,7 @@ class HTMLElementExt extends Extension {
 	}
 
 	/**
-	 * Calculate offset rect of the underlyimg element in the coordinate system of it's offset parent.
+	 * Calculate offset rect of the underlying element in the coordinate system of its offset parent.
 	 *
 	 * @returns {DOMRect} Offset rect with prop 'outerSize', where it includes margins
 	 */

@@ -2,24 +2,33 @@ import js from "@eslint/js"
 import globals from "globals"
 
 export default [
+	{
+		ignores: ["**/_*.js"]
+	},
+
 	js.configs.recommended,
 
 	{
+		files: ["**/*.js"],
+
 		languageOptions: {
-			ecmaVersion: 2022,
+			ecmaVersion: "latest",
 			sourceType: "module",
 			globals: {
 				...globals.browser,
 				...globals.node,
 				Atomics: "readonly",
+				DedicatedWorkerGlobalScope: "readonly",
 				SharedArrayBuffer: "readonly",
 				DOMSize: "readonly"
-			},
+			}
 		},
 
 		rules: {
-			"no-prototype-builtins": "off",
-			"no-unused-vars": "off"
+			"no-unused-vars": ["error", {
+				"argsIgnorePattern": "^(e|event|reject|receiver)$",
+				"caughtErrorsIgnorePattern": "^e$"
+			}]
 		}
 	}
-];
+]

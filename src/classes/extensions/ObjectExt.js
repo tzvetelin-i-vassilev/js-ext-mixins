@@ -35,10 +35,10 @@ class ObjectExt extends Extension {
 
 		for (let p in x) {
 			// other properties were tested using x.constructor === y.constructor
-			if (!x.hasOwnProperty(p)) continue;
+			if (!Object.hasOwn(x, p)) continue;
 
 			// allows to compare x[p] and y[p] when set to undefined
-			if (!y.hasOwnProperty(p)) return false;
+			if (!Object.hasOwn(y, p)) return false;
 
 			// if they have the same strict value or identity then they are equal
 			if (x[p] === y[p]) continue;
@@ -52,7 +52,7 @@ class ObjectExt extends Extension {
 
 		for (let p in y) {
 			// allows x[p] to be set to undefined
-			if (y.hasOwnProperty(p) && !x.hasOwnProperty(p)) return false;
+			if (Object.hasOwn(y, p) && !Object.hasOwn(x, p)) return false;
 		}
 
 		return true;
@@ -85,7 +85,7 @@ class ObjectExt extends Extension {
 				if (bDataOnly && typeof oSource[sPropertyName] === "function")
 					continue;
 
-				if (oSource.hasOwnProperty(sPropertyName))
+				if (Object.hasOwn(oSource, sPropertyName))
 					oCopy[sPropertyName] = deepCopy(oSource[sPropertyName]);
 			}
 

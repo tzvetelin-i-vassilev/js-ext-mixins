@@ -5,16 +5,36 @@ import DOMSize from "../add-ons/DOMSize.js"
 /**
  * DOMRect extension
  *
- * @property {DOMSize} size Rect size
- * @property {DOMPoint} center Rect center
- *
  * @hideconstructor
  * @memberof extensions
  */
 class DOMRectExt extends Extension {
 	static properties = {
+		/**
+		 * Rect size
+		 *
+		 * @name extensions.DOMRectExt#size
+		 * @type {DOMSize}
+		 * @readonly
+		 */
 		size: {get: function() {return new DOMSize(this.width, this.height)}, configurable: true},
+
+		/**
+		 * Rect center
+		 *
+		 * @name extensions.DOMRectExt#center
+		 * @type {DOMPoint}
+		 * @readonly
+		 */
 		center: {get: function() {return new DOMPoint((this.left + this.right) / 2, (this.top + this.bottom) / 2)}, configurable: true},
+
+		/**
+		 * Rect area - width by height
+		 *
+		 * @name extensions.DOMRectExt#area
+		 * @type {number}
+		 * @readonly
+		 */
 		area: {get: function() {return this.width * this.height}, configurable: true}
 	}
 
@@ -58,7 +78,7 @@ class DOMRectExt extends Extension {
 	 * Check are 2 rects have common part
 	 *
 	 * @param {DOMRect} rect Intersect with area
-	 * @return {boolean} Intersection availability
+	 * @returns {boolean} Intersection availability
 	 */
 	intersects(rect) {
 		return (this.left <= rect.right && this.right >= rect.left) && (this.top <= rect.bottom && this.bottom >= rect.top);
@@ -128,7 +148,7 @@ class DOMRectExt extends Extension {
 
 	/**
 	 * @param {DOMRect} rect
-	 * @return {boolean} Is rect part from rect
+	 * @returns {boolean} Is rect part from rect
 	 */
 	includes(rect) {
 		return this.left <= rect.left && this.right >= rect.right && this.top <= rect.top && this.bottom >= rect.bottom;
@@ -154,6 +174,12 @@ class DOMRectExt extends Extension {
 		return DOMRect.ofEdges(left, top, right, bottom);
 	}
 
+	/**
+	 * The four corners as a closed path, clockwise from the top left, the first point repeated at
+	 * the end - ten numbers, which is what a path takes rather than four rects.
+	 *
+	 * @returns {Float32Array} x and y of each point in turn
+	 */
 	toPath() {
 		let path = [];
 

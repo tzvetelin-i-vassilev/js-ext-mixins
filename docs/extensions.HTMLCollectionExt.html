@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: FormDataExt</title>
+    <title>JSDoc: Class: HTMLCollectionExt</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: FormDataExt</h1>
+    <h1 class="page-title">Class: HTMLCollectionExt</h1>
 
     
 
@@ -29,9 +29,9 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="extensions.html">extensions</a>.</span>FormDataExt</h2>
+            <span class="ancestors"><a href="extensions.html">extensions</a>.</span>HTMLCollectionExt</h2>
         
-            <div class="class-description"><p>FormData extension</p></div>
+            <div class="class-description"><p>HTMLCollection extension</p></div>
         
     
 </header>
@@ -135,7 +135,7 @@
     
 
     
-    <h4 class="name" id="toObject"><span class="type-signature"></span>toObject<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id=".fromHTML"><span class="type-signature">(static) </span>fromHTML<span class="signature">(html)</span><span class="type-signature"> &rarr; {HTMLCollection}</span></h4>
     
 
     
@@ -143,7 +143,10 @@
 
 
 <div class="description">
-    <p>Represents form data as object. Suitable for debugging.</p>
+    <p>Parses html and hands back its top level elements, without the wrapper a container would add
+and without running anything - the markup goes through a template, where scripts stay inert.</p>
+<p>The collection is live over the parsed fragment, as every HTMLCollection is: moving the
+elements out of it empties it as you go, so take a copy first when the loop moves them.</p>
 </div>
 
 
@@ -152,6 +155,55 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>html</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Markup to parse</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -211,7 +263,7 @@
 
         
 <div class="param-desc">
-    <p>Readable data</p>
+    <p>The top level elements of it</p>
 </div>
 
 
@@ -222,7 +274,7 @@
     </dt>
     <dd>
         
-<span class="param-type">object</span>
+<span class="param-type">HTMLCollection</span>
 
 
     </dd>
@@ -231,6 +283,12 @@
     
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>for (let element of [...HTMLCollection.fromHTML("&lt;li>one&lt;/li>&lt;li>two&lt;/li>")])
+    list.appendChild(element);</code></pre>
 
 
 

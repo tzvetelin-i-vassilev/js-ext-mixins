@@ -3,19 +3,45 @@ import Extension from "../Extension.js"
 /**
  * Number extension
  *
- * @property {number} MAX_INT32 0x7FFFFFFF (static property)
- * @property {number} MAX_UINT32 0xFFFFFFFF (static property)
- * @property {BigInt} MAX_INT64 0x7FFFFFFFFFFFFFFFn (static property)
- * @property {BigInt} MAX_UINT64 0xFFFFFFFFFFFFFFFFn (static property)
- *
  * @hideconstructor
  * @memberof extensions
  */
 class NumberExt extends Extension {
 	static classProperties = {
+		/**
+		 * 0x7FFFFFFF
+		 *
+		 * @name extensions.NumberExt.MAX_INT32
+		 * @type {number}
+		 * @readonly
+		 */
 		MAX_INT32: {value: 0x7FFFFFFF, enumerable: true},
+
+		/**
+		 * 0xFFFFFFFF
+		 *
+		 * @name extensions.NumberExt.MAX_UINT32
+		 * @type {number}
+		 * @readonly
+		 */
 		MAX_UINT32: {value: 0xFFFFFFFF, enumerable: true},
+
+		/**
+		 * 0x7FFFFFFFFFFFFFFFn
+		 *
+		 * @name extensions.NumberExt.MAX_INT64
+		 * @type {BigInt}
+		 * @readonly
+		 */
 		MAX_INT64: (typeof BigInt == "undefined") ? undefined : {value: 0x7FFFFFFFFFFFFFFFn, enumerable: true},
+
+		/**
+		 * 0xFFFFFFFFFFFFFFFFn
+		 *
+		 * @name extensions.NumberExt.MAX_UINT64
+		 * @type {BigInt}
+		 * @readonly
+		 */
 		MAX_UINT64: (typeof BigInt == "undefined") ? undefined : {value: 0xFFFFFFFFFFFFFFFFn, enumerable: true}
 	}
 /*

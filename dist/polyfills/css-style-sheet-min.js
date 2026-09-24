@@ -3,7 +3,7 @@
 	 * [js-ext-mixins/polyfills/css-style-sheet]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
 	 *
 	 * @namespace jsExt
-	 * @version 2.0.0
+	 * @version 2.1.0
 	 * @author Tzvetelin Vassilev
 	 * @copyright Tzvetelin Vassilev 2020-2026
 	 * @license ISC

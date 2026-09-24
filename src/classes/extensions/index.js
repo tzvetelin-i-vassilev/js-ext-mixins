@@ -22,6 +22,8 @@ import TypedArrayExt from "./TypedArrayExt.js"
 import SetExt from "./SetExt.js"
 import ScreenExt from "./ScreenExt.js"
 import LocationExt from "./LocationExt.js"
+import DocumentExt from "./DocumentExt.js"
+import HTMLCollectionExt from "./HTMLCollectionExt.js"
 import HTMLElementExt from "./HTMLElementExt.js"
 import HTMLImageElementExt from "./HTMLImageElementExt.js"
 import ImageExt from "./ImageExt.js"
@@ -47,6 +49,8 @@ export {
 	SetExt,
 	ScreenExt,
 	LocationExt,
+	DocumentExt,
+	HTMLCollectionExt,
 	HTMLElementExt,
 	HTMLImageElementExt,
 	ImageExt,

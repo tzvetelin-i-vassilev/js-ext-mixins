@@ -8,16 +8,18 @@
 	 * [js-ext-mixins]{@link https://github.com/tzvetelin-i-vassilev/js-ext-mixins}
 	 *
 	 * @namespace jsExt
-	 * @version 2.0.0
+	 * @version 2.1.0
 	 * @author Tzvetelin Vassilev
 	 * @copyright Tzvetelin Vassilev 2020-2026
 	 * @license ISC
 	 */
 
-	var version = "2.0.0";
+	var version = "2.1.0";
 
 	class Extension {
 		static overrides = ["toString"];
+		static debug = false;
+		static applied = [];
 		static extend(clazz, extension = this) {
 			let name;
 			if (typeof clazz == "string") {
@@ -84,6 +86,8 @@
 					}
 				});
 			}
+			if (!Extension.applied.includes(name))
+				Extension.applied.push(name);
 			return true;
 		}
 	}
@@ -109,14 +113,14 @@
 				return x.every((v, i) => Object.equals(v, y[i]));
 			}
 			for (let p in x) {
-				if (!x.hasOwnProperty(p)) continue;
-				if (!y.hasOwnProperty(p)) return false;
+				if (!Object.hasOwn(x, p)) continue;
+				if (!Object.hasOwn(y, p)) return false;
 				if (x[p] === y[p]) continue;
 				if (typeof(x[p]) !== "object") return false;
 				if (!Object.equals(x[p], y[p])) return false;
 			}
 			for (let p in y) {
-				if (y.hasOwnProperty(p) && !x.hasOwnProperty(p)) return false;
+				if (Object.hasOwn(y, p) && !Object.hasOwn(x, p)) return false;
 			}
 			return true;
 		}
@@ -135,7 +139,7 @@
 				for (let sPropertyName in oSource) {
 					if (bDataOnly && typeof oSource[sPropertyName] === "function")
 						continue;
-					if (oSource.hasOwnProperty(sPropertyName))
+					if (Object.hasOwn(oSource, sPropertyName))
 						oCopy[sPropertyName] = deepCopy(oSource[sPropertyName]);
 				}
 				return oCopy;
@@ -573,20 +577,42 @@
 			return {
 				query: {
 					get: function() {
-						if (!this._query) {
-							let value = Object.assign({}, ...this.search.substring(1)
-								.split("&")
-								.filter(pair => pair)
-								.map(pair => pair.split("="))
-								.map(pair => ({[pair[0]]: decodeURIComponent(pair[1])}))
-							);
-							Object.defineProperty(this, "_query", {value});
-						}
-						return this._query;
+						return Object.assign({}, ...this.search.substring(1)
+							.split("&")
+							.filter(pair => pair)
+							.map(pair => pair.split("="))
+							.map(pair => ({[pair[0]]: decodeURIComponent(pair[1])}))
+						);
 					},
 					configurable: true
 				}
 			};
+		}
+	}
+
+	let native;
+	class DocumentExt extends Extension {
+		static overrides = Extension.overrides.concat(["createElement"]);
+		createElement(name, options) {
+			const element = native.call(this, name, options);
+			if (options && options.is) {
+				element.is = options.is;
+				element.setAttribute("is", options.is);
+			}
+			return element;
+		}
+		static extend() {
+			if (typeof Document == "undefined" || native) return false;
+			native = Document.prototype.createElement;
+			return Extension.extend("Document", this);
+		}
+	}
+
+	class HTMLCollectionExt extends Extension {
+		static fromHTML(html) {
+			let template = document.createElement("template");
+			template.innerHTML = html;
+			return template.content.children;
 		}
 	}
 
@@ -1009,19 +1035,15 @@
 	}
 
 	class ShadowRootExt extends Extension {
-		adoptStyleSheet(text) {
+		adoptStyleSheet(content, copy = false) {
 			let sheet;
-			if (this.adoptedStyleSheets) {
+			if (typeof content == "string" || copy) {
 				sheet = new CSSStyleSheet();
-				sheet.replaceSync(text);
-				this.adoptedStyleSheets.push(sheet);
+				sheet.replaceSync(content);
 			}
-			else {
-				let style = document.createElement("style");
-				style.innerHTML = text;
-				this.appendChild(style);
-				sheet = style.sheet;
-			}
+			else
+				sheet = content;
+			this.adoptedStyleSheets.push(sheet);
 			return sheet;
 		}
 	}
@@ -1036,8 +1058,10 @@
 		DOMQuadExt: DOMQuadExt,
 		DOMRectExt: DOMRectExt,
 		DateExt: DateExt,
+		DocumentExt: DocumentExt,
 		FormDataExt: FormDataExt,
 		FunctionExt: FunctionExt,
+		HTMLCollectionExt: HTMLCollectionExt,
 		HTMLElementExt: HTMLElementExt,
 		HTMLImageElementExt: HTMLImageElementExt,
 		ImageExt: ImageExt,

@@ -8,15 +8,6 @@ let nativeToString;
 /**
  * DOMMatrix extension
  *
- * @property {float} tx Translate x, 'e' alias
- * @property {float} ty Translate y, 'f' alias
- * @property {float} dx Translate x, 'e' alias
- * @property {float} dy Translate y, 'f' alias
- *
- * @property {Translation} translated Axis X and Y translation
- * @property {Rotation} rotated Z axis rotation angle in rad
- * @property {Scale} scaled Axis X and Y scale factor
- * @property {Skew} skewed Axis X and Y skew angle in rad
  *
  * @hideconstructor
  * @memberof extensions
@@ -25,14 +16,72 @@ class DOMMatrixExt extends Extension {
 	static overrides = ["toString", "fromMatrix"];
 
 	static properties = {
+		/**
+		 * Translate x, 'e' alias
+		 *
+		 * @name extensions.DOMMatrixExt#tx
+		 * @type {float}
+		 */
 		tx: {get: function() {return this.e}, set: function(value) {this.e = value}, enumerable: true},
+
+		/**
+		 * Translate y, 'f' alias
+		 *
+		 * @name extensions.DOMMatrixExt#ty
+		 * @type {float}
+		 */
 		ty: {get: function() {return this.f}, set: function(value) {this.f = value}, enumerable: true},
+
+		/**
+		 * Translate x, 'e' alias
+		 *
+		 * @name extensions.DOMMatrixExt#dx
+		 * @type {float}
+		 */
 		dx: {get: function() {return this.e}, set: function(value) {this.e = value}, enumerable: true},
+
+		/**
+		 * Translate y, 'f' alias
+		 *
+		 * @name extensions.DOMMatrixExt#dy
+		 * @type {float}
+		 */
 		dy: {get: function() {return this.f}, set: function(value) {this.f = value}, enumerable: true},
 
+		/**
+		 * Axis X and Y translation
+		 *
+		 * @name extensions.DOMMatrixExt#translated
+		 * @type {Translation}
+		 * @readonly
+		 */
 		translated: {get: function() {return {x: this.tx, y: this.ty}}, enumerable: true},
+
+		/**
+		 * Z axis rotation angle in rad
+		 *
+		 * @name extensions.DOMMatrixExt#rotated
+		 * @type {Rotation}
+		 * @readonly
+		 */
 		rotated: {get: function() {return {angle: Math.atan2(this.b, this.a)}}, enumerable: true},
+
+		/**
+		 * Axis X and Y scale factor
+		 *
+		 * @name extensions.DOMMatrixExt#scaled
+		 * @type {Scale}
+		 * @readonly
+		 */
 		scaled: {get: function() {return {x: Math.hypot(this.a, this.c), y: Math.hypot(this.d, this.b)}}, enumerable: true},
+
+		/**
+		 * Axis X and Y skew angle in rad
+		 *
+		 * @name extensions.DOMMatrixExt#skewed
+		 * @type {Skew}
+		 * @readonly
+		 */
 		skewed: {get: function() {return {angleX: Math.tan(this.c), angleY: Math.tan(this.b)}}, enumerable: true}
 	};
 

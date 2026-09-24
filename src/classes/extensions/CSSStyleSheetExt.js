@@ -11,7 +11,7 @@ class CSSStyleSheetExt extends Extension {
 	 * Allocates rule in sheet - first match
 	 *
 	 * @param {string} selectorText Rule selector
-	 * @return {CSSRule} Rule if found
+	 * @returns {CSSRule} Rule if found
 	 */
 	findRule(selectorText) {
 		let result;
@@ -31,7 +31,7 @@ class CSSStyleSheetExt extends Extension {
 	 * Allocates rule in sheet - all matches
 	 *
 	 * @param {string} selectorText Rule selector
-	 * @return {Array<CSSRule>} Found rules
+	 * @returns {Array<CSSRule>} Found rules
 	 */
 	findRules(selectorText) {
 		return Array.from(this.cssRules).filter(rule => (rule.selectorText == selectorText));
@@ -40,7 +40,7 @@ class CSSStyleSheetExt extends Extension {
 	/**
 	 * Converts style sheet to collection of css definitions
 	 *
-	 * @return {Array<string>} Found rules
+	 * @returns {Array<string>} Found rules
 	 */
 	toTextList() {
 		return Array.from(this.cssRules).map(rule => rule.cssText);
@@ -49,7 +49,7 @@ class CSSStyleSheetExt extends Extension {
 	/**
 	 * Converts sheet to string
 	 *
-	 * @return {string} Style sheet
+	 * @returns {string} Style sheet
 	 */
 	toString() {
 		return Array.from(this.cssRules).map(rule => rule.cssText).join("\n");

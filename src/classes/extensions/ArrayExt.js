@@ -3,15 +3,27 @@ import Extension from "../Extension.js"
 /**
  * Array extension
  *
- * @property {any} first Refference to the first element
- * @property {any} last Refference to the last element
- *
  * @hideconstructor
  * @memberof extensions
  */
 class ArrayExt extends Extension {
 	static properties = {
+		/**
+		 * Reference to the first element
+		 *
+		 * @name extensions.ArrayExt#first
+		 * @type {any}
+		 * @readonly
+		 */
 		first: {get: function() {return this[0]}, configurable: true},
+
+		/**
+		 * Reference to the last element
+		 *
+		 * @name extensions.ArrayExt#last
+		 * @type {any}
+		 * @readonly
+		 */
 		last: {get: function() {return this[this.length-1]}, configurable: true}
 	};
 
@@ -23,7 +35,7 @@ class ArrayExt extends Extension {
 	}
 
 	/**
-	 * Deep clone of instance and it's elements
+	 * Deep clone of instance and its elements
 	 *
 	 * @returns {Array} Cloned array
 	 */
@@ -33,7 +45,7 @@ class ArrayExt extends Extension {
 	}
 
 	/**
-	 * Filter unique elements (by refference)
+	 * Filter unique elements (by reference)
 	 *
 	 * @returns {Array} Filtered array with non repeated values
 	 */

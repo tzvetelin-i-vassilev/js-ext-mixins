@@ -1,5 +1,20 @@
 # js-ext-mixins ChangeLog
 
+## 2.1.0
+
+_2026-09-24_
+
+### Updates
+- _CustomElementRegistryExt_ - extension added, moved here from @wacom/web-components - a define that takes options: clazzURL, assets, style, font, abstract, extends
+- _CustomElementRegistryExt_ - reached through an entry point of its own, js-ext-mixins/custom-elements, which carries the custom elements polyfill it has to stand on
+- _DocumentExt_ - extension added, createElement remembers the 'is' it was asked for - as a property and as an attribute
+- _HTMLCollectionExt_ - extension added, static fromHTML method impl
+- _Extension_ - applied property added, the classes really extended as against JS_EXT_SCOPE, which is the ones asked for
+- _Extension_ - documented, with the four ways an extension adds a member
+- _ObjectExt_ - equals and clone read own properties through Object.hasOwn
+- README rewritten - what each extension puts on its class, the globals, and how to write one
+- unit tests extended - Date, Function, Set, ArrayBuffer, SharedArrayBuffer, Promise, parseBool
+
 ## 2.0.0
 
 _2026-06-16_

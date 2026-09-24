@@ -44,48 +44,291 @@
 
     <section>
         <article><h1>js-ext-mixins</h1>
-<p>The Javascript extension. Provides additional functionality to classes when they are available and when particular functionality is missing.</p>
-<h2>Installation</h2>
+<h3>What the platform left out, put on the classes that should have had it</h3>
+<p>A set of extensions applied to the built-in classes at import time. <code>Array</code> gets a <code>remove</code>,
+<code>DOMRect</code> gets a <code>union</code>, <code>ShadowRoot</code> gets a one-line way to adopt a stylesheet - the kind of thing
+every project writes for itself as a folder of helpers, kept here instead and reached through the
+objects it belongs to.</p>
+<p>Nothing is replaced. An extension fills in what is missing and steps over what is already there, so
+the day a runtime ships one of these under the same name, its own is what stays and nothing here has
+to change. The few deliberate exceptions say so out loud, in <code>overrides</code>.</p>
 <pre class="prettyprint source lang-shell"><code>npm install --save js-ext-mixins
 </code></pre>
-<h2>Importing</h2>
 <pre class="prettyprint source lang-js"><code>import &quot;js-ext-mixins&quot;
-import &quot;js-ext-mixins/polyfills/css-style-sheet&quot;
 </code></pre>
-<h2>Polyfills</h2>
-<ul>
-<li>CSSStyleSheet</li>
-</ul>
-<h2>Extensions (affected classes)</h2>
-<ul>
-<li>ArrayBuffer</li>
-<li>Array</li>
-<li>CSSStyleSheet</li>
-<li>DOMMatrix</li>
-<li>DOMPoint</li>
-<li>DOMQuad</li>
-<li>DOMRect</li>
-<li>Date</li>
-<li>FormData</li>
-<li>Function</li>
-<li>HTMLElement</li>
-<li>HTMLImageElement</li>
-<li>Image</li>
-<li>Location</li>
-<li>Number</li>
-<li>Object</li>
-<li>Promise</li>
-<li>Screen</li>
-<li>Set</li>
-<li>ShadowRoot</li>
-<li>SharedArrayBuffer</li>
-<li>String</li>
-<li>TypedArray</li>
-</ul>
+<p>That import is the whole of the setup: there is nothing to call and nothing to hold. A class the
+runtime does not have is skipped rather than being an error, so the same import serves a page, a
+worker and Node.</p>
+<p><code>JS_EXT_SCOPE</code> is how that is narrowed. It holds the names that will be extended, and the library
+writes it only when nothing has - so a context that wants a few of these and not the rest says so
+before the import, and gets what it asked for:</p>
+<pre class="prettyprint source lang-js"><code>globalThis.JS_EXT_SCOPE = [&quot;Array&quot;, &quot;Set&quot;];
+
+import &quot;js-ext-mixins&quot;
+</code></pre>
+<p>It is the list of what is to be applied rather than a record of what was: a name stays in it whether
+the class behind it was there or not. A name with no extension behind it stops the import with an
+error rather than being ignored, so a typo is not something to look for later.</p>
+<p>What was really applied is <code>Extension.applied</code>, written as each one lands. The two differ wherever a
+runtime had no such class - in Node that is most of the DOM - and they differ in the other direction
+too, because <code>TypedArray</code> is not a class anything has: what it leaves in <code>applied</code> is <code>Int8Array</code>,
+<code>Uint8Array</code> and the nine others.</p>
+<h2>The extensions</h2>
+<p><strong>Object</strong> - <code>equals(x, y)</code> compares by value rather than by reference, walking arrays; <code>clone(o)</code>
+copies as deeply; <code>defineEnum(target, name, values)</code> puts a read-only enum on a context, reachable
+by name and by value alike, each entry an <code>EnumValue</code> that knows its name, its value and its place.</p>
+<p><strong>String</strong> - the five notations and the way between any two of them: <code>toCamelCase</code>, <code>toPascalCase</code>,
+<code>toSnakeCase</code>, <code>toKebabCase</code>, <code>toDotNotation</code>, each told which notation it is reading. Plus
+<code>padStart(length, char)</code>, and <code>toCharArray</code> / <code>String.fromCharArray</code> for the round trip through
+codes or bytes.</p>
+<p><strong>Number</strong> - <code>format(pattern)</code> and <code>compareTo(value)</code>, and the four bounds the language has no name
+for: <code>Number.MAX_INT32</code>, <code>MAX_UINT32</code>, <code>MAX_INT64</code>, <code>MAX_UINT64</code> - the last two only where <code>BigInt</code>
+is.</p>
+<p><strong>Date</strong> - <code>format(pattern)</code> on an instance, and <code>Date.format(pattern, timestamp)</code> for one you are
+holding as a number.</p>
+<p><strong>Function</strong> - <code>createClass(name, parentClass, options)</code>, a class whose name is decided at run time.
+Plus <code>body</code>, the source between the braces with the signature left off.</p>
+<p><strong>Array</strong> - <code>clear</code>, <code>clone</code> (deep), <code>unique</code> (by reference), <code>insert(item, index)</code>,
+<code>indicesOf(item)</code>, <code>remove(...items)</code> (every occurrence), <code>removeAt(index, count)</code>,
+<code>replace(item, with, exact)</code>, and <code>first</code> / <code>last</code> as properties rather than as arithmetic.
+<code>Array.from</code> also takes a collection that holds a single value.</p>
+<p><strong>Set</strong> - <code>map</code> and <code>filter</code>, which return sets, so a set need not become an array and back to be
+worked on.</p>
+<p><strong>ArrayBuffer</strong> - <code>toBase64()</code> and <code>ArrayBuffer.fromBase64(string)</code>, plus <code>ArrayBuffer.isTypedArray</code>
+for the test that has no operator.</p>
+<p><strong>SharedArrayBuffer</strong> - <code>SharedArrayBuffer.fromArrayBuffer(buffer)</code>, the same bytes in shared memory.</p>
+<p><strong>TypedArray</strong> - <code>clone</code>, <code>concat(...others)</code> of the same kind, <code>toArray</code>, <code>TypedArray.from(array)</code>,
+and <code>createSharedInstance(data)</code>, which is shared memory where it is allowed and an ordinary buffer
+where it is not. There is no class of that name, so this one is applied to each of the eleven
+concrete kinds - and each of them leaves the way back on <code>Array</code> itself: <code>toInt8Array</code>,
+<code>toFloat32Array</code> and the nine others, which is <code>TypedArray.from</code> read from the other end.</p>
+<p><strong>Promise</strong> - <code>Promise.sleep(time)</code>, a pause that can be awaited. The default is 16ms, about a
+frame.</p>
+<p><strong>Location</strong> - <code>query</code>, the search string already decoded into an object.</p>
+<p><strong>Screen</strong> - <code>size</code> and <code>resolution</code>, the second in device pixels, both as a <code>DOMSize</code>.</p>
+<p><strong>Document</strong> - <code>createElement(name, {is})</code> remembers what the element was asked to be. The platform
+keeps that <code>is</code> inside the element and gives nothing to read it back, so one made in code cannot be
+told from a plain one; here it becomes both a property and an attribute, which is what the parser
+gives for <code>&lt;button is=&quot;my-button&quot;&gt;</code> anyway.</p>
+<p><strong>HTMLCollection</strong> - <code>HTMLCollection.fromHTML(markup)</code>, the top level elements of a piece of html
+with no wrapper around them and nothing run - it is parsed through a template, where scripts stay
+inert.</p>
+<p><strong>HTMLElement</strong> - <code>computedStyle</code> as a property; <code>toRect()</code> for the element's box in its offset
+parent's coordinates; <code>getClientOffset(relative)</code> and <code>getOffsetRelativeTo(parent)</code> for where it
+sits; <code>getTransformOrigin()</code> parsed rather than as the string CSS gives.</p>
+<p><strong>HTMLImageElement</strong> - <code>toDataURL(type)</code>, <code>toBlob(type)</code>, <code>toArrayBuffer(type)</code>: an image already in
+the page, read back out as bytes.</p>
+<p><strong>Image</strong> - <code>Image.fromBytes(bytes, type)</code>, awaited, which is the other direction and the one the
+platform makes into an event dance.</p>
+<p><strong>FormData</strong> - <code>toObject()</code>, for reading one in a debugger.</p>
+<p><strong>CSSStyleSheet</strong> - <code>findRule(selector)</code> and <code>findRules(selector)</code> instead of walking <code>cssRules</code>,
+<code>toTextList()</code> and <code>toString()</code>.</p>
+<p><strong>ShadowRoot</strong> - <code>adoptStyleSheet(content)</code>, which takes a string or a sheet, adopts it and hands it
+back. With <code>copy</code> it adopts a copy, so a sheet shared between elements is not edited by one of them.</p>
+<p><strong>DOMPoint</strong> - <code>transform(matrix, round)</code>, and a <code>toString</code> that can print in two dimensions.</p>
+<p><strong>DOMQuad</strong> - <code>transform(matrix)</code>, <code>contains(point)</code> (a convex test against all four edges), and a
+readable <code>toString</code>.</p>
+<p><strong>DOMRect</strong> - <code>union</code>, <code>intersect</code>, <code>intersects</code>, <code>contains(point)</code>, <code>includes(rect)</code>,
+<code>transform(matrix)</code> (the bounds of the transformed edges), <code>ceil</code> / <code>floor</code> which round a rect
+outwards or inwards rather than each number on its own, and <code>DOMRect.ofEdges(left, top, right, bottom)</code> for the rect one naturally has the edges of. As properties, <code>size</code>, <code>center</code> and <code>area</code>;
+and <code>toPath()</code>, the four corners closed back onto the first, for what takes a path rather than a
+rect.</p>
+<p><strong>DOMMatrix</strong> - the transform arithmetic a canvas or an editor keeps rewriting:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tx</code> <code>ty</code> <code>dx</code> <code>dy</code></td>
+<td>the translation, under the names the rest of the world uses for <code>e</code> and <code>f</code></td>
+</tr>
+<tr>
+<td><code>translated</code> <code>rotated</code> <code>scaled</code> <code>skewed</code></td>
+<td>the matrix read back as what was done to it</td>
+</tr>
+<tr>
+<td><code>invert()</code></td>
+<td><code>inverse()</code> under the name people reach for</td>
+</tr>
+<tr>
+<td><code>DOMMatrix.fromTranslate</code> <code>fromRotate</code> <code>fromScale</code></td>
+<td>a matrix from one operation, rotation and scale around a pivot</td>
+</tr>
+<tr>
+<td><code>DOMMatrix.fromPoints(from, to)</code></td>
+<td>the transform that takes three points to three points</td>
+</tr>
+<tr>
+<td><code>at(pivot)</code></td>
+<td>the same transform, applied around a point instead of around the origin</td>
+</tr>
+<tr>
+<td><code>DOMMatrix.toLocal(matrix, pivot)</code></td>
+<td>and the way back out of that point's space</td>
+</tr>
+<tr>
+<td><code>DOMMatrix.inSpace(matrix, space)</code> <code>toSpace</code></td>
+<td>the same transform as another space would perform it, and as that space would read it</td>
+</tr>
+<tr>
+<td><code>toString(textTable)</code></td>
+<td>one line, or laid out as a table to be looked at</td>
+</tr>
+</tbody>
+</table>
+<h2>Custom elements</h2>
+<p><code>customElements.define</code> takes a name and a class, and a component usually needs to say more than
+that at the moment it is registered: where it was served from, so it can find its own icons; a
+stylesheet meant for the document rather than for a shadow root; a font to declare. This gives the
+platform's define a third argument for all of it.</p>
+<pre class="prettyprint source lang-js"><code>import &quot;js-ext-mixins&quot;
+import &quot;js-ext-mixins/custom-elements&quot;
+
+customElements.define(&quot;my-thing&quot;, MyThing, {clazzURL: import.meta.url, assets: true});
+</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>clazzURL</code></td>
+<td>the address of the module doing the registering - <code>import.meta.url</code> - from which the folder it was served from becomes <code>baseURL</code> on the class</td>
+</tr>
+<tr>
+<td><code>assets</code></td>
+<td>puts <code>icon(path)</code>, <code>image(path)</code> and <code>html()</code> on the class, each resolving under <code>baseURL</code> and under the element's own tag name; <code>true</code> in place of the tag name asks for the folder that belongs to no single element</td>
+</tr>
+<tr>
+<td><code>style</code></td>
+<td>a <code>CSSStyleSheet</code> to adopt into the document, named after the element</td>
+</tr>
+<tr>
+<td><code>font</code></td>
+<td><code>{name, format}</code>, a <code>@font-face</code> built and adopted, its sources read from <code>baseURL/fonts/&lt;tag&gt;/&lt;name&gt;.&lt;ext&gt;</code></td>
+</tr>
+<tr>
+<td><code>abstract</code></td>
+<td>do everything else and register nothing, which is what a base class needs</td>
+</tr>
+<tr>
+<td><code>extends</code></td>
+<td>the built-in element being customized, as the platform means it; the class also gets an <code>is</code> of its own</td>
+</tr>
+<tr>
+<td><code>define</code></td>
+<td>options to hand to the platform's own define instead of these</td>
+</tr>
+</tbody>
+</table>
+<p>It has an import of its own for two reasons, and both are about order. It has to be the outermost
+patch of <code>define</code>, so the custom elements polyfill it stands on is imported beside it, where the
+order cannot be got wrong - and that polyfill reads <code>self</code> as it loads, so a library carrying it
+could not be imported in Node at all.</p>
+<p>Being outside the main import also puts it outside <code>JS_EXT_SCOPE</code> and outside <code>Extension.applied</code>:
+it is asked for by importing it, and nothing else. <code>CustomElementRegistry._ext</code> is how a page tells
+whether the options above are understood - the mark the patch leaves, and what stops it being done
+twice.</p>
+<p>It is the one extension here that does not derive from <code>Extension</code>. What the others add is members,
+put on a class that is missing them; what this adds is a meaning for an argument the platform
+ignores, which is a different kind of thing and is not reached by putting members anywhere.</p>
 <h2>Add-ons</h2>
-<ul>
-<li>DOMSize</li>
-</ul>
+<p>Two small classes the extensions hand back, rather than plain objects: <strong><code>DOMSize</code></strong> - a width and a
+height, with <code>DOMSize.fromSize(value)</code> and a <code>toJSON</code>, so it survives being stored - and
+<strong><code>EnumValue</code></strong>, one entry of an enum made by <code>Object.defineEnum</code>, which knows its name, its value
+and its index.</p>
+<h2>Polyfills</h2>
+<p><strong>CSSStyleSheet</strong>, for constructable stylesheets where they are missing. It is a separate import
+because a polyfill is a decision rather than a convenience:</p>
+<pre class="prettyprint source lang-js"><code>import &quot;js-ext-mixins/polyfills/css-style-sheet&quot;
+</code></pre>
+<h2>In the global scope</h2>
+<p>Two, and only two. <code>parseBool(value)</code> reads a boolean out of whatever it is given - the string
+<code>&quot;false&quot;</code> and the number <code>0</code> are false, an empty string is false, <code>undefined</code> is false, an object is
+true when it is not null - which is what an attribute or a query parameter needs and what <code>Boolean</code>
+does not do. <code>JS_EXT_SCOPE</code> is the list of classes to extend, which is also how it is narrowed - see above.</p>
+<h2>Writing one of your own</h2>
+<p>An extension is a class deriving from <code>Extension</code>, holding the members to be added.
+<code>src/classes/TemplateExt.js</code> is the shape of one, with the three ways of adding something written
+out: methods on the prototype, <code>properties</code> for accessors, <code>classProperties</code> for what goes on the
+class itself. A method is documented with a block of its own; an accessor with a block on
+its entry, carrying an <code>@name</code> - a class level <code>@property</code> does not survive <code>@hideconstructor</code>, which
+every one of these classes has.</p>
+<p>A member that already exists is skipped. To replace one on purpose, name it in <code>overrides</code> - which
+is read for methods only: an accessor is never put over one the class already has, whatever the list
+says. And if the replacement has to call the one it replaced, take it before the extension is
+applied, which is what <code>DOMMatrixExt</code> does:</p>
+<pre class="prettyprint source lang-js"><code>let nativeFromMatrix;
+
+class DOMMatrixExt extends Extension {
+    static overrides = [&quot;toString&quot;, &quot;fromMatrix&quot;];
+
+    static extend() {
+        if (typeof DOMMatrix === &quot;undefined&quot; || nativeFromMatrix)
+            return false;
+
+        nativeFromMatrix = DOMMatrix.fromMatrix;
+
+        Extension.extend(&quot;DOMMatrix&quot;, this);
+    }
+}
+</code></pre>
+<p><code>Extension.debug</code> prints what was defined, overridden and skipped, class by class, which is the
+quickest way to find out why a method is not there. It is read while the extensions are applied,
+which is the import itself, so it is set in <code>src/index.js</code> - the line is there, commented - and the
+library run from source.</p>
+<h2>Entry points</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>js-ext-mixins</code></td>
+<td>the built library, minified</td>
+</tr>
+<tr>
+<td><code>js-ext-mixins/src</code></td>
+<td>the same, unminified</td>
+</tr>
+<tr>
+<td><code>js-ext-mixins/dev</code></td>
+<td>the sources, for debugging through them</td>
+</tr>
+<tr>
+<td><code>js-ext-mixins/custom-elements</code></td>
+<td>the registry extension and the polyfill under it</td>
+</tr>
+<tr>
+<td><code>js-ext-mixins/polyfills/css-style-sheet</code></td>
+<td>the polyfill, on its own</td>
+</tr>
+</tbody>
+</table>
+<p>The custom elements entry has an unminified <code>/src</code> and a plain source <code>/dev</code> beside it, on the
+pattern of the first three; the polyfill has a <code>/src</code> and nothing further.</p>
+<p>A <code>/dev</code> entry is the source as it stands, so what it imports is resolved where it is read from. That
+matters for one of them: <code>custom-elements/dev</code> imports <code>@ungap/custom-elements</code> by name, and the
+polyfill is a dev dependency here rather than one this package installs - every built entry carries
+its own copy of it. So that path is for debugging inside this repository, or through a link to it,
+rather than from an install.</p>
+<h2>Building</h2>
+<pre class="prettyprint source"><code>npm run build          rollup, the docs and the tests
+npm run doc            jsdoc, into ./docs
+npm test               mocha
+</code></pre>
+<p>The generated documentation is the reference this page is not: every method with its parameters and
+what it gives back.</p>
 <h2>License</h2>
 <p>The project is released under the <a href="http://www.opensource.org/licenses/MIT">MIT license</a>.</p></article>
     </section>
@@ -98,7 +341,7 @@ import &quot;js-ext-mixins/polyfills/css-style-sheet&quot;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="add-ons.html">add-ons</a></li><li><a href="extensions.html">extensions</a></li><li><a href="polyfills.html">polyfills</a></li></ul><h3>Classes</h3><ul><li><a href="add-ons.DOMSize.html">DOMSize</a></li><li><a href="add-ons.EnumValue.html">EnumValue</a></li><li><a href="extensions.ArrayBufferExt.html">ArrayBufferExt</a></li><li><a href="extensions.ArrayExt.html">ArrayExt</a></li><li><a href="extensions.CSSStyleSheetExt.html">CSSStyleSheetExt</a></li><li><a href="extensions.DOMMatrixExt.html">DOMMatrixExt</a></li><li><a href="extensions.DOMPointExt.html">DOMPointExt</a></li><li><a href="extensions.DOMQuadExt.html">DOMQuadExt</a></li><li><a href="extensions.DOMRectExt.html">DOMRectExt</a></li><li><a href="extensions.DateExt.html">DateExt</a></li><li><a href="extensions.FormDataExt.html">FormDataExt</a></li><li><a href="extensions.FunctionExt.html">FunctionExt</a></li><li><a href="extensions.HTMLElementExt.html">HTMLElementExt</a></li><li><a href="extensions.HTMLImageElementExt.html">HTMLImageElementExt</a></li><li><a href="extensions.ImageExt.html">ImageExt</a></li><li><a href="extensions.LocationExt.html">LocationExt</a></li><li><a href="extensions.NumberExt.html">NumberExt</a></li><li><a href="extensions.ObjectExt.html">ObjectExt</a></li><li><a href="extensions.PromiseExt.html">PromiseExt</a></li><li><a href="extensions.ScreenExt.html">ScreenExt</a></li><li><a href="extensions.SetExt.html">SetExt</a></li><li><a href="extensions.ShadowRootExt.html">ShadowRootExt</a></li><li><a href="extensions.SharedArrayBufferExt.html">SharedArrayBufferExt</a></li><li><a href="extensions.StringExt.html">StringExt</a></li><li><a href="extensions.TypedArrayExt.html">TypedArrayExt</a></li><li><a href="polyfills.CSSStyleSheet.html">CSSStyleSheet</a></li></ul><h3>Global</h3><ul><li><a href="global.html#parseBool">parseBool</a></li><li><a href="global.html#version">version</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="add-ons.html">add-ons</a></li><li><a href="extensions.html">extensions</a></li><li><a href="polyfills.html">polyfills</a></li></ul><h3>Classes</h3><ul><li><a href="Extension.html">Extension</a></li><li><a href="add-ons.DOMSize.html">DOMSize</a></li><li><a href="add-ons.EnumValue.html">EnumValue</a></li><li><a href="extensions.ArrayBufferExt.html">ArrayBufferExt</a></li><li><a href="extensions.ArrayExt.html">ArrayExt</a></li><li><a href="extensions.CSSStyleSheetExt.html">CSSStyleSheetExt</a></li><li><a href="extensions.CustomElementRegistryExt.html">CustomElementRegistryExt</a></li><li><a href="extensions.DOMMatrixExt.html">DOMMatrixExt</a></li><li><a href="extensions.DOMPointExt.html">DOMPointExt</a></li><li><a href="extensions.DOMQuadExt.html">DOMQuadExt</a></li><li><a href="extensions.DOMRectExt.html">DOMRectExt</a></li><li><a href="extensions.DateExt.html">DateExt</a></li><li><a href="extensions.DocumentExt.html">DocumentExt</a></li><li><a href="extensions.FormDataExt.html">FormDataExt</a></li><li><a href="extensions.FunctionExt.html">FunctionExt</a></li><li><a href="extensions.HTMLCollectionExt.html">HTMLCollectionExt</a></li><li><a href="extensions.HTMLElementExt.html">HTMLElementExt</a></li><li><a href="extensions.HTMLImageElementExt.html">HTMLImageElementExt</a></li><li><a href="extensions.ImageExt.html">ImageExt</a></li><li><a href="extensions.LocationExt.html">LocationExt</a></li><li><a href="extensions.NumberExt.html">NumberExt</a></li><li><a href="extensions.ObjectExt.html">ObjectExt</a></li><li><a href="extensions.PromiseExt.html">PromiseExt</a></li><li><a href="extensions.ScreenExt.html">ScreenExt</a></li><li><a href="extensions.SetExt.html">SetExt</a></li><li><a href="extensions.ShadowRootExt.html">ShadowRootExt</a></li><li><a href="extensions.SharedArrayBufferExt.html">SharedArrayBufferExt</a></li><li><a href="extensions.StringExt.html">StringExt</a></li><li><a href="extensions.TypedArrayExt.html">TypedArrayExt</a></li><li><a href="polyfills.CSSStyleSheet.html">CSSStyleSheet</a></li></ul><h3>Global</h3><ul><li><a href="global.html#parseBool">parseBool</a></li><li><a href="global.html#version">version</a></li></ul>
 </nav>
 
 <br class="clear">

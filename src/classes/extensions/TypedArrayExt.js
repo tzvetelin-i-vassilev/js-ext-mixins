@@ -73,7 +73,7 @@ class TypedArrayExt extends Extension {
 	 * Create instance based on SharedArrayBuffer when is supported. Fallbacks to ArrayBuffer based instance.
 	 *
 	 * @param {int | Array<number> | TypedArray} [data=0] TypedArray data. When input is TypedArray, expected type should be the same as underlying type.
-	 * @return {TypedArray} Instance from underlyimg type
+	 * @returns {TypedArray} Instance from underlying type
 	 */
 	static createSharedInstance(data = 0) {
 		if (data instanceof this) {
@@ -107,13 +107,18 @@ class TypedArrayExt extends Extension {
 	/**
 	 * Converts java-script Array to TypedArray
 	 *
-	 * @param {Array<number>} Source data
+	 * @param {Array<number>} array Source data
 	 * @returns {TypedArray} Data copy
 	 */
 	static from(array) {
 		return new this(array);
 	}
 
+	/*
+	 * TypedArray is not a class anything has, so this is applied once per concrete kind - eleven of
+	 * them - and each one that lands also leaves a toInt8Array, toFloat32Array and so on Array's own
+	 * prototype, the way out of a plain array that matches TypedArray.from, the way in.
+	 */
 	static extend() {
 		TYPES.forEach(type => {
 			let success = Extension.extend(type + "Array", this);
