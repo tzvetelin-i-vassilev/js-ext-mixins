@@ -3,6 +3,7 @@ import globals from "globals"
 
 export default [
 	js.configs.recommended,
+
 	{
 		languageOptions: {
 			ecmaVersion: 2022,
@@ -15,6 +16,7 @@ export default [
 				DOMSize: "readonly"
 			},
 		},
+
 		rules: {
 			"no-prototype-builtins": "off",
 			"no-unused-vars": "off"

@@ -13,18 +13,12 @@ class LocationExt extends Extension {
 		return {
 			query: {
 				get: function() {
-					if (!this._query) {
-						let value = Object.assign({}, ...this.search.substring(1)
-							.split("&")
-							.filter(pair => pair)
-							.map(pair => pair.split("="))
-							.map(pair => ({[pair[0]]: decodeURIComponent(pair[1])}))
-						);
-
-						Object.defineProperty(this, "_query", {value})
-					}
-
-					return this._query;
+					return Object.assign({}, ...this.search.substring(1)
+						.split("&")
+						.filter(pair => pair)
+						.map(pair => pair.split("="))
+						.map(pair => ({[pair[0]]: decodeURIComponent(pair[1])}))
+					);
 				},
 				configurable: true
 			}

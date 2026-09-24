@@ -2,7 +2,12 @@ const CSSStyleSheetOrigin = window.CSSStyleSheet;
 const protoProps = Object.getOwnPropertyNames(CSSStyleSheetOrigin.prototype).slice(1);
 
 /**
- * DOMSize add-on
+ * Constructable stylesheets, for the runtimes without them. The stand-in holds no sheet of its own
+ * until replaceSync is called: a style element goes into the head, and the sheet the browser makes
+ * for it is what every other member is forwarded to.
+ *
+ * It takes the place of window.CSSStyleSheet only where replaceSync is missing, so a runtime that
+ * has its own keeps it - and the static 'polyfill' is how a page tells which of the two it got.
  *
  * @memberof polyfills
  */

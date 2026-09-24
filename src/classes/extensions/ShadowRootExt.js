@@ -10,26 +10,21 @@ class ShadowRootExt extends Extension {
 	/**
 	 * Adopts CSS style sheet with underlying document fragment
 	 *
-	 * @param {string} text Style sheet content
+	 * @param {string | CSSStyleSheet} content Style sheet content
+	 * @param {boolean} [copy=false] Adopt sheet copy
 	 * @returns {CSSStyleSheet} Adopted style sheet
 	 */
-	adoptStyleSheet(text) {
+	adoptStyleSheet(content, copy = false) {
 		let sheet;
 
-		if (this.adoptedStyleSheets) {
+		if (typeof content == "string" || copy) {
 			sheet = new CSSStyleSheet();
-			sheet.replaceSync(text);
-
-			this.adoptedStyleSheets.push(sheet);
+			sheet.replaceSync(content);
 		}
-		else {
-			let style = document.createElement("style");
-			style.innerHTML = text;
+		else
+			sheet = content;
 
-			this.appendChild(style);
-
-			sheet = style.sheet;
-		}
+		this.adoptedStyleSheets.push(sheet);
 
 		return sheet;
 	}
