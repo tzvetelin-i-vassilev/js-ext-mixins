@@ -144,10 +144,14 @@ rect.
 
 ## Custom elements
 
+This one is a wrapper rather than an extension: it adds no members anywhere, it widens what an
+existing method accepts.
+
 `customElements.define` takes a name and a class, and a component usually needs to say more than
 that at the moment it is registered: where it was served from, so it can find its own icons; a
-stylesheet meant for the document rather than for a shadow root; a font to declare. This gives the
-platform's define a third argument for all of it.
+stylesheet meant for the document rather than for a shadow root; a font to declare. The platform's
+third argument is the place for it, and the specification leaves exactly one key in it - `extends`.
+The wrapper reads the rest below, and hands that one on as it found it.
 
 ```js
 import "js-ext-mixins"
@@ -176,9 +180,14 @@ it is asked for by importing it, and nothing else. `CustomElementRegistry._ext` 
 whether the options above are understood - the mark the patch leaves, and what stops it being done
 twice.
 
-It is the one extension here that does not derive from `Extension`. What the others add is members,
-put on a class that is missing them; what this adds is a meaning for an argument the platform
-ignores, which is a different kind of thing and is not reached by putting members anywhere.
+So it does not derive from `Extension`, and that is the kind of thing it is rather than an
+oversight. An extension puts members on a class that is missing them; a wrapper stands in front of
+a method that is already there and takes more than it used to. Nothing here is a polyfill either:
+a polyfill fills a gap against a specification and becomes a no-op the day the runtime closes it,
+and no runtime will ever ship these options, because nobody has specified them. The polyfill in
+this entry point is the one underneath - `@ungap/custom-elements`, for the customized built-ins -
+and it cannot be moved out to `polyfills/`, because the order between the two is the whole reason
+the entry point exists.
 
 ## Add-ons
 
@@ -246,7 +255,7 @@ library run from source.
 | `js-ext-mixins` | the built library, minified |
 | `js-ext-mixins/src` | the same, unminified |
 | `js-ext-mixins/dev` | the sources, for debugging through them |
-| `js-ext-mixins/custom-elements` | the registry extension and the polyfill under it |
+| `js-ext-mixins/custom-elements` | the registry wrapper and the polyfill under it |
 | `js-ext-mixins/polyfills/css-style-sheet` | the polyfill, on its own |
 
 The custom elements entry has an unminified `/src` and a plain source `/dev` beside it, on the
