@@ -30,17 +30,22 @@ const FONT_FORMATS = {
 let native;
 
 /**
- * CustomElementRegistry extension - a define that takes options the platform has no place for.
+ * CustomElementRegistry wrapper - a define that takes more than the specification put in it.
  *
  * What a component needs at the moment it is registered is not only its name and its class: where
  * it was served from, so it can find its own icons; a stylesheet for the document rather than for
  * its shadow root; a font to declare. All of that is a line each here, instead of being written out
  * again in every component.
  *
- * It is the one extension here that does not derive from Extension, and that is not an oversight.
- * What the others add is members, put on a class that is missing them; what this adds is a meaning
- * for an argument the platform ignores, which is a different kind of thing and is not reached by
- * putting members anywhere. It is not in JS_EXT_SCOPE either - it is asked for by importing it:
+ * The platform's third argument is where all of it goes, and the specification leaves exactly one
+ * key in it - extends, which is handed on as it was found.
+ *
+ * So this does not derive from Extension, and that is the kind of thing it is rather than an
+ * oversight. An extension puts members on a class that is missing them; a wrapper stands in front
+ * of a method that is already there and takes more than it used to. Nor is it a polyfill, which
+ * fills a gap against a specification and becomes a no-op once the runtime closes it - no runtime
+ * will ship these options, because nobody has specified them. It is not in JS_EXT_SCOPE either -
+ * it is asked for by importing it:
  *
  * @example
  * import "js-ext-mixins"
